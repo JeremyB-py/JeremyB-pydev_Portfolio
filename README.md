@@ -18,17 +18,25 @@ I build data-driven systems that connect analytics, automation, and practicality
 
 ## Featured Projects
 
-### Wrinkle Witch CRM & Referral Tracker
-> A modular Streamlit-based client and referral management system built for a real skincare business.  
-> Tracks clients, referrals, and generates personalized referral cards for printing.  
-> Integrates CSV/SQLite data pipelines and PDF export automation.
-> Additional modules planned for future applications (e.g. Referral Tracker)
+### Wrinkle Witch CRM (Core Platform)
+> A modular Streamlit-based business management platform built for a real skincare business, **The Wrinkle Witch**.  
+> Originally designed as a searchable esthetician product database, the CRM evolved into a foundation for managing clients, referrals, and other salon operations.  
+> Future modules include Square API integration, client analytics, and routine suggestions.
 
-- **Tech:** Python · Streamlit · Pandas · FPDF · Pillow  
-- **Highlights:** Persistent session management, client CSV syncing, on-demand PDF batch export  
+- **Tech:** Python · Streamlit · Pandas · SQLite · CSV I/O  
+- **Highlights:** Modular architecture, searchable product catalog, persistent data pipelines, and Square integration planning  
 - *(Private repository – code available upon request)*  
 
 ---
+
+### Referral Tracker Module
+> The newest module in the Wrinkle Witch CRM ecosystem — a standalone Streamlit app that automates referral tracking, rewards, PDF card creation, and batch exports for marketing use.  
+> Represents the transition from single-purpose CRM scripts to reusable, scalable modules integrated with the main platform.
+
+- **Tech:** Python · Streamlit · Pandas · Pillow · FPDF  
+- **Highlights:** Modular codebase, automated PDF generation, referral logic, session-state control, and CSV synchronization  
+- *(Private repository – code available upon request)*  
+
 
 ### Agricultural Forecasting Dashboard
 > A data-science project focused on predicting tomato crop yields using regression and ARIMA modeling.  

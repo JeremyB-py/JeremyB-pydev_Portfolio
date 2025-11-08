@@ -8,6 +8,7 @@ This module represents the latest evolution in the platform’s development — 
 ---
 
 ## Overview
+
 The Referral Tracker extends the core CRM’s client management foundation with a specialized tool for handling **referrals, incentives, and branded referral cards**.  
 It automates a previously manual workflow, allowing the business to:
 - Track who referred whom (and when).  
@@ -20,6 +21,7 @@ The system was designed to maintain data integrity while enabling repeated runs 
 ---
 
 ## Features
+
 | Category | Description |
 |-----------|-------------|
 | **Client Referral Linking** | Automatically links clients as referrer/referee pairs based on user input or CSV lookup. |
@@ -32,9 +34,10 @@ The system was designed to maintain data integrity while enabling repeated runs 
 ---
 
 ## Tech Stack
+
 - **Framework:** Streamlit  
 - **Languages:** Python  
-- **Libraries:** Pandas, Pillow, FPDF, OS, Time  
+- **Libraries:** Pandas, Pillow, FPDF, OS, Time, Reportlab  
 - **Storage:** CSV (primary), SQLite (optional for scaling)  
 - **Platform:** Local deployment for business use  
 
@@ -45,20 +48,23 @@ The system was designed to maintain data integrity while enabling repeated runs 
 The Referral Tracker is designed as a **self-contained module** within the Wrinkle Witch CRM framework.  
 
 ### Core Modules
+
 | Module | Purpose |
 |---------|----------|
+| `analytics_manager.py` | Creates summary reports and charts for referrals. |
 | `client_manager.py` | Handles loading, validation, and updating of client data. |
 | `referral_card_generator.py` | Creates individual PNG cards from client info and branding assets. |
-| `export_utils.py` | Combines generated cards into PDF batches for printing. |
-| `app.py` | Streamlit front-end with integrated feedback, progress, and rerun control. |
+| `referral_manager.py` | Tracks client referrals, allowing for rewards for both referrer and referred. |
+| `streamlit_app.py` | Streamlit front-end with integrated feedback, progress, and rerun control. |
 
 This structure allows it to be:
-- Run as a **standalone Streamlit app** (`streamlit run app.py`), or  
+- Run as a **standalone Streamlit app** (`streamlit run streamlit_app.py`), or  
 - Imported as a **module** into the larger CRM platform for integrated usage.
 
 ---
 
 ## Highlights
+
 - **New Modular Codebase:** Refactored older CRM logic into reusable components with clean import structures.  
 - **Stable UI Behavior:** Solved persistent Streamlit rerun issues via controlled session flags.  
 - **Optimized PDF Export:** Batched multiple PNGs per page with precise sizing for card stock printing.  
@@ -68,6 +74,7 @@ This structure allows it to be:
 ---
 
 ## Media
+
 - **Main Streamlit Interface:** Client/referral form and confirmation messages.  
 - **Card Preview:** A branded referral card showing placeholder client data.  
 - **Batch Export Example:** Screenshot of the generated multi-card PDF layout.  
@@ -75,6 +82,7 @@ This structure allows it to be:
 ---
 
 ## Skills Demonstrated
+
 - Streamlit app development  
 - Modular Python architecture  
 - Data persistence & CSV/SQLite synchronization  
@@ -86,17 +94,19 @@ This structure allows it to be:
 ---
 
 ## Integration with Wrinkle Witch CRM
+
 The Referral Tracker serves as the **first deployed module** in the Wrinkle Witch CRM ecosystem.  
 It connects directly to the CRM’s client database and shares common components such as `client_manager.py` and CSV sync utilities.
 
 **Related project:**  
-The core project is maintained as a separate private repository due to business sensitivity.  
+The **Wrinkle Witch CRM** core project is maintained as a separate private repository due to business sensitivity.  
 A summarized version is available here:
 [github.com/JeremyB-py-Portfolio](https://github.com/JeremyB-py-Portfolio)
 
 ---
 
 ## Future Improvements
+
 - Migrate PDF export to background thread for improved responsiveness.  
 - Add direct integration with the Square API for automatic referral code generation.  
 - Introduce analytics dashboard summarizing referral performance.  
@@ -105,6 +115,7 @@ A summarized version is available here:
 ---
 
 ## Repository
+
 This module is maintained as a separate private repository due to business sensitivity.  
 A summarized version is available here:  
 [github.com/JeremyB-py-Portfolio](https://github.com/JeremyB-py-Portfolio)
