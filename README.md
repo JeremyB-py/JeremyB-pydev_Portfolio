@@ -1,0 +1,78 @@
+# Hello, I’m Jeremy Brown — *JeremyB-py*
+
+![Python](https://img.shields.io/badge/Python-3776AB?logo=python&logoColor=white)
+![Pandas](https://img.shields.io/badge/Pandas-150458?logo=pandas&logoColor=white)
+![Streamlit](https://img.shields.io/badge/Streamlit-FF4B4B?logo=streamlit&logoColor=white)
+![Git](https://img.shields.io/badge/Git-F05032?logo=git&logoColor=white)
+![VS Code](https://img.shields.io/badge/VS%20Code-007ACC?logo=visual-studio-code&logoColor=white)
+
+
+**Aspiring Data Engineer | Python Developer | AI & Automation Enthusiast**
+
+I build data-driven systems that connect analytics, automation, and creativity.
+
+---
+
+## Featured Projects
+
+### Wrinkle Witch CRM & Referral Tracker
+> A Streamlit-based client and referral management system built for a real skincare business.  
+> Tracks clients, referrals, and generates personalized referral cards for printing.  
+> Integrates CSV/SQLite data pipelines and PDF export automation.
+
+- **Tech:** Python · Streamlit · Pandas · FPDF · Pillow  
+- **Highlights:** Persistent session management, client CSV syncing, on-demand PDF batch export  
+- *(Private repository – code available upon request)*  
+
+---
+
+### Agricultural Forecasting Dashboard
+> A data-science project focused on predicting tomato crop yields using regression and ARIMA modeling.  
+> Includes exploratory data analysis (EDA), time-series forecasting, and Matplotlib visualizations.
+
+- **Tech:** Python · Pandas · Scikit-Learn · Matplotlib · Statsmodels  
+- **Highlights:** Parameter tuning for ARIMA (p,d,q), error analysis (RMSE / R²), multi-crop comparisons  
+- *(Private repository – demo available on request)*  
+
+---
+
+### Continuous Learning AI Framework
+> An experimental Python project modeling how an AI could evolve knowledge and moral rules over time.  
+> Includes checkpointing, rollback logic, and modular “knowledge bases” for adaptive behavior.
+
+- **Tech:** Python · JSON · Modular Design · Persistent Storage  
+- **Focus:** AI safety, dynamic memory, and rule-based evolution  
+
+---
+
+### Toy Blockchain
+> A minimal blockchain prototype in Python demonstrating proof-of-work, transaction queues, and networking fundamentals.
+
+- **Tech:** Python · Flask · Hashlib · JSON  
+- **Highlights:** Block validation, unconfirmed transaction pool, node-based sync logic  
+
+---
+
+### Miscellaneous Experiments
+Smaller projects and notebooks exploring:
+- Local LLM testing (Phi-2, LoRA, QLoRA)  
+- Gradient descent & optimization demos  
+- VS Code and Git automations  
+*(See individual repos for details.)*
+
+---
+
+## About Me
+I’m transitioning from logistics into data science and engineering, combining analytical thinking with hands-on problem solving.  
+I build practical tools —from predictive crop models to real-world business automations— with a focus on clarity, reliability, and continuous learning.
+
+---
+
+## Connect With Me
+- **GitHub:** [github.com/JeremyB-py](https://github.com/JeremyB-py)  
+- **LinkedIn:** [linkedin.com/in/jeremyb-pydev](https://www.linkedin.com/in/jeremyb-pydev/)  
+- **Email:** JeremyB.pydev@gmail.com  
+
+---
+
+*If you’d like to see detailed write-ups, visit the* [`/projects`](./projects) *folder in this repository.*
