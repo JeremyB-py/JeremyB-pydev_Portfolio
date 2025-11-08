@@ -1,16 +1,13 @@
-# Wrinkle Witch CRM & Referral Tracker
+# Wrinkle Witch CRM (Core Platform)
 
-A custom-built client management and referral tracking system developed for **The Wrinkle Witch**, a local skincare business.  
-The application streamlines how clients, referrals, and incentives are tracked — while also generating printable, branded referral cards for in-person distribution.
+A modular, Streamlit-based CRM system built as the foundation for a suite of business management tools for **The Wrinkle Witch**, a local skincare business.  
+Designed with scalability and extensibility in mind, the CRM provides a flexible architecture for integrating future modules — such as referral tracking, product inventory, and client analytics.
 
 ---
 
 ## Overview
-The **Wrinkle Witch CRM** is a lightweight, data-driven Streamlit web application that enables an esthetician to:
-- Add and manage client profiles.  
-- Track who referred whom (including cross-client referrals).  
-- Generate personalized, printable referral cards (PDFs) for marketing use.  
-- Export combined reports for record keeping or print runs.  
+The **Wrinkle Witch CRM** acts as a central framework that manages client data, streamlines workflow, and supports modular feature expansion.  
+Recent development efforts have focused on integrating the **Referral Tracker module**, a standalone component that automates client referral card generation and PDF exports.
 
 All data persists between sessions using CSV and SQLite storage — ensuring both simplicity and offline reliability.
 
@@ -36,6 +33,16 @@ All data persists between sessions using CSV and SQLite storage — ensuring bot
 
 ---
 
+## Modular Extensions
+
+| Module | Description |
+|---------|--------------|
+| **Referral Tracker** | Automates referral card creation, tracks referrers/referees, and handles PDF exports. *(See detailed project write-up [here](./referral_tracker.md))* |
+| **Product Database** | Planned feature to manage product catalog, pricing, and batch inventory for salon use. |
+| **Client Analytics Dashboard** | Planned Streamlit dashboard for client trends and retention metrics. |
+
+---
+
 ## Highlights
 - Built for a real business use case (The Wrinkle Witch).  
 - Solved early rerun-state and persistence bugs through custom `st.session_state` logic.  
@@ -47,8 +54,7 @@ All data persists between sessions using CSV and SQLite storage — ensuring bot
 
 ## Media
 - **App UI:** Include 2–3 screenshots of the Streamlit interface (client form, referral tracker, PDF preview).  
-- **Referral Card Sample:** 1 image of a generated card.  
-- *(Avoid posting raw client data; use demo data or blurred screenshots.)*  
+- **Referral Card Sample:** 1 image of a generated card.   
 
 ---
 

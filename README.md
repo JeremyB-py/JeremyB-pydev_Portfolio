@@ -1,24 +1,28 @@
-# Hello, I’m Jeremy Brown — *JeremyB-py*
+# Hello, I’m Jeremy Brown - *JeremyB-py*
 
 ![Python](https://img.shields.io/badge/Python-3776AB?logo=python&logoColor=white)
 ![Pandas](https://img.shields.io/badge/Pandas-150458?logo=pandas&logoColor=white)
 ![Streamlit](https://img.shields.io/badge/Streamlit-FF4B4B?logo=streamlit&logoColor=white)
+![SQLite](https://img.shields.io/badge/SQLite-003B57?logo=sqlite&logoColor=white)
+![Scikit-Learn](https://img.shields.io/badge/Scikit--Learn-F7931E?logo=scikitlearn&logoColor=white)
+![Matplotlib](https://img.shields.io/badge/Matplotlib-11557C?logo=plotly&logoColor=white)
 ![Git](https://img.shields.io/badge/Git-F05032?logo=git&logoColor=white)
 ![VS Code](https://img.shields.io/badge/VS%20Code-007ACC?logo=visual-studio-code&logoColor=white)
 
 
 **Aspiring Data Engineer | Python Developer | AI & Automation Enthusiast**
 
-I build data-driven systems that connect analytics, automation, and creativity.
+I build data-driven systems that connect analytics, automation, and practicality.
 
 ---
 
 ## Featured Projects
 
 ### Wrinkle Witch CRM & Referral Tracker
-> A Streamlit-based client and referral management system built for a real skincare business.  
+> A modular Streamlit-based client and referral management system built for a real skincare business.  
 > Tracks clients, referrals, and generates personalized referral cards for printing.  
 > Integrates CSV/SQLite data pipelines and PDF export automation.
+> Additional modules planned for future applications (e.g. Referral Tracker)
 
 - **Tech:** Python · Streamlit · Pandas · FPDF · Pillow  
 - **Highlights:** Persistent session management, client CSV syncing, on-demand PDF batch export  
@@ -32,7 +36,6 @@ I build data-driven systems that connect analytics, automation, and creativity.
 
 - **Tech:** Python · Pandas · Scikit-Learn · Matplotlib · Statsmodels  
 - **Highlights:** Parameter tuning for ARIMA (p,d,q), error analysis (RMSE / R²), multi-crop comparisons  
-- *(Private repository – demo available on request)*  
 
 ---
 
@@ -42,14 +45,17 @@ I build data-driven systems that connect analytics, automation, and creativity.
 
 - **Tech:** Python · JSON · Modular Design · Persistent Storage  
 - **Focus:** AI safety, dynamic memory, and rule-based evolution  
+- *(Private repository – demo available on request)*
 
 ---
 
 ### Toy Blockchain
-> A minimal blockchain prototype in Python demonstrating proof-of-work, transaction queues, and networking fundamentals.
+> A minimal blockchain prototype in Python demonstrating proof-of-work, transaction queues, and networking fundamentals.  
+> Designed to learn basics and application of crypto technologies.
 
 - **Tech:** Python · Flask · Hashlib · JSON  
 - **Highlights:** Block validation, unconfirmed transaction pool, node-based sync logic  
+- *(Private repository – demo available on request)*  
 
 ---
 
