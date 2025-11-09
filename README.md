@@ -1,4 +1,4 @@
-# Hello, I’m Jeremy Brown - *JeremyB-py*
+# Hello, I’m Jeremy B. - *JeremyB.py*
 
 ![Python](https://img.shields.io/badge/Python-3776AB?logo=python&logoColor=white)
 ![Pandas](https://img.shields.io/badge/Pandas-150458?logo=pandas&logoColor=white)
@@ -25,7 +25,7 @@ I build data-driven systems that connect analytics, automation, and practicality
 
 - **Tech:** Python · Streamlit · Pandas · SQLite · CSV I/O  
 - **Highlights:** Modular architecture, searchable product catalog, persistent data pipelines, and Square integration planning  
-- *(Private repository – code available upon request)*  
+- *(Private repository, code available upon request)*  
 
 ---
 
@@ -35,7 +35,7 @@ I build data-driven systems that connect analytics, automation, and practicality
 
 - **Tech:** Python · Streamlit · Pandas · Pillow · FPDF  
 - **Highlights:** Modular codebase, automated PDF generation, referral logic, session-state control, and CSV synchronization  
-- *(Private repository – code available upon request)*  
+- *(Private repository, code available upon request)*  
 
 
 ### Agricultural Forecasting Dashboard
@@ -53,7 +53,7 @@ I build data-driven systems that connect analytics, automation, and practicality
 
 - **Tech:** Python · JSON · Modular Design · Persistent Storage  
 - **Focus:** AI safety, dynamic memory, and rule-based evolution  
-- *(Private repository – demo available on request)*
+- *(Private repository, demo available on request)*
 
 ---
 
@@ -63,22 +63,44 @@ I build data-driven systems that connect analytics, automation, and practicality
 
 - **Tech:** Python · Flask · Hashlib · JSON  
 - **Highlights:** Block validation, unconfirmed transaction pool, node-based sync logic  
-- *(Private repository – demo available on request)*  
+- *(Private repository, demo available on request)*  
 
 ---
 
-### Miscellaneous Experiments
-Smaller projects and notebooks exploring:
-- Local LLM testing (Phi-2, LoRA, QLoRA)  
-- Gradient descent & optimization demos  
-- VS Code and Git automations  
-*(See individual repos for details.)*
+### Power BI Dashboard (Non-Profit Analytics)
+> Designed a Power BI dashboard for a small non-profit organization to visualize outreach and donation performance.  
+> Built around a generated sample dataset with metrics for donor activity, event participation, and volunteer engagement.  
+> Structured for scalability — can easily integrate with Azure SQL or other live data sources.
+
+- **Tools:** Power BI · KPI Visuals · Interactive Filters  
+- **Highlights:** End-to-end dashboard design, data modeling for scalability, intuitive layout for organizational reporting  
+
+---
+
+## Supporting Projects
+
+#### Local LLM Testing & Fine-Tuning
+> Ongoing experimentation with running and fine-tuning local language models such as **Phi-2** (8-bit quantization) and **Mistral-7B (4-bit)** using **LoRA/QLoRA** parameter-efficient methods.  
+> Explores model setup, quantization, embeddings, and retrieval workflows on local hardware.  
+
+- **Tools:** PyTorch · BitsAndBytes · PEFT · Transformers  
+- **Highlights:** LoRA/QLoRA fine-tuning workflows, dataset preparation, local inference optimization  
+
+---
+
+#### VS Code & Git Automations
+> Created custom Git integration scripts and workspace configurations to streamline development across **Streamlit**, **data-science**, and **LLM** projects.  
+> Includes version-controlled repo scaffolding, Jupytext syncing, and automated virtual-environment setup.  
+
+- **Tools:** Git · GitHub · VS Code · Jupytext · Python Virtual Environments  
+- **Highlights:** Automated repo scaffolding, github workflows, improved dev-environment consistency, notebook-to-script synchronization  
+
 
 ---
 
 ## About Me
 I’m transitioning from logistics into data science and engineering, combining analytical thinking with hands-on problem solving.  
-I build practical tools —from predictive crop models to real-world business automations— with a focus on clarity, reliability, and continuous learning.
+I build practical tools, from predictive crop models to real-world business automations, with a focus on clarity, reliability, and continuous learning.
 
 ---
 
