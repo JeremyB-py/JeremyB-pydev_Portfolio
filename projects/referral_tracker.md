@@ -75,9 +75,17 @@ This structure allows it to be:
 
 ## Media
 
-- **Main Streamlit Interface:** Client/referral form and confirmation messages.  
-- **Card Preview:** A branded referral card showing placeholder client data.  
-- **Batch Export Example:** Screenshot of the generated multi-card PDF layout.  
+**Landing Page** with client adding and editing  
+![Client Page](../media/wrinkle_witch_referral_tracker/Client_Page.png)
+
+**Referral Page** for tracking client referrals and rewards  
+![Referral Page](../media/wrinkle_witch_referral_tracker/Referral_Page.png)
+
+**Reports Page** Summaries and graphs for client data  
+![Reports Page](../media/wrinkle_witch_referral_tracker/Reports_Page.png)
+
+**Referral Card Page** Creating referral cards for individual clients to hand out, with qr codes and template functionality  
+![Referral Card Page](../media/wrinkle_witch_referral_tracker/Card_Page.png)
 
 ---
 
@@ -105,25 +113,8 @@ A summarized version is available here:
 
 ---
 
-## Media
-
-**Landing Page** with client adding and editing  
-![Client Page](../media/wrinkle_witch_referral_tracker/Client_Page.png)
-
-**Referral Page** for tracking client referrals and rewards  
-![Referral Page](../media/wrinkle_witch_referral_tracker/Referral_Page.png)
-
-**Reports Page** Summaries and graphs for client data  
-![Reports Page](../media/wrinkle_witch_referral_tracker/Reports_Page.png)
-
-**Referral Card Page** Creating referral cards for individual clients to hand out, with qr codes and template functionality  
-![Referral Card Page](../media/wrinkle_witch_referral_tracker/Card_Page.png)
-
----
-
 ## Future Improvements
-
-- Migrate PDF export to background thread for improved responsiveness.  
+ 
 - Add direct integration with the Square API for automatic referral code generation.  
 - Introduce analytics dashboard summarizing referral performance.  
 - Implement optional secure login for multi-user business usage.

@@ -12,7 +12,7 @@
 
 **Aspiring Data Engineer | Python Developer | AI & Automation Enthusiast**
 
-I build data-driven systems that connect analytics, automation, and practicality.
+I build data-driven systems that connect analytics, automation, and practicality.  
 
 ---
 
@@ -27,6 +27,8 @@ I build data-driven systems that connect analytics, automation, and practicality
 - **Highlights:** Modular architecture, searchable product catalog, persistent data pipelines, and Square integration planning  
 - *(Private repository, code available upon request)*  
 
+Write-up Link: [Wrinkle Witch CRM Showcase](https://github.com/JeremyB-py/JeremyB-pydev_Portfolio/blob/main/projects/wrinkle_witch_crm.md)
+
 ---
 
 ### Referral Tracker Module
@@ -37,13 +39,17 @@ I build data-driven systems that connect analytics, automation, and practicality
 - **Highlights:** Modular codebase, automated PDF generation, referral logic, session-state control, and CSV synchronization  
 - *(Private repository, code available upon request)*  
 
+Write-up link: [Wrinkle Witch Referral Tracker Showcase](https://github.com/JeremyB-py/JeremyB-pydev_Portfolio/blob/main/projects/referral_tracker.md)
+
 
 ### Agricultural Forecasting Dashboard
 > A data-science project focused on predicting tomato crop yields using regression and ARIMA modeling.  
 > Includes exploratory data analysis (EDA), time-series forecasting, and Matplotlib visualizations.
 
 - **Tech:** Python · Pandas · Scikit-Learn · Matplotlib · Statsmodels  
-- **Highlights:** Parameter tuning for ARIMA (p,d,q), error analysis (RMSE / R²), multi-crop comparisons  
+- **Highlights:** Parameter tuning for ARIMA (p,d,q), error analysis (RMSE / R²), multi-crop comparisons
+
+Write-up Link: [Agricultural Forcasting Showcase](https://github.com/JeremyB-py/JeremyB-pydev_Portfolio/blob/main/projects/agricultural_forecasting.md)
 
 ---
 
@@ -55,6 +61,8 @@ I build data-driven systems that connect analytics, automation, and practicality
 - **Focus:** AI safety, dynamic memory, and rule-based evolution  
 - *(Private repository, demo available on request)*
 
+Write-up Link: [CLAIP Showcase](https://github.com/JeremyB-py/JeremyB-pydev_Portfolio/blob/main/projects/continuous_learning_ai_prototype.md)
+
 ---
 
 ### Toy Blockchain
@@ -65,6 +73,8 @@ I build data-driven systems that connect analytics, automation, and practicality
 - **Highlights:** Block validation, unconfirmed transaction pool, node-based sync logic  
 - *(Private repository, demo available on request)*  
 
+Write-up Link: [Crypto Prototype Showcase](https://github.com/JeremyB-py/JeremyB-pydev_Portfolio/blob/main/projects/crypto_prototype.md)
+
 ---
 
 ### Power BI Dashboard (Non-Profit Analytics)
@@ -74,6 +84,8 @@ I build data-driven systems that connect analytics, automation, and practicality
 
 - **Tools:** Power BI · KPI Visuals · Interactive Filters  
 - **Highlights:** End-to-end dashboard design, data modeling for scalability, intuitive layout for organizational reporting  
+
+Write-up Link: [PowerBI Dashboard Showcase](https://github.com/JeremyB-py/JeremyB-pydev_Portfolio/blob/main/projects/powerbi_nonprofit_dashboard.md)
 
 ---
 
@@ -91,8 +103,9 @@ I build data-driven systems that connect analytics, automation, and practicality
 #### VS Code & Git Automations
 > Created custom Git integration scripts and workspace configurations to streamline development across **Streamlit**, **data-science**, and **LLM** projects.  
 > Includes version-controlled repo scaffolding, Jupytext syncing, and automated virtual-environment setup.  
+> Testing with pytest integrated within workflows.
 
-- **Tools:** Git · GitHub · VS Code · Jupytext · Python Virtual Environments  
+- **Tools:** Git · GitHub · VS Code · Jupytext · Python Virtual Environments · UnitTest · PyTest  
 - **Highlights:** Automated repo scaffolding, github workflows, improved dev-environment consistency, notebook-to-script synchronization  
 
 ---

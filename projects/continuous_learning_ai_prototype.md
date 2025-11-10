@@ -42,7 +42,7 @@ The project is primarily a **design and logic study**, bridging concepts from re
 ---
 
 ## Media
-Sample blocks of code within CLAIP.py
+Sample blocks of early code within CLAIP.py
 
 **Moral Rules** Immutable moral guidelines the AI will follow.  
 ![Moral Rules](../media/continuous_learning_ai_prototype/moral_rules.png)
