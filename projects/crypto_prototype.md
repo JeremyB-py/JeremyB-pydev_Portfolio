@@ -19,11 +19,11 @@ The prototype emphasizes **clarity over complexity**, providing an educational f
 ## Features
 | Category | Description |
 |-----------|-------------|
-| **Proof-of-Work Algorithm** | Adjustable difficulty for mining simulation. |
-| **Transaction Queue** | Handles unconfirmed transactions before block creation. |
-| **Block Validation** | Ensures hash linkage and integrity. |
-| **Networking (Flask)** | Enables basic node communication and synchronization. |
-| **JSON Storage** | Persists blockchain state across sessions. |
+| `Proof-of-Work Algorithm` | Adjustable difficulty for mining simulation. |
+| `Transaction Queue` | Handles unconfirmed transactions before block creation. |
+| `Block Validation` | Ensures hash linkage and integrity. |
+| `Networking (Flask)` | Enables basic node communication and synchronization. |
+| `JSON Storage` | Persists blockchain state across sessions. |
 
 ---
 
@@ -39,6 +39,17 @@ The prototype emphasizes **clarity over complexity**, providing an educational f
 - Debugged early transaction-pool and hash-computation issues to achieve stable mining.  
 - Added optional Flask API endpoints for peer-to-peer simulation.  
 - Serves as an educational proof of concept for decentralized ledger systems.
+
+---
+
+## Media
+Early example code
+
+**Blockchain Prototype code**
+![Blockchain Prototype code](../media/crypto_prototype/BlockchainPrototype.png)
+
+**Node Server Prototype code**
+![Node Prototype code](../media/crypto_prototype/NodeServerPrototype.png)
 
 ---
 

@@ -41,6 +41,21 @@ The project is primarily a **design and logic study**, bridging concepts from re
 
 ---
 
+## Media
+Sample blocks of code within CLAIP.py
+
+**Moral Rules**
+![Moral Rules](../media/continuous_learning_ai_prototype/moral_rules.png)
+
+**General Knowledge**
+![GK](../media/continuous_learning_ai_prototype/GK.png)
+
+**Source Identification**
+![Sources](../media/continuous_learning_ai_prototype/Sources.png)
+
+
+---
+
 ## Skills Demonstrated
 - AI architecture & safety design  
 - Python modular programming  

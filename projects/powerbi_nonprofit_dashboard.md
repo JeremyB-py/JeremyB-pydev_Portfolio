@@ -54,7 +54,7 @@ The dashboard was first constructed using a small generated dataset, simulating 
 **Expenses Page**  
 ![Expenses Page](../media/powerbi_non-profit_dashboard/Dashboard_Example2.png)
 
-** Geography Page**  
+**Geography Page**  
 ![Geography Page](../media/powerbi_non-profit_dashboard/Dashboard_Example3.png)
 
 ---
