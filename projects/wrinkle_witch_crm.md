@@ -66,9 +66,22 @@ This foundation allows new tools to plug into the same ecosystem — sharing a c
 
 ## Media
 
-- **Product Search Interface:** Screenshot showing brand/product lookup.  
-- **Module Architecture Diagram:** Optional illustration of how modules plug into the core system.  
-- **Future Concepts:** Optional placeholder images (client dashboard mockups, referral UI integration).
+**Product Search Interface:** Searchable database of all products through tags.  
+![Skincare Product Explorer](../media/wrinkle_witch_crm/Skincare_Product_Explorer.png)
+
+**Expandable and Comparable Product Details** Each product can be examined in further detail.  
+![Product Details](../media/wrinkle_witch_crm/Product_Details.png)
+
+**Module Architecture Diagram:** Prototype code in place for modules to plug into the core system.  
+![Prototype Module Architecture](../media/wrinkle_witch_crm/Prototype_Module_Linking.png)
+
+---
+
+## Future Imrovements
+
+- Database will be searchable through recommendations and more advanced tags.
+- Tracking client usage and success with specific products or brands.
+- Implementation of future modules.
 
 ---
 

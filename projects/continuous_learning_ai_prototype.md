@@ -44,13 +44,13 @@ The project is primarily a **design and logic study**, bridging concepts from re
 ## Media
 Sample blocks of code within CLAIP.py
 
-**Moral Rules**
+**Moral Rules** Immutable moral guidelines the AI will follow.  
 ![Moral Rules](../media/continuous_learning_ai_prototype/moral_rules.png)
 
-**General Knowledge**
+**General Knowledge** Prototype knowledge base, meant for refinement over time.  
 ![GK](../media/continuous_learning_ai_prototype/GK.png)
 
-**Source Identification**
+**Source Identification** Knowledge sources designed to keep biases in mind.  
 ![Sources](../media/continuous_learning_ai_prototype/Sources.png)
 
 

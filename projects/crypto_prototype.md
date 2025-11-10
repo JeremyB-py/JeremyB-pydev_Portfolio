@@ -45,10 +45,10 @@ The prototype emphasizes **clarity over complexity**, providing an educational f
 ## Media
 Early example code
 
-**Blockchain Prototype code**
+**Blockchain Prototype code**  
 ![Blockchain Prototype code](../media/crypto_prototype/BlockchainPrototype.png)
 
-**Node Server Prototype code**
+**Node Server Prototype code**  
 ![Node Prototype code](../media/crypto_prototype/NodeServerPrototype.png)
 
 ---

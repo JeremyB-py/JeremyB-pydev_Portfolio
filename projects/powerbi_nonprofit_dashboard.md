@@ -43,7 +43,7 @@ The dashboard was first constructed using a small generated dataset, simulating 
 ---
 
 ## Media
-(Example pages of the dashboard using generated datasets)
+Example pages of the dashboard using generated datasets. All pages are connected and interactable.
 
 **Dashboard Overview**  
 ![Dashboard Overview Page](../media/powerbi_non-profit_dashboard/Dashboard_Example0.png)
