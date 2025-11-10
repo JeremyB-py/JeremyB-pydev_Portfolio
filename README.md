@@ -6,7 +6,7 @@
 ![SQLite](https://img.shields.io/badge/SQLite-003B57?logo=sqlite&logoColor=white)
 ![Scikit-Learn](https://img.shields.io/badge/Scikit--Learn-F7931E?logo=scikitlearn&logoColor=white)
 ![Matplotlib](https://img.shields.io/badge/Matplotlib-11557C?logo=plotly&logoColor=white)
-![Git](https://img.shields.io/badge/Git-F05032?logo=git&logoColor=white)
+![Ubuntu](https://img.shields.io/badge/Ubuntu-E95420?logo=ubuntu&logoColor=white)
 ![VS Code](https://img.shields.io/badge/VS%20Code-007ACC?logo=visual-studio-code&logoColor=white)
 
 
@@ -95,6 +95,10 @@ I build data-driven systems that connect analytics, automation, and practicality
 - **Tools:** Git · GitHub · VS Code · Jupytext · Python Virtual Environments  
 - **Highlights:** Automated repo scaffolding, github workflows, improved dev-environment consistency, notebook-to-script synchronization  
 
+---
+
+#### Ubuntu
+> Working primarily in **Ubuntu 24 LTS** with custom terminal configurations, including **fish** and **Starship**.
 
 ---
 
