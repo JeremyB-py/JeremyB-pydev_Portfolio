@@ -42,6 +42,23 @@ The dashboard was first constructed using a small generated dataset, simulating 
 
 ---
 
+## Media
+(Example pages of the dashboard using generated datasets)
+
+**Dashboard Overview**  
+![Dashboard Overview Page](../media/powerbi_non-profit_dashboard/Dashboard_Example0.png)
+
+**Events Page**  
+![Events Page](../media/powerbi_non-profit_dashboard/Dashboard_Example1.png)
+
+**Expenses Page**  
+![Expenses Page](../media/powerbi_non-profit_dashboard/Dashboard_Example2.png)
+
+** Geography Page**  
+![Geography Page](../media/powerbi_non-profit_dashboard/Dashboard_Example3.png)
+
+---
+
 ## Skills Demonstrated
 - Data modeling & visualization  
 - ETL design (Power Query)  
