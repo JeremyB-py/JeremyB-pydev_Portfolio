@@ -41,6 +41,20 @@ Write-up Link: [Wrinkle Witch CRM Showcase](https://github.com/JeremyB-py/Jeremy
 
 Write-up link: [Wrinkle Witch Referral Tracker Showcase](https://github.com/JeremyB-py/JeremyB-pydev_Portfolio/blob/main/projects/referral_tracker.md)
 
+---
+
+### Wrinkle Witch Website & Multi-App Platform
+> A modern full-stack web platform built for a local skincare business, **The Wrinkle Witch**.  
+> Includes both customer-facing pages and an internal admin section, with a modular monorepo structure supporting multiple business applications.  
+> Designed to unify the CRM, referral tracker, and future tools under a single cohesive ecosystem with shared utilities and branding.
+
+- **Tech:** Python · Streamlit · SQLAlchemy · Modular Architecture · API Integrations (Square)  
+- **Highlights:** Public-facing site + admin panel, shared database models, reusable components, multi-app monorepo, subdomain-ready deployments  
+- *(Private repository, code available upon request)*  
+
+Write-up Link: [Wrinkle Witch Website Showcase](https://github.com/JeremyB-py/JeremyB-pydev_Portfolio/blob/main/projects/wrinkle_witch_website.md)
+
+---
 
 ### Agricultural Forecasting Dashboard
 > A data-science project focused on predicting tomato crop yields using regression and ARIMA modeling.  
