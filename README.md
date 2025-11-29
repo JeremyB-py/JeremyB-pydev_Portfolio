@@ -48,7 +48,7 @@ Write-up link: [Wrinkle Witch Referral Tracker Showcase](https://github.com/Jere
 > Includes both customer-facing pages and an internal admin section, with a modular monorepo structure supporting multiple business applications.  
 > Designed to unify the CRM, referral tracker, and future tools under a single cohesive ecosystem with shared utilities and branding.
 
-- **Tech:** Python · Streamlit · SQLAlchemy · Modular Architecture · API Integrations (Square)  
+- **Tech:** Python · Streamlit · SQLAlchemy · HTML · CSS · JavaScript · Modular Architecture · API Integrations (Square)  
 - **Highlights:** Public-facing site + admin panel, shared database models, reusable components, multi-app monorepo, subdomain-ready deployments  
 - *(Private repository, code available upon request)*  
 

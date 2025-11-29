@@ -49,7 +49,7 @@ This allows the business to scale new applications without duplicating code, ens
 
 ## Tech Stack
 
-- **Frontend/UI:** Streamlit (with custom styling)
+- **Frontend/UI:** Streamlit (with custom styling), HTML, CSS, JavaScript
 - **Backend/Logic:** Python
 - **Database Layer:** SQLAlchemy + CSV interoperability
 - **App Structure:** Modular monorepo
