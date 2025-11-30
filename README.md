@@ -33,7 +33,7 @@ Write-up Link: [Wrinkle Witch CRM Showcase](https://github.com/JeremyB-py/Jeremy
 ---
 
 ### Referral Tracker Module
-> The newest module in the Wrinkle Witch CRM ecosystem — a standalone Streamlit app that automates referral tracking, rewards, PDF card creation, and batch exports for marketing use.  
+> The newest module in the Wrinkle Witch CRM ecosystem - a standalone Streamlit app that automates referral tracking, rewards, PDF card creation, and batch exports for marketing use.  
 > Represents the transition from single-purpose CRM scripts to reusable, scalable modules integrated with the main platform.
 
 - **Tech:** Python · Streamlit · Pandas · Pillow · FPDF  
@@ -131,8 +131,9 @@ Write-up Link: [PowerBI Dashboard Showcase](https://github.com/JeremyB-py/Jeremy
 ---
 
 ## About Me
-I’m transitioning from logistics into data science and engineering, combining analytical thinking with hands-on problem solving.  
-I build practical tools, from predictive crop models to real-world business automations, with a focus on clarity, reliability, and continuous learning.
+I am a full stack Python developer focused on building web applications, dashboards, and automation tools. After nine years in logistics, I bring a process driven mindset to designing systems that are reliable and practical for real businesses.
+
+Most of my time is spent learning new tools and applying them directly in projects, from the Wrinkle Witch platform (website, CRM, and referral tools) to forecasting dashboards and early experiments with AI system design.
 
 ---
 
