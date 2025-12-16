@@ -45,12 +45,11 @@ Write-up link: [Wrinkle Witch Referral Tracker Showcase](https://github.com/Jere
 ---
 
 ### Wrinkle Witch Website & Multi-App Platform
-> A modern full-stack web platform built for a local skincare business, **The Wrinkle Witch**.  
-> Includes both customer-facing pages and an internal admin section, with a modular monorepo structure supporting multiple business applications.  
-> Designed to unify the CRM, referral tracker, and future tools under a single cohesive ecosystem with shared utilities and branding.
+> A production-oriented, full-stack platform built for **The Wrinkle Witch** (local skincare studio).  
+> Combines a static customer website (Cloudflare Pages) with a FastAPI backend (Railway) and Streamlit admin apps, all inside a modular monorepo with shared business logic, auth, and integrations.
 
-- **Tech:** Python · Streamlit · SQLAlchemy · HTML · CSS · JavaScript · Modular Architecture · API Integrations (Square)  
-- **Highlights:** Public-facing site + admin panel, shared database models, reusable components, multi-app monorepo, subdomain-ready deployments  
+- **Tech:** Python · FastAPI · Streamlit · SQLAlchemy · PostgreSQL/SQLite · HTML/CSS/JS · Railway · Cloudflare Pages  
+- **Highlights:** Static, branded customer pages (fast + SEO-friendly) that call backend APIs for referrals/unsubscribe/specials; Backend API service with validation, error handling, CORS controls, and production deployment on api.thewrinklewitch.com; Shared /shared modules (auth, Square OAuth, business_id, domain utilities) used across apps via adapter patterns; Security upgrade: bcrypt password hashing + role-based access + admin user management UI; Marketing system: Specials/Packages management with image optimization, analytics tracking, and A/B testing groundwork; Performance: HTTP caching strategy (ETag/304 + cache-aware frontend fetch) to reduce API calls and improve load times; Maintainability: monorepo structure + automated tests + CI path-filtering improvements for PRs  
 - *(Private repository, code available upon request)*  
 
 Write-up Link: [Wrinkle Witch Website Showcase](https://github.com/JeremyB-py/JeremyB-pydev_Portfolio/blob/main/projects/wrinkle_witch_website.md)
