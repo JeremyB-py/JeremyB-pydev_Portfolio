@@ -5,6 +5,8 @@ Initially developed as a **searchable product database for esthetician products*
 
 Built with scalability and modular integration in mind, the CRM architecture supports new components like the **Referral Tracker**, while maintaining simple offline persistence through CSV and SQLite storage.
 
+**Platform note:** This CRM is now **fully integrated** as an internal app within the broader [Wrinkle Witch Website & Full-Stack Business Platform](./wrinkle_witch_website.md). This write-up highlights the CRM module itself (product database, data layer, and extension patterns).
+
 ---
 
 ## Overview

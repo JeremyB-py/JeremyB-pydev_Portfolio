@@ -5,6 +5,8 @@ It focuses on automating client referral management and marketing material gener
 
 This module represents the latest evolution in the platform’s development — shifting from a single Streamlit script into a scalable, modular architecture that integrates data management, automation, and UI components seamlessly.
 
+**Platform note:** The Referral Tracker is now **fully integrated** as an internal admin app within the broader [Wrinkle Witch Website & Full-Stack Business Platform](./wrinkle_witch_website.md). This write-up highlights the referral module itself (referral logic, card/PDF generation, and Streamlit session-state control).
+
 ---
 
 ## Overview

@@ -19,13 +19,26 @@ I build practical applications that connect frontend experience, backend enginee
 
 ## Featured Projects
 
+### Wrinkle Witch Website & Multi-App Platform
+> A production-oriented, full-stack platform built for **The Wrinkle Witch** (local skincare studio).  
+> Combines a static customer website (Cloudflare Pages) with a FastAPI backend (Railway) and Streamlit admin apps, all inside a modular monorepo with shared business logic, auth, and integrations.  
+> Includes the fully integrated **Wrinkle Witch CRM** and **Referral Tracker Module** as internal tools within the same platform.
+
+- **Tech:** Python · FastAPI · Streamlit · SQLAlchemy · PostgreSQL/SQLite · HTML/CSS/JS · Railway · Cloudflare Pages  
+- **Highlights:** Static customer pages calling backend APIs; FastAPI service with validation/CORS and production deployment; shared `/shared` modules (auth, Square OAuth, domain utilities); bcrypt + roles + admin user management; specials engine with image optimization + analytics; caching (ETag/304) + tests/CI for maintainability  
+- *(Private repository, code available upon request)*  
+
+Write-up Link: [Wrinkle Witch Website Showcase](https://github.com/JeremyB-py/JeremyB-pydev_Portfolio/blob/main/projects/wrinkle_witch_website.md)
+
+---
+
 ### Wrinkle Witch CRM (Core Platform)
 > A modular Streamlit-based business management platform built for a real skincare business, **The Wrinkle Witch**.  
 > Originally designed as a searchable esthetician product database, the CRM evolved into a foundation for managing clients, referrals, and other salon operations.  
 > Future modules include Square API integration, client analytics, and routine suggestions.
 
 - **Tech:** Python · Streamlit · Pandas · SQLite · CSV I/O  
-- **Highlights:** Modular architecture, searchable product catalog, persistent data pipelines, and Square integration planning  
+- **Highlights:** Modular architecture, searchable product catalog, persistent data pipelines, and Square integration planning. Fully integrated into the Wrinkle Witch Multi-App Platform.  
 - *(Private repository, code available upon request)*  
 
 Write-up Link: [Wrinkle Witch CRM Showcase](https://github.com/JeremyB-py/JeremyB-pydev_Portfolio/blob/main/projects/wrinkle_witch_crm.md)
@@ -37,22 +50,10 @@ Write-up Link: [Wrinkle Witch CRM Showcase](https://github.com/JeremyB-py/Jeremy
 > Represents the transition from single-purpose CRM scripts to reusable, scalable modules integrated with the main platform.
 
 - **Tech:** Python · Streamlit · Pandas · Pillow · FPDF  
-- **Highlights:** Modular codebase, automated PDF generation, referral logic, session-state control, and CSV synchronization  
+- **Highlights:** Modular codebase, automated PDF generation, referral logic, session-state control, and CSV synchronization. Fully integrated into the Wrinkle Witch Multi-App Platform.  
 - *(Private repository, code available upon request)*  
 
 Write-up link: [Wrinkle Witch Referral Tracker Showcase](https://github.com/JeremyB-py/JeremyB-pydev_Portfolio/blob/main/projects/referral_tracker.md)
-
----
-
-### Wrinkle Witch Website & Multi-App Platform
-> A production-oriented, full-stack platform built for **The Wrinkle Witch** (local skincare studio).  
-> Combines a static customer website (Cloudflare Pages) with a FastAPI backend (Railway) and Streamlit admin apps, all inside a modular monorepo with shared business logic, auth, and integrations.
-
-- **Tech:** Python · FastAPI · Streamlit · SQLAlchemy · PostgreSQL/SQLite · HTML/CSS/JS · Railway · Cloudflare Pages  
-- **Highlights:** Static, branded customer pages (fast + SEO-friendly) that call backend APIs for referrals/unsubscribe/specials; Backend API service with validation, error handling, CORS controls, and production deployment on api.thewrinklewitch.com; Shared /shared modules (auth, Square OAuth, business_id, domain utilities) used across apps via adapter patterns; Security upgrade: bcrypt password hashing + role-based access + admin user management UI; Marketing system: Specials/Packages management with image optimization, analytics tracking, and A/B testing groundwork; Performance: HTTP caching strategy (ETag/304 + cache-aware frontend fetch) to reduce API calls and improve load times; Maintainability: monorepo structure + automated tests + CI path-filtering improvements for PRs  
-- *(Private repository, code available upon request)*  
-
-Write-up Link: [Wrinkle Witch Website Showcase](https://github.com/JeremyB-py/JeremyB-pydev_Portfolio/blob/main/projects/wrinkle_witch_website.md)
 
 ---
 
