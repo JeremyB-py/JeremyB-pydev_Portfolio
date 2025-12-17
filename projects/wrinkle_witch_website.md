@@ -82,6 +82,24 @@ This keeps customer experiences fast and consistent while still supporting robus
 **FAQ Page:** Customer-facing frequently asked questions section.  
 ![FAQ Page](../media/wrinkle_witch_website/FAQ.png)
 
+**FastAPI API Setup (CORS Middleware):** Core API configuration showing FastAPI initialization and `CORSMiddleware` setup for the production-facing service.  
+![FastAPI API + CORS Middleware](../media/wrinkle_witch_website/api_main.png)
+
+**FastAPI Docs (Specials Endpoints):** ReDoc view highlighting the Specials/Packages API surface used by the static site for dynamic homepage content.  
+![FastAPI ReDoc - Specials](../media/wrinkle_witch_website/fastapi_redoc_specials.png)
+
+**Admin Specials Manager:** Streamlit admin UI for creating and managing specials/packages content (marketing engine).  
+![Admin Specials Manager](../media/wrinkle_witch_website/app_specials_manager.png)
+
+**Admin User Management:** Admin-only UI for user management, supporting role-based access and bcrypt-backed authentication.  
+![Admin User Management](../media/wrinkle_witch_website/app_user_management.png)
+
+**Manual Referral Entry:** Customer-facing referral flow with manual code entry fallback when a QR code is unavailable.  
+![Manual Referral Entry](../media/wrinkle_witch_website/manual_referral_entry.png)
+
+**Referral Success State:** Confirmation/status messaging after a referral code is successfully processed.  
+![Manual Referral Success](../media/wrinkle_witch_website/manual_referral_success.png)
+
 ---
 
 ## Highlights
