@@ -19,13 +19,13 @@ I build practical applications that connect frontend experience, backend enginee
 
 ## Featured Projects
 
-### Wrinkle Witch Website & Multi-App Platform
+### Wrinkle Witch Website & Full-Stack Business Platform
 > A production-oriented, full-stack platform built for **The Wrinkle Witch** (local skincare studio).  
-> Combines a static customer website (Cloudflare Pages) with a FastAPI backend (Railway) and Streamlit admin apps, all inside a modular monorepo with shared business logic, auth, and integrations.  
-> Includes the fully integrated **Wrinkle Witch CRM** and **Referral Tracker Module** as internal tools within the same platform.
+> Static customer site (Cloudflare Pages), FastAPI backend (Railway), Streamlit admin apps, and scheduled jobs share a monorepo with common auth, Square integrations, and database layer.  
+> Includes the fully integrated **Wrinkle Witch CRM** and **Referral Tracker Module** as internal tools.
 
 - **Tech:** Python · FastAPI · Streamlit · SQLAlchemy · PostgreSQL/SQLite · HTML/CSS/JS · Railway · Cloudflare Pages  
-- **Highlights:** Static customer pages calling backend APIs; FastAPI service with validation/CORS and production deployment; shared `/shared` modules (auth, Square OAuth, domain utilities); bcrypt + roles + admin user management; specials engine with image optimization + analytics; caching (ETag/304) + tests/CI for maintainability  
+- **Highlights:** Static site + FastAPI (validation, CORS); shared modules (auth, Square OAuth); specials engine + analytics; Square Bookings (multi-step booking, card-on-file via Web Payments SDK); scheduled jobs (credit expiration, quarterly reset/prizes, appointment sync) + job dashboard; bcrypt/roles; SEO + security (sitemap, dotfile protection); caching + CI  
 - *(Private repository, code available upon request)*  
 
 Write-up Link: [Wrinkle Witch Website Showcase](https://github.com/JeremyB-py/JeremyB-pydev_Portfolio/blob/main/projects/wrinkle_witch_website.md)
