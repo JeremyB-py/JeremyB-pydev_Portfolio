@@ -87,9 +87,6 @@ This keeps customer experiences fast and consistent while still supporting robus
 **Dark Mode Interface:** Alternative color scheme for improved user experience.  
 ![Dark Mode](../media/wrinkle_witch_website/Darkmode.png)
 
-**FAQ Page:** Customer-facing frequently asked questions section.  
-![FAQ Page](../media/wrinkle_witch_website/FAQ.png)
-
 **FastAPI API Setup (CORS Middleware):** Core API configuration showing FastAPI initialization and `CORSMiddleware` setup for the production-facing service.  
 ![FastAPI API + CORS Middleware](../media/wrinkle_witch_website/api_main.png)
 
@@ -114,7 +111,7 @@ This keeps customer experiences fast and consistent while still supporting robus
 **Referral Program Page:** Top section of the customer-facing `referral-program.html` page.  
 ![Referral Program HTML](../media/wrinkle_witch_website/referral_html.png)
 
-**Referral Management (Admin):** Streamlit admin interface for managing and tracking referrals.  
+**Referral Management (Admin):** Streamlit admin interface for managing and tracking referrals (Clients listed are test clients, not actual clients).  
 ![Referral Management](../media/wrinkle_witch_website/referral_management.png)
 
 ---
