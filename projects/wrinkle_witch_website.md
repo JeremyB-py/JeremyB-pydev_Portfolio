@@ -108,6 +108,15 @@ This keeps customer experiences fast and consistent while still supporting robus
 **Referral Success State:** Confirmation/status messaging after a referral code is successfully processed.  
 ![Manual Referral Success](../media/wrinkle_witch_website/manual_referral_success.png)
 
+**Booking Flow – Secure Your Appointment (Step 4):** Card step in the multi-step booking flow on `booking.html` (Square Web Payments SDK).  
+![Booking Flow Card Step](../media/wrinkle_witch_website/booking_flow_card.png)
+
+**Referral Program Page:** Top section of the customer-facing `referral-program.html` page.  
+![Referral Program HTML](../media/wrinkle_witch_website/referral_html.png)
+
+**Referral Management (Admin):** Streamlit admin interface for managing and tracking referrals.  
+![Referral Management](../media/wrinkle_witch_website/referral_management.png)
+
 ---
 
 ## Highlights
