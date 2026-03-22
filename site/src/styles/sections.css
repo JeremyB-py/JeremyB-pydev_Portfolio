@@ -336,6 +336,11 @@
   color: var(--color-text-muted);
 }
 
+.project-card__invalid-url {
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+}
+
 /* Skills */
 .skills-list {
   display: flex;

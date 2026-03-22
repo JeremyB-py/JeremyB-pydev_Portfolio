@@ -23,26 +23,54 @@ async function loadProjects(): Promise<ProjectJson[]> {
   return res.json() as Promise<ProjectJson[]>;
 }
 
+/**
+ * Allow only http(s) URLs for navigational links. Blocks javascript:, data:, vbscript:, etc.
+ */
+function sanitizeHttpUrl(raw: string): string | null {
+  const t = raw.trim();
+  if (!t) return null;
+  try {
+    const u = new URL(t);
+    if (u.protocol !== 'http:' && u.protocol !== 'https:') return null;
+    return u.href;
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Restrict DOM id / hash fragment segments to safe characters (prevents attribute-breakout in templates).
+ */
+function safeProjectDomId(id: string, fallbackIndex: number): string {
+  const cleaned = id.replace(/[^a-zA-Z0-9_-]/g, '');
+  return cleaned || `project-${fallbackIndex}`;
+}
+
 function renderProjects(projects: ProjectJson[]): void {
   const root = document.getElementById('projects-root');
   if (!root) return;
 
   root.innerHTML = projects
-    .map(
-      (p) => `
-    <article class="project-card" id="project-${p.id}">
+    .map((p, index) => {
+      const domId = safeProjectDomId(p.id, index);
+      const writeUp = sanitizeHttpUrl(p.writeUpUrl);
+      const writeUpLink = writeUp
+        ? `<a href="${escapeHtml(writeUp)}" target="_blank" rel="noopener noreferrer">Read write-up</a>`
+        : `<span class="project-card__invalid-url" title="Invalid or disallowed write-up URL (only http and https links allowed)">Write-up unavailable</span>`;
+      return `
+    <article class="project-card" id="project-${escapeHtml(domId)}">
       <h3 class="project-card__title">${escapeHtml(p.title)}</h3>
       <p class="project-card__summary">${escapeHtml(p.summary)}</p>
       <div class="project-card__tags" aria-label="Technologies">
         ${p.tech.map((t) => `<span class="tag">${escapeHtml(t)}</span>`).join('')}
       </div>
       <div class="project-card__links">
-        <a href="${p.writeUpUrl}" target="_blank" rel="noopener noreferrer">Read write-up</a>
+        ${writeUpLink}
         ${p.private ? '<span class="badge-private">Private repo</span>' : ''}
       </div>
     </article>
-  `
-    )
+  `;
+    })
     .join('');
 }
 
@@ -57,8 +85,8 @@ function fillConstellationList(projects: ProjectForMap[]): void {
   if (!ul) return;
   ul.innerHTML = projects
     .map(
-      (p) =>
-        `<li><a href="#project-${p.id}">${escapeHtml(p.title)}</a></li>`
+      (p, index) =>
+        `<li><a href="#project-${escapeHtml(safeProjectDomId(p.id, index))}">${escapeHtml(p.title)}</a></li>`
     )
     .join('');
 }
@@ -97,10 +125,10 @@ async function main(): Promise<void> {
     const projects = await loadProjects();
     renderProjects(projects);
 
-    const mapData: ProjectForMap[] = projects.map((p) => ({
-      id: p.id,
+    const mapData: ProjectForMap[] = projects.map((p, index) => ({
+      id: safeProjectDomId(p.id, index),
       title: p.title,
-      writeUpUrl: p.writeUpUrl,
+      writeUpUrl: sanitizeHttpUrl(p.writeUpUrl) ?? '',
     }));
     fillConstellationList(mapData);
 
