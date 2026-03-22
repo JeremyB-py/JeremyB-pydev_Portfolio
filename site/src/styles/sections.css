@@ -17,6 +17,27 @@
   padding: 0.75rem 0;
 }
 
+/* Desktop: keep header on one row; tablet: allow wrap (max two logical rows) */
+@media (min-width: 1024px) {
+  .site-header__inner {
+    flex-wrap: nowrap;
+  }
+
+  .site-header__actions {
+    flex-wrap: nowrap;
+    min-width: 0;
+  }
+
+  .theme-switcher {
+    flex-wrap: nowrap;
+    min-width: 0;
+  }
+
+  .theme-buttons {
+    flex-wrap: nowrap;
+  }
+}
+
 .site-logo {
   font-weight: 700;
   font-size: 1.05rem;
@@ -97,6 +118,13 @@
   margin: 0;
 }
 
+/* Ease horizontal pressure: hide long hint until large desktop */
+@media (max-width: 1279px) {
+  .theme-switcher__hint {
+    display: none;
+  }
+}
+
 .theme-buttons {
   display: flex;
   gap: 0.25rem;
@@ -116,6 +144,15 @@
     border-color 0.2s,
     color 0.2s,
     background 0.2s;
+  min-width: 0;
+  flex-shrink: 1;
+}
+
+[data-theme='matrix'] .theme-btn,
+[data-theme='terminal'] .theme-btn {
+  font-size: 0.65rem;
+  padding: 0.3rem 0.4rem;
+  letter-spacing: -0.02em;
 }
 
 .theme-btn:hover {
@@ -327,6 +364,18 @@
   flex-wrap: wrap;
   gap: 0.75rem;
   font-size: 0.85rem;
+  align-items: baseline;
+}
+
+.project-card__primary {
+  font-weight: 600;
+  color: var(--color-accent);
+  text-decoration: none;
+}
+
+.project-card__primary:hover {
+  text-decoration: underline;
+  color: var(--color-link);
 }
 
 .badge-private {

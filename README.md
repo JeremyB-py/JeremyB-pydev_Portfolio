@@ -67,7 +67,7 @@ Write-up link: [Wrinkle Witch Referral Tracker Showcase](https://github.com/Jere
 - **Tech:** Python · Pandas · Scikit-Learn · Matplotlib · Statsmodels  
 - **Highlights:** Parameter tuning for ARIMA (p,d,q), error analysis (RMSE / R²), multi-crop comparisons
 
-Write-up Link: [Agricultural Forcasting Showcase](https://github.com/JeremyB-py/JeremyB-pydev_Portfolio/blob/main/projects/agricultural_forecasting.md)
+Write-up Link: [Agricultural Forecasting Showcase](https://github.com/JeremyB-py/JeremyB-pydev_Portfolio/blob/main/projects/agricultural_forecasting.md)
 
 ---
 

@@ -53,13 +53,13 @@ It was built as part of a larger research goal to apply data-driven insights to 
 ## Media
 
 - **Pairplot Features** Showing correlations for all variables with crop yield.  
-![Pairplot Features](../media/agricultural_forcasting/pairplot_features.png)
+![Pairplot Features](../media/agricultural_forecasting/pairplot_features.png)
 
 - **Heatmaps** showing feature correlations.  
-![Heatmap Correlations](../media/agricultural_forcasting/heatmap_correlations.png)
+![Heatmap Correlations](../media/agricultural_forecasting/heatmap_correlations.png)
 
 - **ARIMA forecast plot** Best fit, predicted yield per for all crops per year.  
-![Combined Crop Yields](../media/agricultural_forcasting/Combined_Crop_Yields_with_Best-Fit_ARIMA_Forecasts.png)
+![Combined Crop Yields](../media/agricultural_forecasting/Combined_Crop_Yields_with_Best-Fit_ARIMA_Forecasts.png)
 
 ---
 

@@ -9,11 +9,17 @@ import { initConstellation, type ProjectForMap } from './constellation';
 
 interface ProjectJson {
   id: string;
+  slug: string;
   title: string;
   summary: string;
   tech: string[];
   writeUpUrl: string;
   private: boolean;
+}
+
+function projectPageHref(slug: string): string {
+  const s = slug.replace(/[^a-zA-Z0-9_-]/g, '') || 'project';
+  return `${import.meta.env.BASE_URL}projects/${s}/`;
 }
 
 async function loadProjects(): Promise<ProjectJson[]> {
@@ -53,9 +59,12 @@ function renderProjects(projects: ProjectJson[]): void {
   root.innerHTML = projects
     .map((p, index) => {
       const domId = safeProjectDomId(p.id, index);
+      const slug = (p.slug ?? p.id).replace(/[^a-zA-Z0-9_-]/g, '') || `project-${index}`;
+      const pageHref = projectPageHref(slug);
       const writeUp = sanitizeHttpUrl(p.writeUpUrl);
+      const viewProject = `<a class="project-card__primary" href="${escapeHtml(pageHref)}">View project</a>`;
       const writeUpLink = writeUp
-        ? `<a href="${escapeHtml(writeUp)}" target="_blank" rel="noopener noreferrer">Read write-up</a>`
+        ? `<a href="${escapeHtml(writeUp)}" target="_blank" rel="noopener noreferrer">View on GitHub</a>`
         : `<span class="project-card__invalid-url" title="Invalid or disallowed write-up URL (only http and https links allowed)">Write-up unavailable</span>`;
       return `
     <article class="project-card" id="project-${escapeHtml(domId)}">
@@ -65,6 +74,7 @@ function renderProjects(projects: ProjectJson[]): void {
         ${p.tech.map((t) => `<span class="tag">${escapeHtml(t)}</span>`).join('')}
       </div>
       <div class="project-card__links">
+        ${viewProject}
         ${writeUpLink}
         ${p.private ? '<span class="badge-private">Private repo</span>' : ''}
       </div>
@@ -84,10 +94,10 @@ function fillConstellationList(projects: ProjectForMap[]): void {
   const ul = document.getElementById('constellation-list');
   if (!ul) return;
   ul.innerHTML = projects
-    .map(
-      (p, index) =>
-        `<li><a href="#project-${escapeHtml(safeProjectDomId(p.id, index))}">${escapeHtml(p.title)}</a></li>`
-    )
+    .map((p) => {
+      const href = projectPageHref(p.slug);
+      return `<li><a href="${escapeHtml(href)}">${escapeHtml(p.title)}</a></li>`;
+    })
     .join('');
 }
 
@@ -127,6 +137,7 @@ async function main(): Promise<void> {
 
     const mapData: ProjectForMap[] = projects.map((p, index) => ({
       id: safeProjectDomId(p.id, index),
+      slug: (p.slug ?? p.id).replace(/[^a-zA-Z0-9_-]/g, '') || `project-${index}`,
       title: p.title,
       writeUpUrl: sanitizeHttpUrl(p.writeUpUrl) ?? '',
     }));
@@ -134,10 +145,7 @@ async function main(): Promise<void> {
 
     const canvas = document.getElementById('constellation-canvas') as HTMLCanvasElement | null;
     if (canvas) {
-      initConstellation(canvas, mapData, (id) => {
-        const el = document.getElementById(`project-${id}`);
-        el?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      });
+      initConstellation(canvas, mapData, import.meta.env.BASE_URL);
     }
   } catch (e) {
     console.error(e);
