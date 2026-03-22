@@ -15,6 +15,9 @@
 
 I build practical applications that connect frontend experience, backend engineering, and automation.  
 
+### Portfolio website
+An interactive portfolio UI lives in [`site/`](./site/) (Vite + TypeScript): theme switcher, scroll reveals, project constellation map, and deploy to GitHub Pages via [`.github/workflows/deploy-pages.yml`](./.github/workflows/deploy-pages.yml). See [`site/README.md`](./site/README.md) for commands.
+
 ---
 
 ## Featured Projects

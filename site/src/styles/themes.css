@@ -1,0 +1,73 @@
+:root {
+  --font-sans: system-ui, 'Segoe UI', Roboto, Ubuntu, Cantarell, sans-serif;
+  --font-mono: ui-monospace, 'Cascadia Code', 'Fira Code', 'SF Mono', monospace;
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --shadow-soft: 0 8px 32px rgba(0, 0, 0, 0.35);
+}
+
+/* Nebula (default) — dark blue / cyan sci-fi */
+:root,
+[data-theme='nebula'] {
+  --color-bg: #070b14;
+  --color-bg-gradient: radial-gradient(ellipse 120% 80% at 50% -20%, rgba(56, 189, 248, 0.12), transparent 50%),
+    radial-gradient(ellipse 80% 50% at 100% 50%, rgba(59, 130, 246, 0.08), transparent),
+    linear-gradient(180deg, #070b14 0%, #0a1228 100%);
+  --color-surface: rgba(15, 23, 42, 0.75);
+  --color-surface-border: rgba(56, 189, 248, 0.22);
+  --color-text: #e8f4fc;
+  --color-text-muted: #94a3b8;
+  --color-accent: #38bdf8;
+  --color-accent-dim: rgba(56, 189, 248, 0.15);
+  --color-link: #7dd3fc;
+  --color-header-bg: rgba(7, 11, 20, 0.85);
+  --font-ui: var(--font-sans);
+}
+
+[data-theme='matrix'] {
+  --color-bg: #020805;
+  --color-bg-gradient: radial-gradient(ellipse 100% 60% at 50% 0%, rgba(34, 197, 94, 0.08), transparent 55%),
+    linear-gradient(180deg, #020805 0%, #051a0d 100%);
+  --color-surface: rgba(6, 26, 14, 0.85);
+  --color-surface-border: rgba(34, 197, 94, 0.35);
+  --color-text: #dcfce7;
+  --color-text-muted: #86efac;
+  --color-accent: #22c55e;
+  --color-accent-dim: rgba(34, 197, 94, 0.12);
+  --color-link: #4ade80;
+  --color-header-bg: rgba(2, 8, 5, 0.92);
+  --font-ui: var(--font-mono);
+}
+
+[data-theme='terminal'] {
+  --color-bg: #0c0a06;
+  --color-bg-gradient: radial-gradient(ellipse 90% 50% at 50% 0%, rgba(251, 191, 36, 0.06), transparent 50%),
+    linear-gradient(180deg, #0c0a06 0%, #1a1510 100%);
+  --color-surface: rgba(28, 25, 20, 0.9);
+  --color-surface-border: rgba(251, 191, 36, 0.28);
+  --color-text: #fef3c7;
+  --color-text-muted: #d6d3d1;
+  --color-accent: #fbbf24;
+  --color-accent-dim: rgba(251, 191, 36, 0.12);
+  --color-link: #fcd34d;
+  --color-header-bg: rgba(12, 10, 6, 0.92);
+  --font-ui: var(--font-mono);
+}
+
+[data-theme='paper'] {
+  --color-bg: #f8fafc;
+  --color-bg-gradient: linear-gradient(180deg, #f8fafc 0%, #e2e8f0 100%);
+  --color-surface: #ffffff;
+  --color-surface-border: rgba(15, 23, 42, 0.12);
+  --color-text: #0f172a;
+  --color-text-muted: #475569;
+  --color-accent: #0369a1;
+  --color-accent-dim: rgba(3, 105, 161, 0.08);
+  --color-link: #0284c7;
+  --color-header-bg: rgba(248, 250, 252, 0.95);
+  --font-ui: var(--font-sans);
+}
+
+body {
+  font-family: var(--font-ui);
+}
