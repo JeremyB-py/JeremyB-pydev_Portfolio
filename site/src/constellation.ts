@@ -52,6 +52,11 @@ const NODE_R = 14;
 const SAT_R_HI = 6;
 const SAT_R_LO = 4;
 
+/** Matrix theme: monospace glyphs (size still follows orbit / highlight logic) */
+const MATRIX_NODE_CHARS = ['@', '#', '*', '%', '&', 'O', '+', 'X', '8', 'H'];
+const MATRIX_SAT_CHARS = ['+', '*', '.', ':', "'", '`', ',', '^', '~', '='];
+const MATRIX_MID_CHARS = ['.', ',', "'", ':', ';', '`', '^', '~', '-', '|'];
+
 /** Golden-angle hue step so neighboring projects read as distinct in any theme */
 const GOLDEN_HUE = 137.508;
 
@@ -69,6 +74,12 @@ interface NodePaletteEntry {
   shadowDim: string;
   /** Low-opacity stroke for hub → node lines when not hovered */
   hubLineMuted: string;
+}
+
+function withAlpha(hexOrCss: string, alpha: number): string {
+  const rgb = parseCssColor(hexOrCss);
+  if (!rgb) return hexOrCss;
+  return `rgba(${rgb.r},${rgb.g},${rgb.b},${alpha})`;
 }
 
 function parseCssColor(input: string): RGB | null {
@@ -430,6 +441,11 @@ export function initConstellation(
       colors.link,
       colors.bg
     );
+    const themeAttr = document.documentElement.getAttribute('data-theme') ?? '';
+    const isPaper = themeAttr === 'paper';
+    const isMatrix = themeAttr === 'matrix';
+    const monoFont = "ui-monospace, 'Cascadia Code', 'Fira Code', monospace";
+
     c.clearRect(0, 0, w, h);
 
     if (!reducedMotion) {
@@ -447,6 +463,7 @@ export function initConstellation(
 
     // Background mini-stars (non-interactive): brighter + subtle twinkle
     const bgBaseAlpha = reducedMotion ? 0.32 : 0.48;
+    const bgPaperMul = isPaper ? 0.55 : 1;
     for (const d of bgDots) {
       const a = d.ang + spin * (0.85 + (d.r % 1) * 0.3);
       const bx = galaxyCx + Math.cos(a) * d.rx;
@@ -455,17 +472,26 @@ export function initConstellation(
         ? 1
         : 0.62 + 0.38 * Math.sin(animT * d.twinkleSpeed + d.twinklePhase);
       const rr = d.r * (reducedMotion ? 1 : 0.92 + 0.08 * twinkle);
-      c.globalAlpha = bgBaseAlpha * twinkle;
+      c.globalAlpha = bgBaseAlpha * twinkle * bgPaperMul;
       c.fillStyle = muted;
       c.beginPath();
       c.arc(bx, by, rr, 0, Math.PI * 2);
-      c.fill();
+      if (isPaper) {
+        c.fillStyle = withAlpha(muted, 0.06);
+        c.fill();
+        c.strokeStyle = withAlpha(muted, isPaper ? 0.42 : 0.35);
+        c.lineWidth = 0.75;
+        c.stroke();
+      } else {
+        c.fill();
+      }
     }
     c.globalAlpha = 1;
 
     // Mid-orbit stars (larger than mini dust, smaller than skill satellites)
     const midBaseAlpha = reducedMotion ? 0.44 : 0.58;
-    for (const d of midOrbiters) {
+    const midPaperMul = isPaper ? 0.52 : 1;
+    midOrbiters.forEach((d, midIdx) => {
       const a = d.ang + spin * d.spinRate;
       const bx = galaxyCx + Math.cos(a) * d.rx;
       const by = galaxyCy + Math.sin(a) * d.ry;
@@ -473,16 +499,36 @@ export function initConstellation(
         ? 1
         : 0.68 + 0.32 * Math.sin(animT * d.twinkleSpeed + d.twinklePhase);
       const rr = d.r * (reducedMotion ? 1 : 0.94 + 0.06 * twinkle);
-      c.globalAlpha = midBaseAlpha * twinkle;
-      c.fillStyle = muted;
-      c.beginPath();
-      c.arc(bx, by, rr, 0, Math.PI * 2);
-      c.fill();
-    }
+      c.globalAlpha = midBaseAlpha * twinkle * midPaperMul;
+      if (isMatrix) {
+        const ch = MATRIX_MID_CHARS[midIdx % MATRIX_MID_CHARS.length];
+        const fs = Math.max(6, Math.min(13, rr * 2.4));
+        c.fillStyle = muted;
+        c.font = `${fs}px ${monoFont}`;
+        c.textAlign = 'center';
+        c.textBaseline = 'middle';
+        c.globalAlpha = midBaseAlpha * twinkle * midPaperMul;
+        c.fillText(ch, bx, by);
+      } else if (isPaper) {
+        c.fillStyle = withAlpha(muted, 0.08);
+        c.beginPath();
+        c.arc(bx, by, rr, 0, Math.PI * 2);
+        c.fill();
+        c.strokeStyle = withAlpha(muted, 0.38);
+        c.lineWidth = 1;
+        c.stroke();
+      } else {
+        c.fillStyle = muted;
+        c.beginPath();
+        c.arc(bx, by, rr, 0, Math.PI * 2);
+        c.fill();
+      }
+    });
     c.globalAlpha = 1;
 
-    // Hub aura — radial glow + rings (drawn behind core disk)
+    // Hub aura — radial glow + rings (drawn behind core disk); softer “pencil” on paper
     const accentRgb = parseCssColor(accent);
+    const auraMul = isPaper ? 0.45 : 1;
     if (accentRgb) {
       const pulse = reducedMotion ? 0 : 7 * Math.sin(animT * 0.72);
       const breathe = reducedMotion ? 1 : 1 + 0.035 * Math.sin(animT * 0.48);
@@ -497,29 +543,30 @@ export function initConstellation(
         rOuter
       );
       const { r: ar, g: ag, b: ab } = accentRgb;
+      const ga = (x: number) => x * auraMul;
       grad.addColorStop(0, `rgba(${ar},${ag},${ab},0)`);
-      grad.addColorStop(0.22, `rgba(${ar},${ag},${ab},0.14)`);
-      grad.addColorStop(0.5, `rgba(${ar},${ag},${ab},0.07)`);
+      grad.addColorStop(0.22, `rgba(${ar},${ag},${ab},${ga(0.14)})`);
+      grad.addColorStop(0.5, `rgba(${ar},${ag},${ab},${ga(0.07)})`);
       grad.addColorStop(1, `rgba(${ar},${ag},${ab},0)`);
       c.fillStyle = grad;
       c.beginPath();
       c.arc(hub.x, hub.y, rOuter, 0, Math.PI * 2);
       c.fill();
 
-      const ringCount = reducedMotion ? 2 : 4;
+      const ringCount = reducedMotion ? 2 : isPaper ? 3 : 4;
       for (let ring = 0; ring < ringCount; ring++) {
         const baseR = 30 + ring * 9 + (reducedMotion ? 0 : Math.sin(animT * 0.65 + ring * 1.1) * 2.5);
         const alpha = reducedMotion
-          ? 0.065 + ring * 0.015
-          : 0.07 + 0.06 * Math.sin(animT * 0.88 + ring * 0.9);
+          ? (0.065 + ring * 0.015) * auraMul
+          : (0.07 + 0.06 * Math.sin(animT * 0.88 + ring * 0.9)) * auraMul;
         c.strokeStyle = `rgba(${ar},${ag},${ab},${alpha})`;
-        c.lineWidth = reducedMotion ? 1 : 1.2 + (ring % 2) * 0.35;
+        c.lineWidth = reducedMotion ? 1 : isPaper ? 0.9 : 1.2 + (ring % 2) * 0.35;
         c.beginPath();
         c.arc(hub.x, hub.y, baseR, 0, Math.PI * 2);
         c.stroke();
       }
 
-      if (!reducedMotion) {
+      if (!reducedMotion && !isPaper) {
         const rot = animT * 0.38;
         for (let s = 0; s < 3; s++) {
           const arcR = 36 + s * 10;
@@ -537,52 +584,83 @@ export function initConstellation(
       }
     }
 
-    // Hub — galaxy center (slight pulse when motion on)
+    // Hub — galaxy center (slight pulse when motion on); ink-like on paper
     const hubPulse = reducedMotion ? 1 : 0.92 + 0.08 * Math.sin(animT * 0.7);
-    c.fillStyle = `${accent}38`;
-    c.beginPath();
-    c.arc(hub.x, hub.y, 21 * hubPulse, 0, Math.PI * 2);
-    c.fill();
-    c.strokeStyle = accent;
-    c.lineWidth = 2;
-    c.globalAlpha = reducedMotion ? 0.92 : 0.82 + 0.12 * Math.sin(animT * 0.55 + 0.3);
-    c.stroke();
+    const hubR = 21 * hubPulse;
+    if (isPaper) {
+      c.fillStyle = withAlpha(accent, 0.06);
+      c.beginPath();
+      c.arc(hub.x, hub.y, hubR, 0, Math.PI * 2);
+      c.fill();
+      c.strokeStyle = withAlpha(muted, 0.55);
+      c.lineWidth = 1.6;
+      c.globalAlpha = 1;
+      c.beginPath();
+      c.arc(hub.x, hub.y, hubR, 0, Math.PI * 2);
+      c.stroke();
+      c.strokeStyle = withAlpha(accent, 0.3);
+      c.lineWidth = 0.85;
+      c.beginPath();
+      c.arc(hub.x, hub.y, hubR - 2.2, 0, Math.PI * 2);
+      c.stroke();
+    } else {
+      c.fillStyle = `${accent}38`;
+      c.beginPath();
+      c.arc(hub.x, hub.y, hubR, 0, Math.PI * 2);
+      c.fill();
+      c.strokeStyle = accent;
+      c.lineWidth = 2;
+      c.globalAlpha = reducedMotion ? 0.92 : 0.82 + 0.12 * Math.sin(animT * 0.55 + 0.3);
+      c.stroke();
+    }
     c.globalAlpha = 1;
 
-    c.fillStyle = muted;
-    c.font = '14px system-ui, sans-serif';
+    c.fillStyle = isPaper ? withAlpha(muted, 0.75) : muted;
+    c.font = isMatrix ? `14px ${monoFont}` : '14px system-ui, sans-serif';
     c.textAlign = 'center';
-    if (!reducedMotion) {
+    if (!reducedMotion && !isPaper) {
       c.shadowColor = accent;
       c.shadowBlur = 6 + 5 * Math.sin(animT * 0.65);
     }
     c.fillText('Jeremy B.', hub.x, hub.y + 32);
     c.shadowBlur = 0;
 
-    // Hub → project lines (per-node hue when idle; bright when hovered)
-    c.lineWidth = 1;
+    // Hub → project lines (per-node hue when idle; dashed “ink” on paper)
+    c.lineWidth = isPaper ? 1.05 : 1;
+    if (isPaper) c.setLineDash([4, 6]);
     stars.forEach((s, si) => {
       const pos = galaxyPos(s, galaxyCx, galaxyCy, spin);
       const isHi = hovered === s;
       const np = nodePalette[si];
-      c.strokeStyle = isHi ? 'rgba(255, 255, 255, 0.88)' : np.hubLineMuted;
-      c.globalAlpha = isHi ? 0.95 : 1;
+      if (isPaper) {
+        c.strokeStyle = isHi ? withAlpha(np.fill, 0.88) : withAlpha(muted, 0.4);
+        c.globalAlpha = 1;
+      } else {
+        c.strokeStyle = isHi ? 'rgba(255, 255, 255, 0.88)' : np.hubLineMuted;
+        c.globalAlpha = isHi ? 0.95 : 1;
+      }
       c.beginPath();
       c.moveTo(hub.x, hub.y);
       c.lineTo(pos.x, pos.y);
       c.stroke();
     });
+    if (isPaper) c.setLineDash([]);
     c.globalAlpha = 1;
 
     // Branch lines + skill nodes (inherit parent color)
-    skillSats.forEach((sat) => {
+    if (isPaper) c.setLineDash([3, 5]);
+    skillSats.forEach((sat, satIdx) => {
       const parent = stars[sat.parentIndex];
       if (!parent) return;
       const posP = galaxyPos(parent, galaxyCx, galaxyCy, spin);
       const posS = skillWorldPos(parent, sat, galaxyCx, galaxyCy, spin);
       const isParentHi = hoveredIndex === sat.parentIndex;
       const pCol = nodePalette[sat.parentIndex];
-      c.strokeStyle = isParentHi ? pCol.fill : pCol.hubLineMuted;
+      if (isPaper) {
+        c.strokeStyle = isParentHi ? withAlpha(pCol.fill, 0.75) : withAlpha(muted, 0.35);
+      } else {
+        c.strokeStyle = isParentHi ? pCol.fill : pCol.hubLineMuted;
+      }
       c.globalAlpha = isParentHi ? 0.62 : 1;
       c.lineWidth = isParentHi ? 1.35 : 1;
       c.beginPath();
@@ -598,11 +676,32 @@ export function initConstellation(
       const sr =
         (isParentHi ? SAT_R_HI : SAT_R_LO) *
         (isParentHi && !reducedMotion ? 1 + 0.04 * Math.sin(animT * 0.9) : satTw);
-      c.fillStyle = isParentHi ? pCol.fill : pCol.fillDim;
-      c.globalAlpha = isParentHi ? 0.92 : 0.38 * satTw;
-      c.beginPath();
-      c.arc(posS.x, posS.y, sr, 0, Math.PI * 2);
-      c.fill();
+
+      if (isMatrix) {
+        const ch = MATRIX_SAT_CHARS[satIdx % MATRIX_SAT_CHARS.length];
+        const fs = Math.max(7, Math.min(16, sr * 2));
+        c.fillStyle = isParentHi ? pCol.fill : pCol.fillDim;
+        c.globalAlpha = isParentHi ? 0.95 : 0.55 * satTw;
+        c.font = `${fs}px ${monoFont}`;
+        c.textAlign = 'center';
+        c.textBaseline = 'middle';
+        c.fillText(ch, posS.x, posS.y);
+      } else if (isPaper) {
+        c.fillStyle = withAlpha(isParentHi ? pCol.fill : pCol.fillDim, isParentHi ? 0.12 : 0.08);
+        c.globalAlpha = 1;
+        c.beginPath();
+        c.arc(posS.x, posS.y, sr, 0, Math.PI * 2);
+        c.fill();
+        c.strokeStyle = withAlpha(isParentHi ? pCol.fill : pCol.fillDim, isParentHi ? 0.55 : 0.38);
+        c.lineWidth = 1.1;
+        c.stroke();
+      } else {
+        c.fillStyle = isParentHi ? pCol.fill : pCol.fillDim;
+        c.globalAlpha = isParentHi ? 0.92 : 0.38 * satTw;
+        c.beginPath();
+        c.arc(posS.x, posS.y, sr, 0, Math.PI * 2);
+        c.fill();
+      }
       c.globalAlpha = 1;
 
       if (isParentHi && skillFade > 0.05) {
@@ -610,12 +709,14 @@ export function initConstellation(
           sat.label.length > 18 ? `${sat.label.slice(0, 16)}…` : sat.label;
         c.globalAlpha = skillFade;
         c.fillStyle = text;
-        c.font = '14px system-ui, sans-serif';
+        c.font = isMatrix ? `13px ${monoFont}` : '14px system-ui, sans-serif';
         c.textAlign = 'center';
+        c.textBaseline = 'alphabetic';
         c.fillText(short, posS.x, posS.y - sr - 8);
         c.globalAlpha = 1;
       }
     });
+    if (isPaper) c.setLineDash([]);
 
     // Project nodes + titles (per-theme palette + soft breathe)
     stars.forEach((s, si) => {
@@ -627,18 +728,51 @@ export function initConstellation(
         : 1 + 0.045 * Math.sin(animT * 0.65 + s.baseAngle * 1.4 + si * 0.2);
       const baseR = isHi ? s.r + 3 : s.r * 0.75;
       const radius = baseR * (isHi ? 1 + (reducedMotion ? 0 : 0.03 * Math.sin(animT * 0.85)) : breathe);
-      c.globalAlpha = isHi ? 1 : 0.46;
-      c.fillStyle = isHi ? np.fill : np.fillDim;
-      c.shadowColor = isHi ? np.glow : np.shadowDim;
-      c.shadowBlur = isHi ? 22 : reducedMotion ? 0 : 10;
-      c.beginPath();
-      c.arc(pos.x, pos.y, radius, 0, Math.PI * 2);
-      c.fill();
-      c.shadowBlur = 0;
-      c.globalAlpha = isHi ? 1 : 0.22;
-      c.fillStyle = text;
-      c.font = '16px system-ui, sans-serif';
+
+      if (isMatrix) {
+        const ch = MATRIX_NODE_CHARS[si % MATRIX_NODE_CHARS.length];
+        const fs = Math.max(13, Math.min(26, radius * 1.2));
+        c.fillStyle = isHi ? np.fill : np.fillDim;
+        c.globalAlpha = isHi ? 1 : 0.62;
+        c.font = `${fs}px ${monoFont}`;
+        c.textAlign = 'center';
+        c.textBaseline = 'middle';
+        c.shadowBlur = 0;
+        c.fillText(ch, pos.x, pos.y);
+        c.globalAlpha = 1;
+      } else if (isPaper) {
+        c.globalAlpha = 1;
+        c.fillStyle = withAlpha(isHi ? np.fill : np.fillDim, isHi ? 0.14 : 0.09);
+        c.shadowBlur = 0;
+        c.beginPath();
+        c.arc(pos.x, pos.y, radius, 0, Math.PI * 2);
+        c.fill();
+        c.strokeStyle = withAlpha(isHi ? np.fill : np.fillDim, isHi ? 0.72 : 0.48);
+        c.lineWidth = isHi ? 2 : 1.45;
+        c.stroke();
+      } else {
+        c.globalAlpha = isHi ? 1 : 0.46;
+        c.fillStyle = isHi ? np.fill : np.fillDim;
+        c.shadowColor = isHi ? np.glow : np.shadowDim;
+        c.shadowBlur = isHi ? 22 : reducedMotion ? 0 : 10;
+        c.beginPath();
+        c.arc(pos.x, pos.y, radius, 0, Math.PI * 2);
+        c.fill();
+        c.shadowBlur = 0;
+      }
+      c.globalAlpha = isPaper
+        ? 0.58
+        : isMatrix
+          ? isHi
+            ? 1
+            : 0.52
+          : isHi
+            ? 1
+            : 0.22;
+      c.fillStyle = isPaper ? withAlpha(text, 0.78) : text;
+      c.font = isMatrix ? `15px ${monoFont}` : '16px system-ui, sans-serif';
       c.textAlign = 'center';
+      c.textBaseline = 'alphabetic';
       const label =
         s.project.title.length > 26 ? `${s.project.title.slice(0, 24)}…` : s.project.title;
       c.fillText(label, pos.x, pos.y - radius - 10);
