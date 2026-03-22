@@ -3,7 +3,7 @@
 Static portfolio built with **Vite** and **TypeScript**. Features:
 
 - Single-page layout: hero, about, GitHub activity chart, constellation map, projects (from `public/projects.json`), skills, contact
-- **Per-project pages:** `prebuild` runs `scripts/build-shell-css.mjs` (concatenates `src/styles` into `public/assets/site-shell.css` for shared header/themes), then `generate-project-pages.mjs`, which copies `media/` and emits `public/projects/<slug>/index.html` with the same shell + theme switcher as the home page (`theme` persists via `localStorage`)
+- **Per-project pages:** `prebuild` runs `scripts/build-shell-css.mjs` (concatenates `src/styles` into `public/assets/site-shell.css` for shared header/themes), `copy-docs-pdf.mjs` (copies resume PDF from repo `docs/` → `public/docs/JeremyB_Resume.pdf`), then `generate-project-pages.mjs`, which copies `media/` and emits `public/projects/<slug>/index.html` with the same shell + theme switcher as the home page (`theme` persists via `localStorage`)
 - **Themes:** Nebula (default), Matrix (with optional digital rain), Terminal, Paper — persisted in `localStorage`
 - Scroll-driven section reveals (respects `prefers-reduced-motion`)
 - Canvas **constellation** (rotating “galaxy” + hover reveal) linking to project pages; accessible list mirror
@@ -24,7 +24,7 @@ npm run preview          # preview production build
 
 - Edit **`public/projects.json`** to add or change featured projects (`slug`, `sourceMarkdown`, titles, summaries, tech tags, `writeUpUrl` for “View on GitHub”).
 - Markdown sources live in the repo root `projects/*.md`; images use `/media/...` after build (source files often use `../media/...`).
-- **Resume:** Header and contact link to the markdown resume on GitHub by default. To serve a PDF, add `public/resume.pdf` and update the resume `href` values in `index.html`.
+- **Resume:** Put your PDF in the repo root **`docs/`** folder (any `*.pdf` name is copied to `public/docs/JeremyB_Resume.pdf` on build). Header and contact link to **`docs/JeremyB_Resume.pdf`**. Markdown resumes can live in `docs/` but are gitignored via `docs/*.md` so only the PDF is required for the site.
 - **GitHub “contribution graph” on the home page:** Uses a third-party SVG image URL (`ghchart.rshah.org`), not an official GitHub API. It updates when that service refreshes; link to your profile for the canonical graph. Alternatives with a PAT + GraphQL would require a build-time or server step.
 
 ## Deploy

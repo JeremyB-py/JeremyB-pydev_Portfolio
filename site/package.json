@@ -6,8 +6,8 @@
   "scripts": {
     "generate:pages": "node scripts/generate-project-pages.mjs",
     "shell:css": "node scripts/build-shell-css.mjs",
-    "prebuild": "node scripts/build-shell-css.mjs && node scripts/generate-project-pages.mjs",
-    "dev": "node scripts/build-shell-css.mjs && node scripts/generate-project-pages.mjs && vite",
+    "prebuild": "node scripts/build-shell-css.mjs && node scripts/copy-docs-pdf.mjs && node scripts/generate-project-pages.mjs",
+    "dev": "node scripts/build-shell-css.mjs && node scripts/copy-docs-pdf.mjs && node scripts/generate-project-pages.mjs && vite",
     "build": "tsc --noEmit && vite build",
     "preview": "vite preview"
   },

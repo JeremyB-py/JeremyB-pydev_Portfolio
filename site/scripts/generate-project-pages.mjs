@@ -90,11 +90,11 @@ function siteHeaderHtml(b) {
               </a>
               <a
                 id="resume-link"
-                href="https://github.com/JeremyB-py/JeremyB-pydev_Portfolio/blob/main/docs/JeremyB_Resume.md"
+                href="${b}docs/JeremyB_Resume.pdf"
                 target="_blank"
                 rel="noopener noreferrer"
                 title="Resume"
-                aria-label="Resume (markdown on GitHub)"
+                aria-label="Resume (PDF)"
               >
                 <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
                   <path
