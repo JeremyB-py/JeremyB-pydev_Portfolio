@@ -1,13 +1,10 @@
 name: Deploy portfolio site to GitHub Pages
 
+# Deploy on every push to main so changes outside site/projects/media (e.g. root README)
+# still trigger a rebuild when needed. Vite already hashes JS/CSS for cache busting.
 on:
   push:
     branches: [main]
-    paths:
-      - 'site/**'
-      - 'projects/**'
-      - 'media/**'
-      - '.github/workflows/deploy-pages.yml'
   workflow_dispatch:
 
 permissions:

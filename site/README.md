@@ -27,8 +27,17 @@ npm run preview          # preview production build
 
 ## Deploy
 
-On push to `main` (when `site/`, `projects/`, `media/`, or the workflow file changes), the workflow runs `npm ci && npm run build` in `site/` (so **`prebuild` always runs** the page generator) and publishes `site/dist` to the **`gh-pages`** branch. In the repo **Settings → Pages**, set the source to **`gh-pages`** (root).
+On **every push to `main`**, the workflow runs `npm ci && npm run build` in `site/` (so **`prebuild` always runs** the page generator) and publishes `site/dist` to the **`gh-pages`** branch. You can also run it manually from **Actions → Deploy portfolio site to GitHub Pages → Run workflow**.
+
+In the repo **Settings → Pages**, set the source to **`gh-pages`** branch, folder **`/` (root)** — **not** “GitHub Actions” unless you’ve switched to that model.
 
 Site URL (after Pages is enabled): `https://<user>.github.io/JeremyB-pydev_Portfolio/`
 
 Project case studies: `https://<user>.github.io/JeremyB-pydev_Portfolio/projects/<slug>/`
+
+### If the live site looks stale
+
+- **Assets:** Vite already **content-hashes** `assets/*.js` and `*.css`, so new builds get new filenames (automatic cache busting for JS/CSS).
+- **`index.html`** can be cached by the browser or CDN for a short time. Try a **hard refresh** (Ctrl+Shift+R / Cmd+Shift+R) or an incognito window after a deploy finishes.
+- Confirm **Actions** shows a green run for the latest commit and that **Settings → Pages** points at **`gh-pages`**.
+- After changing only files **outside** this repo (or if the workflow was skipped before), push any commit to `main` or use **workflow_dispatch** to force a deploy.
