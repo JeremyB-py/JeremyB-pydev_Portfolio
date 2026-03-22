@@ -53,12 +53,45 @@ const SAT_R_HI = 6;
 const SAT_R_LO = 4;
 
 /** Matrix theme: monospace glyphs (size still follows orbit / highlight logic) */
-const MATRIX_NODE_CHARS = ['@', '#', '*', '%', '&', 'O', '+', 'X', '8', 'H'];
-const MATRIX_SAT_CHARS = ['+', '*', '.', ':', "'", '`', ',', '^', '~', '='];
-const MATRIX_MID_CHARS = ['.', ',', "'", ':', ';', '`', '^', '~', '-', '|'];
+const MATRIX_NODE_CHARS = ['@', '#', '*', '%', '&', 'O', '+', 'X', '8', 'H', 'Q', 'D', '0'];
+/** Chunky ASCII (avoid . , | ' etc. — read like nodes at small sizes) */
+const MATRIX_SAT_CHARS = [
+  '+',
+  '*',
+  'o',
+  'O',
+  '0',
+  ':',
+  '@',
+  '#',
+  '%',
+  '^',
+  '~',
+  '=',
+  'x',
+  '8',
+  '&',
+];
+const MATRIX_MID_CHARS = [
+  'o',
+  'O',
+  '0',
+  '*',
+  '+',
+  ':',
+  '(',
+  ')',
+  'x',
+  'X',
+  '%',
+  '#',
+  '@',
+  '~',
+  '=',
+];
 
-/** Matrix: node & satellite glyphs ~3× prior size (“+200%”); mid orbiters ~2× (“+100%”) */
-const MATRIX_NODE_SAT_GLYPH_SCALE = 3;
+/** Matrix: node & satellite glyphs ~2.5× prior size; mid orbiters ~2× (“+100%”) */
+const MATRIX_NODE_SAT_GLYPH_SCALE = 2.5;
 const MATRIX_MID_GLYPH_SCALE = 2;
 
 /** Golden-angle hue step so neighboring projects read as distinct in any theme */
