@@ -5,8 +5,9 @@
   "type": "module",
   "scripts": {
     "generate:pages": "node scripts/generate-project-pages.mjs",
-    "prebuild": "node scripts/generate-project-pages.mjs",
-    "dev": "node scripts/generate-project-pages.mjs && vite",
+    "shell:css": "node scripts/build-shell-css.mjs",
+    "prebuild": "node scripts/build-shell-css.mjs && node scripts/generate-project-pages.mjs",
+    "dev": "node scripts/build-shell-css.mjs && node scripts/generate-project-pages.mjs && vite",
     "build": "tsc --noEmit && vite build",
     "preview": "vite preview"
   },

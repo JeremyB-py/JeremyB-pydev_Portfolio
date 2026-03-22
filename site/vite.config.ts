@@ -17,11 +17,15 @@ export default defineConfig({
       input: {
         main: path.resolve(__dirname, 'index.html'),
         projectReveal: path.resolve(__dirname, 'src/project-reveal.ts'),
+        siteShell: path.resolve(__dirname, 'src/site-shell.ts'),
       },
       output: {
         entryFileNames(chunkInfo) {
           if (chunkInfo.name === 'projectReveal') {
             return 'assets/project-reveal.js';
+          }
+          if (chunkInfo.name === 'siteShell') {
+            return 'assets/site-shell.js';
           }
           return 'assets/[name]-[hash].js';
         },

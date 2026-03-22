@@ -25,7 +25,8 @@ interface SkillSat {
   parentIndex: number;
   label: string;
   dist: number;
-  spreadIndex: number;
+  /** Radians offset from perpendicular to center→parent (fan spread) */
+  spreadRad: number;
 }
 
 const MAX_SKILLS = 5;
@@ -53,7 +54,7 @@ function skillWorldPos(
   const posP = galaxyPos(parent, cx, cy, spin);
   const theta = Math.atan2(posP.y - cy, posP.x - cx);
   const perp = theta + Math.PI / 2;
-  const ang = perp + sat.spreadIndex * 0.38;
+  const ang = perp + sat.spreadRad;
   return {
     x: posP.x + Math.cos(ang) * sat.dist,
     y: posP.y + Math.sin(ang) * sat.dist,
@@ -65,13 +66,19 @@ function buildSkillSats(stars: Star[]): SkillSat[] {
   stars.forEach((s, si) => {
     const tech = s.project.tech.slice(0, MAX_SKILLS);
     const n = tech.length;
+    // Fan spread in radians so satellites do not stack (wider arc for more skills)
+    const maxSpan = Math.min(1.55, 0.32 + n * 0.28);
+    const start = -maxSpan / 2;
+    const step = n <= 1 ? 0 : maxSpan / Math.max(n - 1, 1);
     tech.forEach((label, k) => {
-      const spreadIndex = n <= 1 ? 0 : (k - (n - 1) / 2) * 0.85;
+      const spreadRad = n === 1 ? 0 : start + k * step;
+      // Stagger distance so labels do not overlap along the same arc
+      const dist = 34 + k * 14 + (k % 2) * 8;
       out.push({
         parentIndex: si,
         label,
-        dist: 26 + k * 6,
-        spreadIndex,
+        dist,
+        spreadRad,
       });
     });
   });

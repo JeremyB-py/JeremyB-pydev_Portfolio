@@ -2,8 +2,8 @@
 
 Static portfolio built with **Vite** and **TypeScript**. Features:
 
-- Single-page layout: hero, about, constellation map, projects (from `public/projects.json`), skills, contact
-- **Per-project pages:** `npm run build` runs `prebuild`, which copies repo `media/` into `public/media/` and generates static case-study HTML at `public/projects/<slug>/index.html` from markdown paths in `projects.json` (see `scripts/generate-project-pages.mjs`)
+- Single-page layout: hero, about, GitHub activity chart, constellation map, projects (from `public/projects.json`), skills, contact
+- **Per-project pages:** `prebuild` runs `scripts/build-shell-css.mjs` (concatenates `src/styles` into `public/assets/site-shell.css` for shared header/themes), then `generate-project-pages.mjs`, which copies `media/` and emits `public/projects/<slug>/index.html` with the same shell + theme switcher as the home page (`theme` persists via `localStorage`)
 - **Themes:** Nebula (default), Matrix (with optional digital rain), Terminal, Paper — persisted in `localStorage`
 - Scroll-driven section reveals (respects `prefers-reduced-motion`)
 - Canvas **constellation** (rotating “galaxy” + hover reveal) linking to project pages; accessible list mirror
@@ -12,8 +12,9 @@ Static portfolio built with **Vite** and **TypeScript**. Features:
 
 ```bash
 npm install
-npm run generate:pages   # copy media + regenerate public/projects/**/index.html (runs automatically before build)
-npm run dev              # runs generate:pages, then Vite (base /)
+npm run shell:css        # regenerate public/assets/site-shell.css (runs automatically before build/dev)
+npm run generate:pages   # copy media + regenerate public/projects/**/index.html
+npm run dev              # shell:css + generate:pages + Vite (base /)
 npm run build            # generate:pages (prebuild) + production build to dist/
 GITHUB_PAGES=true npm run build   # base /JeremyB-pydev_Portfolio/ for GitHub Pages
 npm run preview          # preview production build
@@ -24,6 +25,7 @@ npm run preview          # preview production build
 - Edit **`public/projects.json`** to add or change featured projects (`slug`, `sourceMarkdown`, titles, summaries, tech tags, `writeUpUrl` for “View on GitHub”).
 - Markdown sources live in the repo root `projects/*.md`; images use `/media/...` after build (source files often use `../media/...`).
 - **Resume:** Header and contact link to the markdown resume on GitHub by default. To serve a PDF, add `public/resume.pdf` and update the resume `href` values in `index.html`.
+- **GitHub “contribution graph” on the home page:** Uses a third-party SVG image URL (`ghchart.rshah.org`), not an official GitHub API. It updates when that service refreshes; link to your profile for the canonical graph. Alternatives with a PAT + GraphQL would require a build-time or server step.
 
 ## Deploy
 

@@ -1,3 +1,255 @@
+/* Auto-generated: do not edit. Source: src/styles/{base,themes,sections}.css */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  line-height: 1.6;
+  color: var(--color-text);
+  background: var(--color-bg);
+  background-image: var(--color-bg-gradient);
+  transition:
+    color 0.35s ease,
+    background 0.35s ease;
+}
+
+#matrix-rain {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+[data-theme='matrix'] #matrix-rain {
+  opacity: 0.12;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-theme='matrix'] #matrix-rain {
+    opacity: 0;
+    display: none;
+  }
+}
+
+.site-wrap {
+  position: relative;
+  z-index: 1;
+}
+
+a {
+  color: var(--color-link);
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+a:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 3px;
+}
+
+.container {
+  width: min(100% - 2rem, 72rem);
+  margin-inline: auto;
+  padding-inline: 1rem;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+:root {
+  --font-sans: system-ui, 'Segoe UI', Roboto, Ubuntu, Cantarell, sans-serif;
+  --font-mono: ui-monospace, 'Cascadia Code', 'Fira Code', 'SF Mono', monospace;
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --shadow-soft: 0 8px 32px rgba(0, 0, 0, 0.35);
+}
+
+/* Nebula (default) — dark blue / cyan sci-fi */
+:root,
+[data-theme='nebula'] {
+  --color-bg: #070b14;
+  --color-bg-gradient: radial-gradient(ellipse 120% 80% at 50% -20%, rgba(56, 189, 248, 0.12), transparent 50%),
+    radial-gradient(ellipse 80% 50% at 100% 50%, rgba(59, 130, 246, 0.08), transparent),
+    linear-gradient(180deg, #070b14 0%, #0a1228 100%);
+  --color-surface: rgba(15, 23, 42, 0.75);
+  --color-surface-border: rgba(56, 189, 248, 0.22);
+  --color-text: #e8f4fc;
+  --color-text-muted: #94a3b8;
+  --color-accent: #38bdf8;
+  --color-accent-dim: rgba(56, 189, 248, 0.15);
+  --color-link: #7dd3fc;
+  --color-header-bg: rgba(7, 11, 20, 0.85);
+  --font-ui: var(--font-sans);
+}
+
+[data-theme='matrix'] {
+  --color-bg: #020805;
+  --color-bg-gradient: radial-gradient(ellipse 100% 60% at 50% 0%, rgba(34, 197, 94, 0.08), transparent 55%),
+    linear-gradient(180deg, #020805 0%, #051a0d 100%);
+  --color-surface: rgba(6, 26, 14, 0.85);
+  --color-surface-border: rgba(34, 197, 94, 0.35);
+  --color-text: #dcfce7;
+  --color-text-muted: #86efac;
+  --color-accent: #22c55e;
+  --color-accent-dim: rgba(34, 197, 94, 0.12);
+  --color-link: #4ade80;
+  --color-header-bg: rgba(2, 8, 5, 0.92);
+  --font-ui: var(--font-mono);
+}
+
+[data-theme='terminal'] {
+  --color-bg: #0c0a06;
+  --color-bg-gradient: radial-gradient(ellipse 90% 50% at 50% 0%, rgba(251, 191, 36, 0.06), transparent 50%),
+    linear-gradient(180deg, #0c0a06 0%, #1a1510 100%);
+  --color-surface: rgba(28, 25, 20, 0.9);
+  --color-surface-border: rgba(251, 191, 36, 0.28);
+  --color-text: #fef3c7;
+  --color-text-muted: #d6d3d1;
+  --color-accent: #fbbf24;
+  --color-accent-dim: rgba(251, 191, 36, 0.12);
+  --color-link: #fcd34d;
+  --color-header-bg: rgba(12, 10, 6, 0.92);
+  --font-ui: var(--font-mono);
+}
+
+[data-theme='paper'] {
+  --color-bg: #f8fafc;
+  --color-bg-gradient: linear-gradient(180deg, #f8fafc 0%, #e2e8f0 100%);
+  --color-surface: #ffffff;
+  --color-surface-border: rgba(15, 23, 42, 0.12);
+  --color-text: #0f172a;
+  --color-text-muted: #475569;
+  --color-accent: #0369a1;
+  --color-accent-dim: rgba(3, 105, 161, 0.08);
+  --color-link: #0284c7;
+  --color-header-bg: rgba(248, 250, 252, 0.95);
+  --font-ui: var(--font-sans);
+}
+
+body {
+  font-family: var(--font-ui);
+}
+
+/* Nebula: subtle extra stars + faint “constellation” lines (static; respects reduced-motion via opacity only) */
+html[data-theme='nebula'] body::before,
+html:not([data-theme]) body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.42;
+  background-image:
+    radial-gradient(1px 1px at 12% 18%, rgba(255, 255, 255, 0.45) 50%, transparent 50%),
+    radial-gradient(1px 1px at 84% 12%, rgba(255, 255, 255, 0.35) 50%, transparent 50%),
+    radial-gradient(1px 1px at 73% 58%, rgba(200, 230, 255, 0.4) 50%, transparent 50%),
+    radial-gradient(1px 1px at 22% 72%, rgba(255, 255, 255, 0.3) 50%, transparent 50%),
+    radial-gradient(1px 1px at 48% 38%, rgba(255, 255, 255, 0.25) 50%, transparent 50%),
+    radial-gradient(1.5px 1.5px at 91% 76%, rgba(186, 230, 253, 0.5) 50%, transparent 50%),
+    radial-gradient(1px 1px at 6% 62%, rgba(255, 255, 255, 0.28) 50%, transparent 50%),
+    radial-gradient(1px 1px at 55% 88%, rgba(200, 230, 255, 0.35) 50%, transparent 50%);
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+}
+
+html[data-theme='nebula'] body::after,
+html:not([data-theme]) body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.1;
+  background-image:
+    linear-gradient(52deg, transparent 47%, rgba(56, 189, 248, 0.22) 49%, transparent 51%),
+    linear-gradient(-28deg, transparent 48%, rgba(56, 189, 248, 0.12) 50%, transparent 52%),
+    linear-gradient(118deg, transparent 44%, rgba(59, 130, 246, 0.1) 50%, transparent 56%);
+  background-size:
+    280px 180px,
+    340px 220px,
+    400px 200px;
+  background-position:
+    15% 20%,
+    70% 55%,
+    40% 80%;
+  background-repeat: no-repeat;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html[data-theme='nebula'] body::before,
+  html:not([data-theme]) body::before {
+    opacity: 0.28;
+  }
+
+  html[data-theme='nebula'] body::after,
+  html:not([data-theme]) body::after {
+    opacity: 0.06;
+  }
+}
+
+/* Paper: lined notebook + margin rule */
+html[data-theme='paper'] body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background-image:
+    repeating-linear-gradient(
+      transparent 0,
+      transparent calc(1.5rem - 1px),
+      rgba(15, 23, 42, 0.07) calc(1.5rem - 1px),
+      rgba(15, 23, 42, 0.07) 1.5rem
+    ),
+    linear-gradient(
+      90deg,
+      transparent 0,
+      transparent calc(2.25rem - 2px),
+      rgba(185, 28, 28, 0.32) calc(2.25rem - 2px),
+      rgba(185, 28, 28, 0.32) calc(2.25rem - 1px),
+      transparent calc(2.25rem - 1px)
+    );
+  background-repeat: repeat, no-repeat;
+}
+
 /* Header */
 .site-header {
   position: sticky;
@@ -584,3 +836,4 @@
   width: 2rem;
   height: 2rem;
 }
+
