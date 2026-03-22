@@ -25,11 +25,13 @@ interface SkillSat {
   parentIndex: number;
   label: string;
   dist: number;
-  /** Radians offset from perpendicular to center→parent (fan spread) */
-  spreadRad: number;
+  /** Angle (rad) in parent-local frame: radial u and tangent v from galaxy center */
+  phi: number;
 }
 
 const MAX_SKILLS = 5;
+/** Same orbit radius for all skill dots around a project node (clock-like spread). */
+const SKILL_ORBIT_DIST = 36;
 
 function galaxyPos(
   s: Star,
@@ -52,12 +54,19 @@ function skillWorldPos(
   spin: number
 ): { x: number; y: number } {
   const posP = galaxyPos(parent, cx, cy, spin);
-  const theta = Math.atan2(posP.y - cy, posP.x - cx);
-  const perp = theta + Math.PI / 2;
-  const ang = perp + sat.spreadRad;
+  const dx = posP.x - cx;
+  const dy = posP.y - cy;
+  const len = Math.hypot(dx, dy) || 1;
+  const ux = dx / len;
+  const uy = dy / len;
+  const vx = -uy;
+  const vy = ux;
+  const phi = sat.phi;
+  const ox = Math.cos(phi) * ux + Math.sin(phi) * vx;
+  const oy = Math.cos(phi) * uy + Math.sin(phi) * vy;
   return {
-    x: posP.x + Math.cos(ang) * sat.dist,
-    y: posP.y + Math.sin(ang) * sat.dist,
+    x: posP.x + sat.dist * ox,
+    y: posP.y + sat.dist * oy,
   };
 }
 
@@ -66,19 +75,16 @@ function buildSkillSats(stars: Star[]): SkillSat[] {
   stars.forEach((s, si) => {
     const tech = s.project.tech.slice(0, MAX_SKILLS);
     const n = tech.length;
-    // Fan spread in radians so satellites do not stack (wider arc for more skills)
-    const maxSpan = Math.min(1.55, 0.32 + n * 0.28);
-    const start = -maxSpan / 2;
-    const step = n <= 1 ? 0 : maxSpan / Math.max(n - 1, 1);
+    // Rotate the whole clock pattern per project so adjacent projects don't align
+    const basePhase = si * 0.713 + 0.35;
     tech.forEach((label, k) => {
-      const spreadRad = n === 1 ? 0 : start + k * step;
-      // Stagger distance so labels do not overlap along the same arc
-      const dist = 34 + k * 14 + (k % 2) * 8;
+      const phi =
+        n <= 1 ? basePhase : basePhase + (2 * Math.PI * k) / n;
       out.push({
         parentIndex: si,
         label,
-        dist,
-        spreadRad,
+        dist: SKILL_ORBIT_DIST,
+        phi,
       });
     });
   });
@@ -127,7 +133,8 @@ export function initConstellation(
     const w = wrap?.clientWidth ?? 800;
     dpr = Math.min(window.devicePixelRatio || 1, 2);
     wCss = w;
-    hCss = Math.max(280, Math.round(w * 0.48));
+    /* ~2x prior height: large map, full width (no side list) */
+    hCss = Math.max(560, Math.round(w * 0.96));
     canvas.style.width = `${wCss}px`;
     canvas.style.height = `${hCss}px`;
     canvas.width = Math.floor(wCss * dpr);

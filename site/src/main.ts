@@ -90,17 +90,6 @@ function escapeHtml(s: string): string {
   return div.innerHTML;
 }
 
-function fillConstellationList(projects: ProjectForMap[]): void {
-  const ul = document.getElementById('constellation-list');
-  if (!ul) return;
-  ul.innerHTML = projects
-    .map((p) => {
-      const href = projectPageHref(p.slug);
-      return `<li><a href="${escapeHtml(href)}">${escapeHtml(p.title)}</a></li>`;
-    })
-    .join('');
-}
-
 function initNav(): void {
   const toggle = document.getElementById('nav-toggle');
   const nav = document.getElementById('site-nav');
@@ -142,8 +131,6 @@ async function main(): Promise<void> {
       writeUpUrl: sanitizeHttpUrl(p.writeUpUrl) ?? '',
       tech: Array.isArray(p.tech) ? p.tech : [],
     }));
-    fillConstellationList(mapData);
-
     const canvas = document.getElementById('constellation-canvas') as HTMLCanvasElement | null;
     if (canvas) {
       initConstellation(canvas, mapData, import.meta.env.BASE_URL);

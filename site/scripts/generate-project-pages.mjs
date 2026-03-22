@@ -45,8 +45,6 @@ function siteHeaderHtml(b) {
           </button>
           <nav id="site-nav" class="site-nav" aria-label="Primary">
             <a href="${b}#about">About</a>
-            <a href="${b}#github-activity">Activity</a>
-            <a href="${b}#map">Constellation</a>
             <a href="${b}#projects">Projects</a>
             <a href="${b}#skills">Skills</a>
             <a href="${b}#contact">Contact</a>
