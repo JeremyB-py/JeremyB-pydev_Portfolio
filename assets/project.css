@@ -1,0 +1,147 @@
+/* Standalone project case-study pages (generated HTML in public/projects/) */
+:root {
+  --pp-bg: #070b14;
+  --pp-text: #e8f4fc;
+  --pp-muted: #94a3b8;
+  --pp-accent: #38bdf8;
+  --pp-border: rgba(56, 189, 248, 0.22);
+  --pp-font: system-ui, 'Segoe UI', Roboto, Ubuntu, sans-serif;
+  --pp-mono: ui-monospace, monospace;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: var(--pp-font);
+  line-height: 1.65;
+  color: var(--pp-text);
+  background: var(--pp-bg);
+  background-image: radial-gradient(ellipse 120% 80% at 50% -20%, rgba(56, 189, 248, 0.08), transparent 50%),
+    linear-gradient(180deg, #070b14 0%, #0a1228 100%);
+}
+
+a {
+  color: var(--pp-accent);
+}
+
+a:focus-visible {
+  outline: 2px solid var(--pp-accent);
+  outline-offset: 3px;
+}
+
+.project-page-header {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem clamp(1rem, 4vw, 2rem);
+  border-bottom: 1px solid var(--pp-border);
+  background: rgba(15, 23, 42, 0.85);
+  backdrop-filter: blur(8px);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.project-page-header a {
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.project-page-header a:hover {
+  text-decoration: underline;
+}
+
+.project-content {
+  max-width: 52rem;
+  margin: 0 auto;
+  padding: 2rem clamp(1rem, 4vw, 2rem) 4rem;
+}
+
+.project-content h1 {
+  font-size: clamp(1.5rem, 4vw, 2rem);
+  margin-top: 0;
+  border-bottom: 1px solid var(--pp-border);
+  padding-bottom: 0.75rem;
+}
+
+.project-content h2 {
+  font-size: 1.25rem;
+  margin-top: 2rem;
+  color: var(--pp-accent);
+}
+
+.project-content h3 {
+  font-size: 1.05rem;
+  margin-top: 1.5rem;
+}
+
+.project-content p,
+.project-content li {
+  color: var(--pp-muted);
+}
+
+.project-content strong {
+  color: var(--pp-text);
+}
+
+.project-content table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+  margin: 1rem 0;
+}
+
+.project-content th,
+.project-content td {
+  border: 1px solid var(--pp-border);
+  padding: 0.5rem 0.75rem;
+  text-align: left;
+}
+
+.project-content th {
+  background: rgba(56, 189, 248, 0.1);
+  color: var(--pp-text);
+}
+
+.project-content img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+  border: 1px solid var(--pp-border);
+  margin: 0.75rem 0;
+}
+
+.project-content hr {
+  border: none;
+  border-top: 1px solid var(--pp-border);
+  margin: 2rem 0;
+}
+
+.project-content code {
+  font-family: var(--pp-mono);
+  font-size: 0.88em;
+  background: rgba(56, 189, 248, 0.1);
+  padding: 0.1em 0.35em;
+  border-radius: 4px;
+}
+
+.project-content pre code {
+  display: block;
+  padding: 1rem;
+  overflow-x: auto;
+}
+
+.project-content blockquote {
+  margin: 1rem 0;
+  padding-left: 1rem;
+  border-left: 3px solid var(--pp-accent);
+  color: var(--pp-muted);
+}

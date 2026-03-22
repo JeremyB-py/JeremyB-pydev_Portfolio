@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Agricultural Forecasting Dashboard — case study" />
+  <title>Agricultural Forecasting Dashboard | Jeremy B.</title>
+  <link rel="stylesheet" href="/JeremyB-pydev_Portfolio/assets/project.css" />
+  <link rel="icon" type="image/svg+xml" href="/JeremyB-pydev_Portfolio/favicon.svg" />
+</head>
+<body>
+  <header class="project-page-header">
+    <a href="/JeremyB-pydev_Portfolio/">← Back to portfolio</a>
+    <a href="https://github.com/JeremyB-py/JeremyB-pydev_Portfolio/blob/main/projects/agricultural_forecasting.md" target="_blank" rel="noopener noreferrer">View on GitHub</a>
+  </header>
+  <main class="project-content">
+    <h1>Agricultural Forecasting Dashboard</h1>
+<p>A data science project focused on forecasting crop yields using regression and ARIMA time-series modeling.<br>The goal was to analyze seasonal patterns, identify key predictors, and build models capable of predicting future production based on historical agricultural data.  </p>
+<hr>
+<h2>Overview</h2>
+<p>The <strong>Agricultural Forecasting Dashboard</strong> combines exploratory data analysis, regression modeling, and visual forecasting into a single, interactive workflow.</p>
+<p>This project demonstrates the end-to-end data science process:</p>
+<ul>
+<li>Data cleaning and preprocessing (handling missing values, normalizing units).  </li>
+<li>Use of multiple regression models to visualize the most important variables.  </li>
+<li>Exploratory Data Analysis (EDA) with descriptive statistics and correlation heatmaps.  </li>
+<li>Model selection and tuning using ARIMA(p,d,q) and regression baselines.  </li>
+<li>Visualizing results with time-series plots and confidence intervals.</li>
+</ul>
+<p>It was built as part of a larger research goal to apply data-driven insights to agricultural decision-making and resource allocation.</p>
+<hr>
+<h2>Features</h2>
+<table>
+<thead>
+<tr>
+<th>Category</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>EDA &amp; Visualization</code></td>
+<td>Trend analysis, seasonal decomposition, outlier detection.</td>
+</tr>
+<tr>
+<td><code>ARIMA Forecasting</code></td>
+<td>Optimized model selection with <code>find_best_arima_orders()</code> custom function.</td>
+</tr>
+<tr>
+<td><code>Regression Models</code></td>
+<td>Linear regression and comparison with ARIMA to evaluate accuracy.</td>
+</tr>
+<tr>
+<td><code>SHAP Model</code></td>
+<td>SHAP integration for automatic EDA visualization and interpretation.</td>
+</tr>
+<tr>
+<td><code>Descision Tree Models</code></td>
+<td>DescisionTree and RandomForest models used to identify EDA focus points.</td>
+</tr>
+<tr>
+<td><code>Performance Metrics</code></td>
+<td>RMSE, MAE, and R² scoring for validation.</td>
+</tr>
+<tr>
+<td><code>Multi-Crop Extension</code></td>
+<td>Modular functions to extend forecasting to other crops or regions.</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>Tech Stack</h2>
+<ul>
+<li><strong>Languages:</strong> Python  </li>
+<li><strong>Libraries:</strong> Pandas, NumPy, Matplotlib, Statsmodels, Scikit-Learn  </li>
+<li><strong>Tools:</strong> Jupyter Notebook, VS Code, Git  </li>
+<li><strong>Workflow:</strong> Data Cleaning → EDA → Modeling → Visualization → Evaluation</li>
+</ul>
+<hr>
+<h2>Highlights</h2>
+<ul>
+<li>Developed automated ARIMA tuning loops (<code>p</code>, <code>d</code>, <code>q</code> search grid).  </li>
+<li>Implemented data grouping logic for multi-crop comparison.  </li>
+<li>Visualized forecasts with confidence intervals and error bands.  </li>
+<li>Produced reproducible results and exportable figures for presentations.  </li>
+<li>Designed modular functions for integration into future data pipelines.  </li>
+<li>Used a variety of regression models to compare for best prediction.</li>
+</ul>
+<hr>
+<h2>Media</h2>
+<ul>
+<li><p><strong>Pairplot Features</strong> Showing correlations for all variables with crop yield.<br><img src="/JeremyB-pydev_Portfolio/media/agricultural_forecasting/pairplot_features.png" alt="Pairplot Features"></p>
+</li>
+<li><p><strong>Heatmaps</strong> showing feature correlations.<br><img src="/JeremyB-pydev_Portfolio/media/agricultural_forecasting/heatmap_correlations.png" alt="Heatmap Correlations"></p>
+</li>
+<li><p><strong>ARIMA forecast plot</strong> Best fit, predicted yield per for all crops per year.<br><img src="/JeremyB-pydev_Portfolio/media/agricultural_forecasting/Combined_Crop_Yields_with_Best-Fit_ARIMA_Forecasts.png" alt="Combined Crop Yields"></p>
+</li>
+</ul>
+<hr>
+<h2>Future Improvements</h2>
+<ul>
+<li>Transition to a Streamlit dashboard for live forecasting interaction.  </li>
+<li>Implement data ingestion from real-time sources (NOAA or USDA APIs).  </li>
+<li>Add machine learning ensembles (XGBoost).  </li>
+<li>Deploy as a hosted web app for non-technical users.</li>
+</ul>
+<hr>
+<h2>Skills Demonstrated</h2>
+<ul>
+<li>Data Cleaning &amp; Transformation  </li>
+<li>Exploratory Data Analysis (EDA)  </li>
+<li>Time-Series Modeling (ARIMA)  </li>
+<li>Regression Modeling  </li>
+<li>Data Visualization &amp; Interpretation  </li>
+<li>Model Evaluation (RMSE, R², Confidence Intervals)  </li>
+<li>Version Control &amp; Documentation</li>
+</ul>
+<hr>
+<h2>Repository</h2>
+<p>This open source project can be viewed at:<br><a href="https://github.com/JeremyB-py/Agricultural_Testing">github.com/JeremyB-py/Agricultural_Testing</a></p>
+
+  </main>
+</body>
+</html>

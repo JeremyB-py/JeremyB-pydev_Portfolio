@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Wrinkle Witch CRM — case study" />
+  <title>Wrinkle Witch CRM | Jeremy B.</title>
+  <link rel="stylesheet" href="/JeremyB-pydev_Portfolio/assets/project.css" />
+  <link rel="icon" type="image/svg+xml" href="/JeremyB-pydev_Portfolio/favicon.svg" />
+</head>
+<body>
+  <header class="project-page-header">
+    <a href="/JeremyB-pydev_Portfolio/">← Back to portfolio</a>
+    <a href="https://github.com/JeremyB-py/JeremyB-pydev_Portfolio/blob/main/projects/wrinkle_witch_crm.md" target="_blank" rel="noopener noreferrer">View on GitHub</a>
+  </header>
+  <main class="project-content">
+    <h1>Wrinkle Witch CRM (Core Platform)</h1>
+<p>The <strong>Wrinkle Witch CRM</strong> is a modular, Streamlit-based business management platform designed for <strong>The Wrinkle Witch</strong>, a local skincare business.<br>Initially developed as a <strong>searchable product database for esthetician products</strong>, the CRM now serves as the foundation for a broader suite of connected applications — including client tracking, referral management, and future automation tools.</p>
+<p>Built with scalability and modular integration in mind, the CRM architecture supports new components like the <strong>Referral Tracker</strong>, while maintaining simple offline persistence through CSV and SQLite storage.</p>
+<p><strong>Platform note:</strong> This CRM is now <strong>fully integrated</strong> as an internal app within the broader <a href="./wrinkle_witch_website.md">Wrinkle Witch Website &amp; Full-Stack Business Platform</a>. This write-up highlights the CRM module itself (product database, data layer, and extension patterns).</p>
+<hr>
+<h2>Overview</h2>
+<p>The Wrinkle Witch CRM was designed to streamline how an esthetician manages multiple facets of their business — from product organization to client engagement and marketing.<br>The initial version focuses on providing a structured product lookup and management system, with planned modules for:</p>
+<ul>
+<li><strong>Client Tracking &amp; Scheduling Integration:</strong> Future module to connect client profiles and appointments with Square API data.  </li>
+<li><strong>Referrals &amp; Rewards:</strong> Active development via the standalone <a href="./referral_tracker.md">Referral Tracker Module</a>.  </li>
+<li><strong>Routine Suggestions:</strong> Planned model-based recommendation engine for skincare routines based on client skin types and purchased products.  </li>
+<li><strong>Automatic Reminders &amp; Follow-ups:</strong> Potential future feature to automate client check-ins or reorder prompts.</li>
+</ul>
+<p>This foundation allows new tools to plug into the same ecosystem — sharing a consistent database layer, UI structure, and branding assets.</p>
+<hr>
+<h2>Features</h2>
+<table>
+<thead>
+<tr>
+<th>Category</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>Product Retrieval</code></td>
+<td>Fetch information and images for all products from an expandable number of skincare websites using BeautifulSoup and Playwright.</td>
+</tr>
+<tr>
+<td><code>Product Search</code></td>
+<td>Search, filter, and browse esthetician products across brands (e.g., Circadia, GlyMed, PCA).</td>
+</tr>
+<tr>
+<td><code>Data Persistence</code></td>
+<td>Stores all product and configuration data in CSV and SQLite for easy backup and portability.</td>
+</tr>
+<tr>
+<td><code>Extensible Framework</code></td>
+<td>Structured around modular imports, making it easy to integrate new Streamlit-based features.</td>
+</tr>
+<tr>
+<td><code>Referrals &amp; Rewards (in progress)</code></td>
+<td>Core support for the new Referral Tracker module, which automates client referral workflows and PDF exports.</td>
+</tr>
+<tr>
+<td><code>Future Scheduling Hooks</code></td>
+<td>Planned integration with Square API for automated scheduling, reminders, and analytics.</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>Tech Stack</h2>
+<ul>
+<li><strong>Frontend/UI:</strong> Streamlit  </li>
+<li><strong>Backend/Data:</strong> Python, Pandas, SQLite, CSV I/O  </li>
+<li><strong>Modules:</strong> OS utilities, Session State Management, Playwright, BeautifulSoup  </li>
+<li><strong>Version Control:</strong> Git / VS Code</li>
+</ul>
+<hr>
+<h2>Modular Extensions</h2>
+<table>
+<thead>
+<tr>
+<th>Module</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Referral Tracker</strong></td>
+<td>Latest standalone module that automates referral tracking, PDF card generation, and CSV synchronization. <em>(See detailed write-up <a href="./referral_tracker.md">here</a>)</em></td>
+</tr>
+<tr>
+<td><strong>Product Database</strong></td>
+<td>Core CRM feature enabling advanced product search, brand lookup, and data management for estheticians.</td>
+</tr>
+<tr>
+<td><strong>Client Analytics Dashboard</strong></td>
+<td>Planned Streamlit dashboard for tracking client activity, preferences, and product usage patterns.</td>
+</tr>
+<tr>
+<td><strong>Routine Suggestions (Planned)</strong></td>
+<td>Smart recommendation engine to suggest skincare routines based on client and product data.</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>Highlights</h2>
+<ul>
+<li>Evolved from a simple searchable product database into a modular CRM platform.  </li>
+<li>Designed for real-world business use by <em>The Wrinkle Witch</em> (esthetician studio).  </li>
+<li>Structured for future Square API integration for automated appointment and client sync.  </li>
+<li>Provides a persistent, local-first data layer (CSV and SQLite) with future cloud scalability.  </li>
+<li>Acts as the base framework supporting the <strong>Referral Tracker</strong> module.</li>
+</ul>
+<hr>
+<h2>Media</h2>
+<p><strong>Product Search Interface:</strong> Searchable database of all products through tags.<br><img src="/JeremyB-pydev_Portfolio/media/wrinkle_witch_crm/Skincare_Product_Explorer.png" alt="Skincare Product Explorer"></p>
+<p><strong>Expandable and Comparable Product Details</strong> Each product can be examined in further detail.<br><img src="/JeremyB-pydev_Portfolio/media/wrinkle_witch_crm/Product_Details.png" alt="Product Details"></p>
+<p><strong>Module Architecture Diagram:</strong> Prototype code in place for modules to plug into the core system.<br><img src="/JeremyB-pydev_Portfolio/media/wrinkle_witch_crm/Prototype_Module_Linking.png" alt="Prototype Module Architecture"></p>
+<hr>
+<h2>Future Imrovements</h2>
+<ul>
+<li>Database will be searchable through recommendations and more advanced tags.</li>
+<li>Tracking client usage and success with specific products or brands.</li>
+<li>Implementation of future modules.</li>
+</ul>
+<hr>
+<h2>Skills Demonstrated</h2>
+<ul>
+<li>Streamlit app architecture &amp; modularization  </li>
+<li>Python development and data management  </li>
+<li>SQLite &amp; CSV data pipelines  </li>
+<li>Session-state handling in reactive UIs  </li>
+<li>Business process automation &amp; scalability planning  </li>
+<li>Modular system design for future integrations</li>
+</ul>
+<hr>
+<h2>Repository</h2>
+<p>This project is private due to business use.<br>A summarized showcase of the CRM platform is available here:<br><a href="https://github.com/JeremyB-py-Portfolio">github.com/JeremyB-py-Portfolio</a></p>
+
+  </main>
+</body>
+</html>
