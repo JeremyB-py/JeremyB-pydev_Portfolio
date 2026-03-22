@@ -57,10 +57,12 @@ Sample blocks of early code within CLAIP.py
 ---
 
 ## Skills Demonstrated
-- AI architecture & safety design  
-- Python modular programming  
-- State persistence & rollback logic  
-- Research-level system conceptualization  
+- AI architecture & safety design (moral vs. learned knowledge separation)  
+- Python modular programming (dataclasses, structured packages)  
+- JSON-backed knowledge stores; Pickle/Hashlib for snapshots and integrity  
+- Logging and checkpoint/rollback logic for continual-learning simulations  
+- Research-level conceptualization (LoRA/QLoRA-inspired, parameter-efficient tuning ideas)  
+- Rule evaluation protocols and update gating before committing changes  
 
 ---
 

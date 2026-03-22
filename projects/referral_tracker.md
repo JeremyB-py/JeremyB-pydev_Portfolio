@@ -96,8 +96,10 @@ This structure allows it to be:
 - Streamlit app development  
 - Modular Python architecture  
 - Data persistence & CSV/SQLite synchronization  
-- Image manipulation (Pillow)  
-- PDF generation and layout (FPDF)  
+- Image manipulation (Pillow) for branded referral cards  
+- PDF generation and layout (FPDF, ReportLab) for batch exports  
+- Analytics-style reporting (charts/summaries via module layer)  
+- QR codes and printable card templates for in-person marketing  
 - Business process automation  
 - Debugging and UI state control in Streamlit  
 

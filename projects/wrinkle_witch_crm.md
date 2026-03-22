@@ -91,10 +91,12 @@ This foundation allows new tools to plug into the same ecosystem — sharing a c
 
 - Streamlit app architecture & modularization  
 - Python development and data management  
-- SQLite & CSV data pipelines  
+- Pandas for tabular data shaping and exports  
+- SQLite & CSV data pipelines (local-first persistence, backup-friendly workflows)  
+- Web scraping & HTML parsing (BeautifulSoup, Playwright) for product retrieval  
 - Session-state handling in reactive UIs  
 - Business process automation & scalability planning  
-- Modular system design for future integrations  
+- Modular system design for future integrations (e.g. Referral Tracker, Square hooks)  
 
 ---
 

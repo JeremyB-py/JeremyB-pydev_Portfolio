@@ -23,7 +23,7 @@
           </button>
           <nav id="site-nav" class="site-nav" aria-label="Primary">
             <a href="#about">About</a>
-            <a href="#projects">Projects</a>
+            <a href="#map">Projects</a>
             <a href="#skills">Skills</a>
             <a href="#contact">Contact</a>
           </nav>
@@ -105,7 +105,7 @@
               tooling for real businesses.
             </p>
             <div class="hero__cta">
-              <a class="btn" href="#projects">View projects</a>
+              <a class="btn" href="#map">View projects</a>
               <a class="btn btn--ghost" href="#contact">Get in touch</a>
             </div>
           </div>
@@ -123,6 +123,31 @@
             <p class="section__lead" style="margin-bottom: 0">
               <strong>Location:</strong> St. Louis, MO (open to remote)
             </p>
+          </div>
+        </section>
+
+        <section id="map" class="section section--map" aria-labelledby="map-heading">
+          <div class="container">
+            <h2 id="map-heading" class="section__title">Project constellation</h2>
+            <p class="section__lead">
+              Explore featured work as a slow-spinning galaxy map. Hover near a star to bring it into focus; click to open
+              the full project page. Links to each case study are also in <a href="#projects">Featured projects</a> below.
+            </p>
+            <div class="constellation-wrap">
+              <div class="constellation-canvas-wrap">
+                <canvas id="constellation-canvas" width="800" height="672" role="img" aria-label="Interactive project map; project links are in the Featured projects section below"></canvas>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="projects" class="section" aria-labelledby="projects-heading">
+          <div class="container">
+            <h2 id="projects-heading" class="section__title">Featured projects</h2>
+            <p class="section__lead">
+              Each project has a case-study page on this site; GitHub links are optional for the raw markdown write-up.
+            </p>
+            <div id="projects-root" class="projects-grid"></div>
           </div>
         </section>
 
@@ -157,31 +182,6 @@
                 />
               </a>
             </div>
-          </div>
-        </section>
-
-        <section id="map" class="section section--map" aria-labelledby="map-heading">
-          <div class="container">
-            <h2 id="map-heading" class="section__title">Project constellation</h2>
-            <p class="section__lead">
-              Explore featured work as a slow-spinning galaxy map. Hover near a star to bring it into focus; click to open
-              the full project page. Links to each case study are also in <a href="#projects">Featured projects</a> below.
-            </p>
-            <div class="constellation-wrap">
-              <div class="constellation-canvas-wrap">
-                <canvas id="constellation-canvas" width="800" height="672" role="img" aria-label="Interactive project map; project links are in the Featured projects section below"></canvas>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <section id="projects" class="section" aria-labelledby="projects-heading">
-          <div class="container">
-            <h2 id="projects-heading" class="section__title">Featured projects</h2>
-            <p class="section__lead">
-              Each project has a case-study page on this site; GitHub links are optional for the raw markdown write-up.
-            </p>
-            <div id="projects-root" class="projects-grid"></div>
           </div>
         </section>
 

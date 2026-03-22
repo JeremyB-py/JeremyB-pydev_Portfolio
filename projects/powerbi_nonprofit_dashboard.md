@@ -60,11 +60,12 @@ Example pages of the dashboard using generated datasets. All pages are connected
 ---
 
 ## Skills Demonstrated
-- Data modeling & visualization  
-- ETL design (Power Query)  
-- DAX expressions & KPIs  
-- Business reporting & storytelling  
-- Azure/SQL-ready data design  
+- Data modeling & visualization (star/snowflake-friendly layouts)  
+- ETL design (Power Query) for simulated and future live sources  
+- DAX expressions, KPIs, and measure design  
+- Interactive reporting (slicers, drill-through, cross-filtering)  
+- Business reporting & storytelling for non-profit stakeholders  
+- Azure/SQL-ready schema and CSV-based prototyping  
 
 ---
 

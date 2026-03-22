@@ -138,13 +138,18 @@ A summarized showcase of the platform is available in the portfolio README:
 
 - Full-stack system design (static frontend + API backend + admin apps + scheduled jobs)
 - Modular monorepo architecture with shared utilities
-- FastAPI endpoint design (validation, errors, CORS, deployment)
+- FastAPI + Uvicorn services; Pydantic validation; CORS, rate limiting, and structured errors
 - Payment and booking flows (Square Bookings API, Web Payments SDK, tokenization)
 - SQLAlchemy modeling + practical production/CI debugging
 - Secure auth patterns (bcrypt hashing, roles, admin tooling)
 - API integration patterns (Square OAuth refactor + adapter interfaces)
-- Performance optimization (HTTP caching + resilient frontend fetching)
+- Performance optimization (ETag/conditional GET, HTTP caching + resilient frontend fetching)
 - Marketing/analytics engineering (specials engine, tracking, A/B testing groundwork)
+- JavaScript & responsive static UI (multi-step booking, theme toggle, slideshows)
+- Cloudflare Pages (static site) + Railway (API, cron jobs, apscheduler/croniter)
+- pytest & GitHub Actions CI (path-filtered pipelines, import-order and DB fixtures)
+- QR codes, branded URLs, and customer-facing HTML flows (referral, unsubscribe)
+- SEO & ops hygiene (robots.txt, sitemap, security headers, logging)
 
 ---
 

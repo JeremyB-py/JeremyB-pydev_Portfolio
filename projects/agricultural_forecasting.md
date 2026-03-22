@@ -74,10 +74,13 @@ It was built as part of a larger research goal to apply data-driven insights to 
 ## Skills Demonstrated
 - Data Cleaning & Transformation  
 - Exploratory Data Analysis (EDA)  
-- Time-Series Modeling (ARIMA)  
-- Regression Modeling  
-- Data Visualization & Interpretation  
-- Model Evaluation (RMSE, R², Confidence Intervals)  
+- NumPy, Pandas, Matplotlib, Statsmodels, and Scikit-learn workflows  
+- Time-Series Modeling (ARIMA) with automated order search  
+- Regression, Decision Tree, and Random Forest models for comparison  
+- SHAP integration for automated EDA and feature interpretation  
+- Data Visualization & Interpretation (heatmaps, pairplots, forecast bands)  
+- Model Evaluation (RMSE, MAE, R², Confidence Intervals)  
+- Jupyter Notebook–driven research and reproducible experiments  
 - Version Control & Documentation  
 
 ---

@@ -54,9 +54,10 @@ Early example code
 ---
 
 ## Skills Demonstrated
-- Blockchain fundamentals  
-- Network communication with Flask  
-- Data integrity and hashing  
+- Blockchain fundamentals (proof-of-work, transaction pools, chain validation)  
+- REST-style APIs with Flask; Requests for node-to-node calls  
+- Cryptographic hashing (SHA-256) and Merkle-style linkage  
+- JSON persistence for chain state  
 - Python object-oriented design  
 - Debugging and algorithm validation  
 
