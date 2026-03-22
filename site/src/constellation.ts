@@ -31,7 +31,12 @@ interface SkillSat {
 
 const MAX_SKILLS = 5;
 /** Same orbit radius for all skill dots around a project node (clock-like spread). */
-const SKILL_ORBIT_DIST = 36;
+const SKILL_ORBIT_DIST = 54;
+/** Base radius for project nodes (CSS px); ~50% larger than original. */
+const NODE_R = 14;
+/** Skill satellite dot radii (CSS px) when highlighted / dim. */
+const SAT_R_HI = 6;
+const SAT_R_LO = 4;
 
 function galaxyPos(
   s: Star,
@@ -98,7 +103,8 @@ function makeBgDots(count: number, wCss: number, hCss: number): BgDot[] {
       ang: Math.random() * Math.PI * 2,
       rx: wCss * (0.22 + Math.random() * 0.48),
       ry: hCss * (0.16 + Math.random() * 0.42),
-      r: 0.4 + Math.random() * 1.1,
+      /** Smaller specks; extra dozens read as distant stars */
+      r: 0.22 + Math.random() * 0.55,
     });
   }
   return out;
@@ -133,8 +139,8 @@ export function initConstellation(
     const w = wrap?.clientWidth ?? 800;
     dpr = Math.min(window.devicePixelRatio || 1, 2);
     wCss = w;
-    /* ~2x prior height: large map, full width (no side list) */
-    hCss = Math.max(560, Math.round(w * 0.96));
+    /* ~20% shorter than prior full-width map */
+    hCss = Math.max(448, Math.round(w * 0.768));
     canvas.style.width = `${wCss}px`;
     canvas.style.height = `${hCss}px`;
     canvas.width = Math.floor(wCss * dpr);
@@ -155,11 +161,12 @@ export function initConstellation(
         orbitRx: wCss * 0.36 * ripple,
         orbitRy: hCss * 0.28 * ripple,
         project,
-        r: 9,
+        r: NODE_R,
       };
     });
     skillSats = buildSkillSats(stars);
-    const bgCount = reducedMotion ? 36 : 88;
+    /* Extra small orbiting stars (dozens more than original) */
+    const bgCount = reducedMotion ? 72 : 152;
     bgDots = makeBgDots(bgCount, wCss, hCss);
   }
 
@@ -172,7 +179,7 @@ export function initConstellation(
       const dx = clientX - rect.left - pos.x;
       const dy = clientY - rect.top - pos.y;
       const d = Math.sqrt(dx * dx + dy * dy);
-      if (d <= s.r + 14 && d < bestD) {
+      if (d <= s.r + 22 && d < bestD) {
         bestD = d;
         best = s;
       }
@@ -220,21 +227,21 @@ export function initConstellation(
     }
     c.globalAlpha = 1;
 
-    // Hub ("You are here") — galaxy center
+    // Hub — galaxy center
     c.fillStyle = `${accent}28`;
     c.beginPath();
-    c.arc(hub.x, hub.y, 14, 0, Math.PI * 2);
+    c.arc(hub.x, hub.y, 21, 0, Math.PI * 2);
     c.fill();
     c.strokeStyle = accent;
-    c.lineWidth = 1.5;
+    c.lineWidth = 2;
     c.globalAlpha = 0.9;
     c.stroke();
     c.globalAlpha = 1;
 
     c.fillStyle = muted;
-    c.font = '12px system-ui, sans-serif';
+    c.font = '14px system-ui, sans-serif';
     c.textAlign = 'center';
-    c.fillText('You are here', hub.x, hub.y + 26);
+    c.fillText('Jeremy B.', hub.x, hub.y + 32);
 
     // Hub → project lines (only hovered project bright)
     c.lineWidth = 1;
@@ -266,7 +273,7 @@ export function initConstellation(
       c.stroke();
       c.globalAlpha = 1;
 
-      const sr = isParentHi ? 4 : 2.5;
+      const sr = isParentHi ? SAT_R_HI : SAT_R_LO;
       c.fillStyle = isParentHi ? accent : muted;
       c.globalAlpha = isParentHi ? 0.85 : 0.2;
       c.beginPath();
@@ -279,9 +286,9 @@ export function initConstellation(
           sat.label.length > 18 ? `${sat.label.slice(0, 16)}…` : sat.label;
         c.globalAlpha = skillFade;
         c.fillStyle = text;
-        c.font = '10px system-ui, sans-serif';
+        c.font = '14px system-ui, sans-serif';
         c.textAlign = 'center';
-        c.fillText(short, posS.x, posS.y - sr - 6);
+        c.fillText(short, posS.x, posS.y - sr - 8);
         c.globalAlpha = 1;
       }
     });
@@ -290,22 +297,22 @@ export function initConstellation(
     stars.forEach((s) => {
       const pos = galaxyPos(s, galaxyCx, galaxyCy, spin);
       const isHi = hovered === s;
-      const radius = isHi ? s.r + 2 : s.r * 0.75;
+      const radius = isHi ? s.r + 3 : s.r * 0.75;
       c.globalAlpha = isHi ? 1 : 0.28;
       c.fillStyle = isHi ? accent : muted;
       c.shadowColor = isHi ? `${accent}aa` : 'transparent';
-      c.shadowBlur = isHi ? 14 : 0;
+      c.shadowBlur = isHi ? 20 : 0;
       c.beginPath();
       c.arc(pos.x, pos.y, radius, 0, Math.PI * 2);
       c.fill();
       c.shadowBlur = 0;
       c.globalAlpha = isHi ? 1 : 0.22;
       c.fillStyle = text;
-      c.font = '11px system-ui, sans-serif';
+      c.font = '16px system-ui, sans-serif';
       c.textAlign = 'center';
       const label =
         s.project.title.length > 26 ? `${s.project.title.slice(0, 24)}…` : s.project.title;
-      c.fillText(label, pos.x, pos.y - radius - 8);
+      c.fillText(label, pos.x, pos.y - radius - 10);
       c.globalAlpha = 1;
     });
 
