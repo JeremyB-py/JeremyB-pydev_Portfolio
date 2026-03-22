@@ -14,10 +14,13 @@
     <a href="https://github.com/JeremyB-py/JeremyB-pydev_Portfolio/blob/main/projects/wrinkle_witch_website.md" target="_blank" rel="noopener noreferrer">View on GitHub</a>
   </header>
   <main class="project-content">
-    <h1>Wrinkle Witch Website &amp; Full-Stack Business Platform</h1>
+    <section class="section">
+<h1>Wrinkle Witch Website &amp; Full-Stack Business Platform</h1>
 <p>A modular, multi-application platform built for <strong>The Wrinkle Witch</strong>, a local esthetician business. The project combines a static customer website with a backend API service and internal admin apps, all sharing a single set of core business logic and database models inside a monorepo.</p>
 <p>This platform is designed to scale: new tools (CRM features, product systems, booking workflows, analytics, etc.) can be added without duplicating authentication, database code, or integrations.</p>
 <hr>
+</section>
+<section class="section">
 <h2>Overview</h2>
 <p>At a high level, the platform has four main parts:</p>
 <p><strong>Customer-facing website (Static HTML)</strong><br>Hosted as static pages for speed and simplicity (ideal for branding/SEO). Public pages call backend APIs when needed (referrals, unsubscribe, specials).</p>
@@ -26,6 +29,8 @@
 <p><strong>Scheduled jobs (<code>/jobs</code>)</strong><br>Background tasks (credit expiration, quarterly reset/prizes, appointment sync) run via Railway cron; job status is visible and manually triggerable from the referral app.</p>
 <p>All layers share reusable modules inside <code>/shared</code> (auth, Square OAuth helpers, domain/environment utilities, business_id handling, etc.).</p>
 <hr>
+</section>
+<section class="section">
 <h2>Architecture Highlights</h2>
 <h3>Monorepo Structure</h3>
 <ul>
@@ -46,6 +51,8 @@
 </ul>
 <p>This keeps customer experiences fast and consistent while still supporting robust server-side validation and logging.</p>
 <hr>
+</section>
+<section class="section">
 <h2>Key Features</h2>
 <table>
 <thead>
@@ -96,6 +103,8 @@
 </tr>
 </tbody></table>
 <hr>
+</section>
+<section class="section">
 <h2>Tech Stack</h2>
 <ul>
 <li><strong>Frontend (Public):</strong> HTML · CSS · JavaScript (static site)</li>
@@ -107,6 +116,8 @@
 <li><strong>Tooling:</strong> pytest · GitHub Actions CI · scheduled jobs (apscheduler/croniter) · structured monorepo</li>
 </ul>
 <hr>
+</section>
+<section class="section">
 <h2>Media</h2>
 <p><strong>Public Website Homepage:</strong> Clean, modern design showcasing the business brand and services.<br><img src="/JeremyB-pydev_Portfolio/media/wrinkle_witch_website/Homepage.png" alt="Homepage"></p>
 <p><strong>Dark Mode Interface:</strong> Alternative color scheme for improved user experience.<br><img src="/JeremyB-pydev_Portfolio/media/wrinkle_witch_website/Darkmode.png" alt="Dark Mode"></p>
@@ -120,6 +131,8 @@
 <p><strong>Referral Program Page:</strong> Top section of the customer-facing <code>referral-program.html</code> page.<br><img src="/JeremyB-pydev_Portfolio/media/wrinkle_witch_website/referral_html.png" alt="Referral Program HTML"></p>
 <p><strong>Referral Management (Admin):</strong> Streamlit admin interface for managing and tracking referrals (Clients listed are test clients, not actual clients).<br><img src="/JeremyB-pydev_Portfolio/media/wrinkle_witch_website/referral_management.png" alt="Referral Management"></p>
 <hr>
+</section>
+<section class="section">
 <h2>Highlights</h2>
 <ul>
 <li>Unified platform: static site, FastAPI backend, Streamlit admin apps, and scheduled jobs in one monorepo.</li>
@@ -129,10 +142,14 @@
 <li>Clean, maintainable architecture; real-world use with evolving business needs.</li>
 </ul>
 <hr>
+</section>
+<section class="section">
 <h2>Repository</h2>
 <p>The codebase is private due to business content, but this page represents a comprehensive summary.
 A summarized showcase of the platform is available in the portfolio README:<br><a href="https://github.com/JeremyB-py-Portfolio">github.com/JeremyB-py-Portfolio</a></p>
 <hr>
+</section>
+<section class="section">
 <h2>Skills Demonstrated</h2>
 <ul>
 <li>Full-stack system design (static frontend + API backend + admin apps + scheduled jobs)</li>
@@ -146,6 +163,8 @@ A summarized showcase of the platform is available in the portfolio README:<br><
 <li>Marketing/analytics engineering (specials engine, tracking, A/B testing groundwork)</li>
 </ul>
 <hr>
+</section>
+<section class="section">
 <h2>Next Steps</h2>
 <ul>
 <li>Customer accounts (v1.5) with contact-based credit lookup and booking UX improvements</li>
@@ -155,7 +174,8 @@ A summarized showcase of the platform is available in the portfolio README:<br><
 <li>Continue hardening multi-tenant patterns (business_id from auth context/subdomain)</li>
 </ul>
 <hr>
-
+</section>
   </main>
+  <script type="module" src="/JeremyB-pydev_Portfolio/assets/project-reveal.js"></script>
 </body>
 </html>

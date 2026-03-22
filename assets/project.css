@@ -65,6 +65,29 @@ a:focus-visible {
   padding: 2rem clamp(1rem, 4vw, 2rem) 4rem;
 }
 
+/* Scroll reveal (matches main site .section behavior) */
+.project-content .section {
+  padding: clamp(1.5rem, 4vw, 2.5rem) 0;
+  opacity: 0;
+  transform: translateY(1.5rem);
+  transition:
+    opacity 0.65s ease,
+    transform 0.65s ease;
+}
+
+.project-content .section.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .project-content .section {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
 .project-content h1 {
   font-size: clamp(1.5rem, 4vw, 2rem);
   margin-top: 0;
@@ -72,10 +95,15 @@ a:focus-visible {
   padding-bottom: 0.75rem;
 }
 
+.project-content .section:first-child h2,
 .project-content h2 {
   font-size: 1.25rem;
-  margin-top: 2rem;
+  margin-top: 0;
   color: var(--pp-accent);
+}
+
+.project-content .section:not(:first-child) h2 {
+  margin-top: 0;
 }
 
 .project-content h3 {
