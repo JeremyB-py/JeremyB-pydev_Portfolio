@@ -23,6 +23,18 @@ function rewriteMediaUrls(html) {
   return out;
 }
 
+/** Split marked HTML on `<h2` boundaries; each block becomes a scroll-reveal section. */
+function wrapMarkdownSections(html) {
+  const trimmed = html.trim();
+  if (!trimmed) return '';
+  const chunks = trimmed.split(/(?=<h2\b)/i);
+  return chunks
+    .map((c) => c.trim())
+    .filter(Boolean)
+    .map((chunk) => `<section class="section">\n${chunk}\n</section>`)
+    .join('\n');
+}
+
 function layoutHtml({ title, bodyHtml, githubUrl }) {
   const gh = githubUrl
     ? `<a href="${escapeAttr(githubUrl)}" target="_blank" rel="noopener noreferrer">View on GitHub</a>`
@@ -45,6 +57,7 @@ function layoutHtml({ title, bodyHtml, githubUrl }) {
   <main class="project-content">
     ${bodyHtml}
   </main>
+  <script type="module" src="${base}assets/project-reveal.js"></script>
 </body>
 </html>
 `;
@@ -90,6 +103,7 @@ function main() {
     const md = fs.readFileSync(mdPath, 'utf8');
     let html = marked.parse(md);
     html = rewriteMediaUrls(html);
+    html = wrapMarkdownSections(html);
 
     const outDir = path.join(publicDir, 'projects', slug);
     fs.mkdirSync(outDir, { recursive: true });

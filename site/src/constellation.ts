@@ -3,6 +3,7 @@ export interface ProjectForMap {
   slug: string;
   title: string;
   writeUpUrl: string;
+  tech: string[];
 }
 
 interface Star {
@@ -12,6 +13,22 @@ interface Star {
   project: ProjectForMap;
   r: number;
 }
+
+interface BgDot {
+  ang: number;
+  rx: number;
+  ry: number;
+  r: number;
+}
+
+interface SkillSat {
+  parentIndex: number;
+  label: string;
+  dist: number;
+  spreadIndex: number;
+}
+
+const MAX_SKILLS = 5;
 
 function galaxyPos(
   s: Star,
@@ -26,6 +43,54 @@ function galaxyPos(
   };
 }
 
+function skillWorldPos(
+  parent: Star,
+  sat: SkillSat,
+  cx: number,
+  cy: number,
+  spin: number
+): { x: number; y: number } {
+  const posP = galaxyPos(parent, cx, cy, spin);
+  const theta = Math.atan2(posP.y - cy, posP.x - cx);
+  const perp = theta + Math.PI / 2;
+  const ang = perp + sat.spreadIndex * 0.38;
+  return {
+    x: posP.x + Math.cos(ang) * sat.dist,
+    y: posP.y + Math.sin(ang) * sat.dist,
+  };
+}
+
+function buildSkillSats(stars: Star[]): SkillSat[] {
+  const out: SkillSat[] = [];
+  stars.forEach((s, si) => {
+    const tech = s.project.tech.slice(0, MAX_SKILLS);
+    const n = tech.length;
+    tech.forEach((label, k) => {
+      const spreadIndex = n <= 1 ? 0 : (k - (n - 1) / 2) * 0.85;
+      out.push({
+        parentIndex: si,
+        label,
+        dist: 26 + k * 6,
+        spreadIndex,
+      });
+    });
+  });
+  return out;
+}
+
+function makeBgDots(count: number, wCss: number, hCss: number): BgDot[] {
+  const out: BgDot[] = [];
+  for (let i = 0; i < count; i++) {
+    out.push({
+      ang: Math.random() * Math.PI * 2,
+      rx: wCss * (0.22 + Math.random() * 0.48),
+      ry: hCss * (0.16 + Math.random() * 0.42),
+      r: 0.4 + Math.random() * 1.1,
+    });
+  }
+  return out;
+}
+
 export function initConstellation(
   canvas: HTMLCanvasElement,
   projects: ProjectForMap[],
@@ -38,8 +103,10 @@ export function initConstellation(
   const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   let stars: Star[] = [];
+  let skillSats: SkillSat[] = [];
+  let bgDots: BgDot[] = [];
   let hovered: Star | null = null;
-  let nearAny = false;
+  let skillFade = 0;
   let dpr = Math.min(window.devicePixelRatio || 1, 2);
   let spin = 0;
   let wCss = 800;
@@ -61,9 +128,9 @@ export function initConstellation(
     c.setTransform(dpr, 0, 0, dpr, 0, 0);
 
     galaxyCx = wCss * 0.5;
-    galaxyCy = hCss * 0.42;
-    hub.x = wCss * 0.5;
-    hub.y = hCss * 0.88;
+    galaxyCy = hCss * 0.48;
+    hub.x = galaxyCx;
+    hub.y = galaxyCy;
 
     const count = projects.length;
     stars = projects.map((project, i) => {
@@ -77,18 +144,19 @@ export function initConstellation(
         r: 9,
       };
     });
+    skillSats = buildSkillSats(stars);
+    const bgCount = reducedMotion ? 36 : 88;
+    bgDots = makeBgDots(bgCount, wCss, hCss);
   }
 
   function pickStar(clientX: number, clientY: number): Star | null {
     const rect = canvas.getBoundingClientRect();
-    const mx = clientX - rect.left;
-    const my = clientY - rect.top;
     let best: Star | null = null;
     let bestD = Infinity;
     for (const s of stars) {
       const pos = galaxyPos(s, galaxyCx, galaxyCy, spin);
-      const dx = mx - pos.x;
-      const dy = my - pos.y;
+      const dx = clientX - rect.left - pos.x;
+      const dy = clientY - rect.top - pos.y;
       const d = Math.sqrt(dx * dx + dy * dy);
       if (d <= s.r + 14 && d < bestD) {
         bestD = d;
@@ -96,16 +164,6 @@ export function initConstellation(
       }
     }
     return best;
-  }
-
-  function nearGalaxy(mx: number, my: number): boolean {
-    for (const s of stars) {
-      const pos = galaxyPos(s, galaxyCx, galaxyCy, spin);
-      const dx = mx - pos.x;
-      const dy = my - pos.y;
-      if (dx * dx + dy * dy <= (s.r + 36) ** 2) return true;
-    }
-    return false;
   }
 
   function readColors(): { accent: string; text: string; muted: string } {
@@ -127,21 +185,50 @@ export function initConstellation(
       spin += 0.0018;
     }
 
-    const idleMode = !nearAny && !hovered;
-    const lineAlpha = idleMode ? 0.08 : 0.35;
-    const nodeAlpha = idleMode ? 0.22 : 1;
-    const labelAlpha = hovered || nearAny ? 1 : 0.15;
+    const targetFade = hovered ? 1 : 0;
+    skillFade += (targetFade - skillFade) * 0.14;
+    if (Math.abs(targetFade - skillFade) < 0.004) {
+      skillFade = targetFade;
+    }
 
-    c.fillStyle = `${accent}18`;
+    const hoveredIndex = hovered ? stars.indexOf(hovered) : -1;
+
+    // Background galaxy dust (non-interactive)
+    c.globalAlpha = reducedMotion ? 0.2 : 0.35;
+    for (const d of bgDots) {
+      const a = d.ang + spin * (0.85 + (d.r % 1) * 0.3);
+      const bx = galaxyCx + Math.cos(a) * d.rx;
+      const by = galaxyCy + Math.sin(a) * d.ry;
+      c.fillStyle = muted;
+      c.beginPath();
+      c.arc(bx, by, d.r, 0, Math.PI * 2);
+      c.fill();
+    }
+    c.globalAlpha = 1;
+
+    // Hub ("You are here") — galaxy center
+    c.fillStyle = `${accent}28`;
     c.beginPath();
     c.arc(hub.x, hub.y, 14, 0, Math.PI * 2);
     c.fill();
+    c.strokeStyle = accent;
+    c.lineWidth = 1.5;
+    c.globalAlpha = 0.9;
+    c.stroke();
+    c.globalAlpha = 1;
 
-    c.strokeStyle = muted;
-    c.globalAlpha = lineAlpha;
+    c.fillStyle = muted;
+    c.font = '12px system-ui, sans-serif';
+    c.textAlign = 'center';
+    c.fillText('You are here', hub.x, hub.y + 26);
+
+    // Hub → project lines (only hovered project bright)
     c.lineWidth = 1;
     stars.forEach((s) => {
       const pos = galaxyPos(s, galaxyCx, galaxyCy, spin);
+      const isHi = hovered === s;
+      c.strokeStyle = isHi ? 'rgba(255, 255, 255, 0.85)' : muted;
+      c.globalAlpha = isHi ? 0.95 : 0.1;
       c.beginPath();
       c.moveTo(hub.x, hub.y);
       c.lineTo(pos.x, pos.y);
@@ -149,30 +236,56 @@ export function initConstellation(
     });
     c.globalAlpha = 1;
 
-    if (hovered) {
-      const pos = galaxyPos(hovered, galaxyCx, galaxyCy, spin);
-      c.strokeStyle = 'rgba(255, 255, 255, 0.9)';
-      c.lineWidth = 2;
-      c.globalAlpha = 1;
+    // Branch lines + skill nodes
+    skillSats.forEach((sat) => {
+      const parent = stars[sat.parentIndex];
+      if (!parent) return;
+      const posP = galaxyPos(parent, galaxyCx, galaxyCy, spin);
+      const posS = skillWorldPos(parent, sat, galaxyCx, galaxyCy, spin);
+      const isParentHi = hoveredIndex === sat.parentIndex;
+      c.strokeStyle = isParentHi ? accent : muted;
+      c.globalAlpha = isParentHi ? 0.55 : 0.07;
+      c.lineWidth = isParentHi ? 1.25 : 1;
       c.beginPath();
-      c.moveTo(hub.x, hub.y);
-      c.lineTo(pos.x, pos.y);
+      c.moveTo(posP.x, posP.y);
+      c.lineTo(posS.x, posS.y);
       c.stroke();
-    }
+      c.globalAlpha = 1;
 
+      const sr = isParentHi ? 4 : 2.5;
+      c.fillStyle = isParentHi ? accent : muted;
+      c.globalAlpha = isParentHi ? 0.85 : 0.2;
+      c.beginPath();
+      c.arc(posS.x, posS.y, sr, 0, Math.PI * 2);
+      c.fill();
+      c.globalAlpha = 1;
+
+      if (isParentHi && skillFade > 0.05) {
+        const short =
+          sat.label.length > 18 ? `${sat.label.slice(0, 16)}…` : sat.label;
+        c.globalAlpha = skillFade;
+        c.fillStyle = text;
+        c.font = '10px system-ui, sans-serif';
+        c.textAlign = 'center';
+        c.fillText(short, posS.x, posS.y - sr - 6);
+        c.globalAlpha = 1;
+      }
+    });
+
+    // Project nodes + titles
     stars.forEach((s) => {
       const pos = galaxyPos(s, galaxyCx, galaxyCy, spin);
-      const active = s === hovered;
-      const radius = active ? s.r + 2 : idleMode ? s.r * 0.65 : s.r;
-      c.globalAlpha = nodeAlpha;
-      c.fillStyle = active ? accent : muted;
-      c.shadowColor = active ? `${accent}aa` : 'transparent';
-      c.shadowBlur = active ? 14 : 0;
+      const isHi = hovered === s;
+      const radius = isHi ? s.r + 2 : s.r * 0.75;
+      c.globalAlpha = isHi ? 1 : 0.28;
+      c.fillStyle = isHi ? accent : muted;
+      c.shadowColor = isHi ? `${accent}aa` : 'transparent';
+      c.shadowBlur = isHi ? 14 : 0;
       c.beginPath();
       c.arc(pos.x, pos.y, radius, 0, Math.PI * 2);
       c.fill();
       c.shadowBlur = 0;
-      c.globalAlpha = labelAlpha;
+      c.globalAlpha = isHi ? 1 : 0.22;
       c.fillStyle = text;
       c.font = '11px system-ui, sans-serif';
       c.textAlign = 'center';
@@ -182,31 +295,19 @@ export function initConstellation(
       c.globalAlpha = 1;
     });
 
-    c.fillStyle = muted;
-    c.globalAlpha = 0.85;
-    c.font = '12px system-ui, sans-serif';
-    c.textAlign = 'center';
-    c.fillText('You are here', hub.x, hub.y + 28);
-    c.globalAlpha = 1;
-
     if (!reducedMotion) {
       requestAnimationFrame(drawFrame);
     }
   }
 
   function onMove(e: MouseEvent): void {
-    const rect = canvas.getBoundingClientRect();
-    const mx = e.clientX - rect.left;
-    const my = e.clientY - rect.top;
     hovered = pickStar(e.clientX, e.clientY);
-    nearAny = nearGalaxy(mx, my);
     canvas.style.cursor = hovered ? 'pointer' : 'crosshair';
     if (reducedMotion) drawFrame();
   }
 
   function onLeave(): void {
     hovered = null;
-    nearAny = false;
     if (reducedMotion) drawFrame();
   }
 
@@ -228,11 +329,7 @@ export function initConstellation(
   themeObs.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
 
   syncSize();
-  if (reducedMotion) {
-    drawFrame();
-  } else {
-    drawFrame();
-  }
+  drawFrame();
 
   window.addEventListener('resize', () => {
     syncSize();

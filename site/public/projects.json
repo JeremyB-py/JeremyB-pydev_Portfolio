@@ -47,7 +47,7 @@
     "summary": "Experimental AI evolution: knowledge bases, checkpointing, rollback, rule-based adaptation.",
     "tech": ["Python", "JSON", "Modular design"],
     "writeUpUrl": "https://github.com/JeremyB-py/JeremyB-pydev_Portfolio/blob/main/projects/continuous_learning_ai_prototype.md",
-    "private": true
+    "private": false
   },
   {
     "id": "blockchain",

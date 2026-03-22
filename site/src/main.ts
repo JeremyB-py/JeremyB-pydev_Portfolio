@@ -140,6 +140,7 @@ async function main(): Promise<void> {
       slug: (p.slug ?? p.id).replace(/[^a-zA-Z0-9_-]/g, '') || `project-${index}`,
       title: p.title,
       writeUpUrl: sanitizeHttpUrl(p.writeUpUrl) ?? '',
+      tech: Array.isArray(p.tech) ? p.tech : [],
     }));
     fillConstellationList(mapData);
 
