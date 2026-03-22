@@ -439,10 +439,14 @@
   color: var(--color-text-muted);
 }
 
-/* GitHub contribution chart (third-party SVG image; not an official GitHub API) */
+/* GitHub contribution chart (third-party SVG; empty cells are light #eee baked into the image) */
 .github-chart-wrap {
-  margin-top: 1rem;
+  margin-top: 0.75rem;
   overflow-x: auto;
+  border-radius: var(--radius-sm);
+  padding: 0.5rem;
+  background: var(--github-chart-surface, var(--color-surface));
+  border: 1px solid var(--github-chart-border, var(--color-surface-border));
 }
 
 .github-chart-wrap a {
@@ -460,8 +464,38 @@
   max-width: 100%;
   height: auto;
   display: block;
-  border-radius: var(--radius-sm);
-  border: 1px solid var(--color-surface-border);
+  border-radius: calc(var(--radius-sm) - 2px);
+}
+
+.github-activity-note {
+  margin-top: 0.75rem;
+  font-size: 0.88rem;
+  color: var(--color-text-muted);
+  line-height: 1.5;
+}
+
+.github-activity-note a {
+  color: var(--color-link);
+}
+
+/* Paper: native light palette from the service */
+[data-theme='paper'] .github-chart-wrap img {
+  filter: none;
+}
+
+/*
+ * Dark themes: invert baked-in light squares; hue-rotate tuned per theme so the graph feels at home.
+ */
+[data-theme='nebula'] .github-chart-wrap img {
+  filter: invert(1) hue-rotate(180deg) brightness(1.06) contrast(1.05);
+}
+
+[data-theme='matrix'] .github-chart-wrap img {
+  filter: invert(1) hue-rotate(168deg) brightness(1.05) contrast(1.06) saturate(1.05);
+}
+
+[data-theme='terminal'] .github-chart-wrap img {
+  filter: invert(1) hue-rotate(188deg) brightness(1.04) contrast(1.05);
 }
 
 /* Constellation */
