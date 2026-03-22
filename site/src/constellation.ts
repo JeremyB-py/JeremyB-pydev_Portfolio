@@ -19,6 +19,9 @@ interface BgDot {
   rx: number;
   ry: number;
   r: number;
+  /** Per-star twinkle phase & speed (subtle brightness pulse) */
+  twinklePhase: number;
+  twinkleSpeed: number;
 }
 
 interface SkillSat {
@@ -31,12 +34,187 @@ interface SkillSat {
 
 const MAX_SKILLS = 5;
 /** Same orbit radius for all skill dots around a project node (clock-like spread). */
-const SKILL_ORBIT_DIST = 54;
+const SKILL_ORBIT_DIST = 81;
 /** Base radius for project nodes (CSS px); ~50% larger than original. */
 const NODE_R = 14;
 /** Skill satellite dot radii (CSS px) when highlighted / dim. */
 const SAT_R_HI = 6;
 const SAT_R_LO = 4;
+
+/** Golden-angle hue step so neighboring projects read as distinct in any theme */
+const GOLDEN_HUE = 137.508;
+
+interface RGB {
+  r: number;
+  g: number;
+  b: number;
+}
+
+interface NodePaletteEntry {
+  fill: string;
+  fillDim: string;
+  glow: string;
+  /** Soft shadow for dim project nodes */
+  shadowDim: string;
+  /** Low-opacity stroke for hub → node lines when not hovered */
+  hubLineMuted: string;
+}
+
+function parseCssColor(input: string): RGB | null {
+  const s = input.trim();
+  if (!s) return null;
+  if (s.startsWith('#')) {
+    const hex = s.slice(1);
+    if (hex.length === 3) {
+      return {
+        r: parseInt(hex[0] + hex[0], 16),
+        g: parseInt(hex[1] + hex[1], 16),
+        b: parseInt(hex[2] + hex[2], 16),
+      };
+    }
+    if (hex.length === 6) {
+      return {
+        r: parseInt(hex.slice(0, 2), 16),
+        g: parseInt(hex.slice(2, 4), 16),
+        b: parseInt(hex.slice(4, 6), 16),
+      };
+    }
+  }
+  const m = s.match(/^rgba?\(\s*([\d.]+)\s*,\s*([\d.]+)\s*,\s*([\d.]+)/);
+  if (m) {
+    return { r: +m[1], g: +m[2], b: +m[3] };
+  }
+  return null;
+}
+
+function rgbToHsl(r: number, g: number, b: number): { h: number; s: number; l: number } {
+  r /= 255;
+  g /= 255;
+  b /= 255;
+  const max = Math.max(r, g, b);
+  const min = Math.min(r, g, b);
+  const d = max - min;
+  let h = 0;
+  const l = (max + min) / 2;
+  let s = 0;
+  if (d !== 0) {
+    s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+    switch (max) {
+      case r:
+        h = ((g - b) / d + (g < b ? 6 : 0)) / 6;
+        break;
+      case g:
+        h = ((b - r) / d + 2) / 6;
+        break;
+      default:
+        h = ((r - g) / d + 4) / 6;
+    }
+  }
+  return { h: h * 360, s, l };
+}
+
+function hslToRgb(h: number, s: number, l: number): RGB {
+  h /= 360;
+  if (s === 0) {
+    const v = Math.round(l * 255);
+    return { r: v, g: v, b: v };
+  }
+  const hue2rgb = (p: number, q: number, t: number) => {
+    if (t < 0) t += 1;
+    if (t > 1) t -= 1;
+    if (t < 1 / 6) return p + (q - p) * 6 * t;
+    if (t < 1 / 2) return q;
+    if (t < 2 / 3) return p + (q - p) * (2 / 3 - t) * 6;
+    return p;
+  };
+  const q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+  const p = 2 * l - q;
+  return {
+    r: Math.round(hue2rgb(p, q, h + 1 / 3) * 255),
+    g: Math.round(hue2rgb(p, q, h) * 255),
+    b: Math.round(hue2rgb(p, q, h - 1 / 3) * 255),
+  };
+}
+
+function rgbToHex(r: number, g: number, b: number): string {
+  const h = (n: number) => n.toString(16).padStart(2, '0');
+  return `#${h(r)}${h(g)}${h(b)}`;
+}
+
+/** WCAG relative luminance (sRGB), 0–1 */
+function relativeLuminance(rgb: RGB): number {
+  const lin = (c: number) => {
+    const x = c / 255;
+    return x <= 0.03928 ? x / 12.92 : ((x + 0.055) / 1.055) ** 2.4;
+  };
+  const r = lin(rgb.r);
+  const g = lin(rgb.g);
+  const b = lin(rgb.b);
+  return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+}
+
+function shortestHueDelta(from: number, to: number): number {
+  let d = to - from;
+  if (d > 180) d -= 360;
+  if (d < -180) d += 360;
+  return d;
+}
+
+/**
+ * One distinct color per project, anchored to --color-accent / --color-link and tuned for --color-bg.
+ */
+function paletteForProjectNodes(
+  count: number,
+  accentStr: string,
+  linkStr: string,
+  bgStr: string
+): NodePaletteEntry[] {
+  const accent = parseCssColor(accentStr);
+  const link = parseCssColor(linkStr);
+  const bg = parseCssColor(bgStr);
+  if (!accent || !bg) {
+    const fb = accentStr || '#38bdf8';
+    return Array.from({ length: count }, () => ({
+      fill: fb,
+      fillDim: fb,
+      glow: `${fb}cc`,
+      shadowDim: 'rgba(148,163,184,0.45)',
+      hubLineMuted: 'rgba(148,163,184,0.12)',
+    }));
+  }
+  const aH = rgbToHsl(accent.r, accent.g, accent.b);
+  const lH = link ? rgbToHsl(link.r, link.g, link.b) : aH;
+  const bgIsDark = relativeLuminance(bg) < 0.4;
+
+  const out: NodePaletteEntry[] = [];
+  for (let i = 0; i < count; i++) {
+    const linkPull = shortestHueDelta(aH.h, lH.h) * (0.06 + (i % 4) * 0.035);
+    let h = (aH.h + i * GOLDEN_HUE + linkPull) % 360;
+    if (h < 0) h += 360;
+
+    let s = Math.min(0.92, Math.max(0.36, aH.s * (0.86 + 0.05 * (i % 5))));
+    let L = aH.l;
+    if (bgIsDark) {
+      L = Math.min(0.82, Math.max(0.42, aH.l + 0.035 * Math.sin(i * 1.2) + (i % 3) * 0.018));
+    } else {
+      L = Math.max(0.26, Math.min(0.55, aH.l - 0.015 * (i % 4)));
+    }
+
+    const rgb = hslToRgb(h, s, L);
+    const dimS = Math.min(0.75, s * 0.58);
+    const dimL = bgIsDark ? L * 0.7 : Math.min(L * 1.05, 0.48);
+    const dimRgb = hslToRgb(h, dimS, dimL);
+
+    out.push({
+      fill: rgbToHex(rgb.r, rgb.g, rgb.b),
+      fillDim: rgbToHex(dimRgb.r, dimRgb.g, dimRgb.b),
+      glow: `rgba(${rgb.r},${rgb.g},${rgb.b},0.82)`,
+      shadowDim: `rgba(${dimRgb.r},${dimRgb.g},${dimRgb.b},0.5)`,
+      hubLineMuted: `rgba(${rgb.r},${rgb.g},${rgb.b},0.13)`,
+    });
+  }
+  return out;
+}
 
 function galaxyPos(
   s: Star,
@@ -105,6 +283,8 @@ function makeBgDots(count: number, wCss: number, hCss: number): BgDot[] {
       ry: hCss * (0.16 + Math.random() * 0.42),
       /** Smaller specks; extra dozens read as distant stars */
       r: 0.22 + Math.random() * 0.55,
+      twinklePhase: Math.random() * Math.PI * 2,
+      twinkleSpeed: 0.65 + Math.random() * 1.15,
     });
   }
   return out;
@@ -128,6 +308,8 @@ export function initConstellation(
   let skillFade = 0;
   let dpr = Math.min(window.devicePixelRatio || 1, 2);
   let spin = 0;
+  /** Wall-clock-ish phase for twinkle / breathe (skipped when reduced motion) */
+  let animT = 0;
   let wCss = 800;
   let hCss = 400;
   let galaxyCx = 0;
@@ -165,8 +347,8 @@ export function initConstellation(
       };
     });
     skillSats = buildSkillSats(stars);
-    /* Extra small orbiting stars (dozens more than original) */
-    const bgCount = reducedMotion ? 72 : 152;
+    /* 100+ more mini-stars than prior pass; still tiny specks */
+    const bgCount = reducedMotion ? 180 : 280;
     bgDots = makeBgDots(bgCount, wCss, hCss);
   }
 
@@ -187,23 +369,40 @@ export function initConstellation(
     return best;
   }
 
-  function readColors(): { accent: string; text: string; muted: string } {
+  function readColors(): {
+    accent: string;
+    text: string;
+    muted: string;
+    link: string;
+    bg: string;
+  } {
     const cs = getComputedStyle(document.documentElement);
+    const accent = cs.getPropertyValue('--color-accent').trim() || '#38bdf8';
     return {
-      accent: cs.getPropertyValue('--color-accent').trim() || '#38bdf8',
+      accent,
       text: cs.getPropertyValue('--color-text').trim() || '#e8f4fc',
       muted: cs.getPropertyValue('--color-text-muted').trim() || '#94a3b8',
+      link: cs.getPropertyValue('--color-link').trim() || accent,
+      bg: cs.getPropertyValue('--color-bg').trim() || '#070b14',
     };
   }
 
   function drawFrame(): void {
     const w = canvas.width / dpr;
     const h = canvas.height / dpr;
-    const { accent, text, muted } = readColors();
+    const colors = readColors();
+    const { accent, text, muted } = colors;
+    const nodePalette = paletteForProjectNodes(
+      stars.length,
+      colors.accent,
+      colors.link,
+      colors.bg
+    );
     c.clearRect(0, 0, w, h);
 
     if (!reducedMotion) {
       spin += 0.0018;
+      animT += 0.018;
     }
 
     const targetFade = hovered ? 1 : 0;
@@ -214,27 +413,33 @@ export function initConstellation(
 
     const hoveredIndex = hovered ? stars.indexOf(hovered) : -1;
 
-    // Background galaxy dust (non-interactive)
-    c.globalAlpha = reducedMotion ? 0.2 : 0.35;
+    // Background mini-stars (non-interactive): brighter + subtle twinkle
+    const bgBaseAlpha = reducedMotion ? 0.32 : 0.48;
     for (const d of bgDots) {
       const a = d.ang + spin * (0.85 + (d.r % 1) * 0.3);
       const bx = galaxyCx + Math.cos(a) * d.rx;
       const by = galaxyCy + Math.sin(a) * d.ry;
+      const twinkle = reducedMotion
+        ? 1
+        : 0.62 + 0.38 * Math.sin(animT * d.twinkleSpeed + d.twinklePhase);
+      const rr = d.r * (reducedMotion ? 1 : 0.92 + 0.08 * twinkle);
+      c.globalAlpha = bgBaseAlpha * twinkle;
       c.fillStyle = muted;
       c.beginPath();
-      c.arc(bx, by, d.r, 0, Math.PI * 2);
+      c.arc(bx, by, rr, 0, Math.PI * 2);
       c.fill();
     }
     c.globalAlpha = 1;
 
-    // Hub — galaxy center
-    c.fillStyle = `${accent}28`;
+    // Hub — galaxy center (slight pulse when motion on)
+    const hubPulse = reducedMotion ? 1 : 0.92 + 0.08 * Math.sin(animT * 0.7);
+    c.fillStyle = `${accent}38`;
     c.beginPath();
-    c.arc(hub.x, hub.y, 21, 0, Math.PI * 2);
+    c.arc(hub.x, hub.y, 21 * hubPulse, 0, Math.PI * 2);
     c.fill();
     c.strokeStyle = accent;
     c.lineWidth = 2;
-    c.globalAlpha = 0.9;
+    c.globalAlpha = reducedMotion ? 0.92 : 0.82 + 0.12 * Math.sin(animT * 0.55 + 0.3);
     c.stroke();
     c.globalAlpha = 1;
 
@@ -243,13 +448,14 @@ export function initConstellation(
     c.textAlign = 'center';
     c.fillText('Jeremy B.', hub.x, hub.y + 32);
 
-    // Hub → project lines (only hovered project bright)
+    // Hub → project lines (per-node hue when idle; bright when hovered)
     c.lineWidth = 1;
-    stars.forEach((s) => {
+    stars.forEach((s, si) => {
       const pos = galaxyPos(s, galaxyCx, galaxyCy, spin);
       const isHi = hovered === s;
-      c.strokeStyle = isHi ? 'rgba(255, 255, 255, 0.85)' : muted;
-      c.globalAlpha = isHi ? 0.95 : 0.1;
+      const np = nodePalette[si];
+      c.strokeStyle = isHi ? 'rgba(255, 255, 255, 0.88)' : np.hubLineMuted;
+      c.globalAlpha = isHi ? 0.95 : 1;
       c.beginPath();
       c.moveTo(hub.x, hub.y);
       c.lineTo(pos.x, pos.y);
@@ -257,25 +463,32 @@ export function initConstellation(
     });
     c.globalAlpha = 1;
 
-    // Branch lines + skill nodes
+    // Branch lines + skill nodes (inherit parent color)
     skillSats.forEach((sat) => {
       const parent = stars[sat.parentIndex];
       if (!parent) return;
       const posP = galaxyPos(parent, galaxyCx, galaxyCy, spin);
       const posS = skillWorldPos(parent, sat, galaxyCx, galaxyCy, spin);
       const isParentHi = hoveredIndex === sat.parentIndex;
-      c.strokeStyle = isParentHi ? accent : muted;
-      c.globalAlpha = isParentHi ? 0.55 : 0.07;
-      c.lineWidth = isParentHi ? 1.25 : 1;
+      const pCol = nodePalette[sat.parentIndex];
+      c.strokeStyle = isParentHi ? pCol.fill : pCol.hubLineMuted;
+      c.globalAlpha = isParentHi ? 0.62 : 1;
+      c.lineWidth = isParentHi ? 1.35 : 1;
       c.beginPath();
       c.moveTo(posP.x, posP.y);
       c.lineTo(posS.x, posS.y);
       c.stroke();
       c.globalAlpha = 1;
 
-      const sr = isParentHi ? SAT_R_HI : SAT_R_LO;
-      c.fillStyle = isParentHi ? accent : muted;
-      c.globalAlpha = isParentHi ? 0.85 : 0.2;
+      const satTw =
+        !isParentHi && !reducedMotion
+          ? 0.88 + 0.12 * Math.sin(animT * 1.1 + sat.parentIndex * 0.9 + sat.phi)
+          : 1;
+      const sr =
+        (isParentHi ? SAT_R_HI : SAT_R_LO) *
+        (isParentHi && !reducedMotion ? 1 + 0.04 * Math.sin(animT * 0.9) : satTw);
+      c.fillStyle = isParentHi ? pCol.fill : pCol.fillDim;
+      c.globalAlpha = isParentHi ? 0.92 : 0.38 * satTw;
       c.beginPath();
       c.arc(posS.x, posS.y, sr, 0, Math.PI * 2);
       c.fill();
@@ -293,15 +506,20 @@ export function initConstellation(
       }
     });
 
-    // Project nodes + titles
-    stars.forEach((s) => {
+    // Project nodes + titles (per-theme palette + soft breathe)
+    stars.forEach((s, si) => {
       const pos = galaxyPos(s, galaxyCx, galaxyCy, spin);
       const isHi = hovered === s;
-      const radius = isHi ? s.r + 3 : s.r * 0.75;
-      c.globalAlpha = isHi ? 1 : 0.28;
-      c.fillStyle = isHi ? accent : muted;
-      c.shadowColor = isHi ? `${accent}aa` : 'transparent';
-      c.shadowBlur = isHi ? 20 : 0;
+      const np = nodePalette[si];
+      const breathe = reducedMotion
+        ? 1
+        : 1 + 0.045 * Math.sin(animT * 0.65 + s.baseAngle * 1.4 + si * 0.2);
+      const baseR = isHi ? s.r + 3 : s.r * 0.75;
+      const radius = baseR * (isHi ? 1 + (reducedMotion ? 0 : 0.03 * Math.sin(animT * 0.85)) : breathe);
+      c.globalAlpha = isHi ? 1 : 0.46;
+      c.fillStyle = isHi ? np.fill : np.fillDim;
+      c.shadowColor = isHi ? np.glow : np.shadowDim;
+      c.shadowBlur = isHi ? 22 : reducedMotion ? 0 : 10;
       c.beginPath();
       c.arc(pos.x, pos.y, radius, 0, Math.PI * 2);
       c.fill();
