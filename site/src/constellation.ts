@@ -24,6 +24,17 @@ interface BgDot {
   twinkleSpeed: number;
 }
 
+/** Mid-size orbiting specks: larger than mini background stars, smaller than skill satellites */
+interface MidOrbiter {
+  ang: number;
+  rx: number;
+  ry: number;
+  r: number;
+  twinklePhase: number;
+  twinkleSpeed: number;
+  spinRate: number;
+}
+
 interface SkillSat {
   parentIndex: number;
   label: string;
@@ -290,6 +301,24 @@ function makeBgDots(count: number, wCss: number, hCss: number): BgDot[] {
   return out;
 }
 
+/** ~1–2.8px radius: between mini dust and ~4px skill satellites */
+function makeMidOrbiters(count: number, wCss: number, hCss: number): MidOrbiter[] {
+  const out: MidOrbiter[] = [];
+  for (let i = 0; i < count; i++) {
+    out.push({
+      ang: Math.random() * Math.PI * 2,
+      /* Inner–mid annulus so they read between distant dust and project ring */
+      rx: wCss * (0.14 + Math.random() * 0.38),
+      ry: hCss * (0.12 + Math.random() * 0.36),
+      r: 1.0 + Math.random() * 1.8,
+      twinklePhase: Math.random() * Math.PI * 2,
+      twinkleSpeed: 0.5 + Math.random() * 0.95,
+      spinRate: 0.72 + Math.random() * 0.55,
+    });
+  }
+  return out;
+}
+
 export function initConstellation(
   canvas: HTMLCanvasElement,
   projects: ProjectForMap[],
@@ -304,6 +333,7 @@ export function initConstellation(
   let stars: Star[] = [];
   let skillSats: SkillSat[] = [];
   let bgDots: BgDot[] = [];
+  let midOrbiters: MidOrbiter[] = [];
   let hovered: Star | null = null;
   let skillFade = 0;
   let dpr = Math.min(window.devicePixelRatio || 1, 2);
@@ -350,6 +380,8 @@ export function initConstellation(
     /* 100+ more mini-stars than prior pass; still tiny specks */
     const bgCount = reducedMotion ? 180 : 280;
     bgDots = makeBgDots(bgCount, wCss, hCss);
+    const midCount = reducedMotion ? 85 : 115;
+    midOrbiters = makeMidOrbiters(midCount, wCss, hCss);
   }
 
   function pickStar(clientX: number, clientY: number): Star | null {
@@ -431,6 +463,80 @@ export function initConstellation(
     }
     c.globalAlpha = 1;
 
+    // Mid-orbit stars (larger than mini dust, smaller than skill satellites)
+    const midBaseAlpha = reducedMotion ? 0.44 : 0.58;
+    for (const d of midOrbiters) {
+      const a = d.ang + spin * d.spinRate;
+      const bx = galaxyCx + Math.cos(a) * d.rx;
+      const by = galaxyCy + Math.sin(a) * d.ry;
+      const twinkle = reducedMotion
+        ? 1
+        : 0.68 + 0.32 * Math.sin(animT * d.twinkleSpeed + d.twinklePhase);
+      const rr = d.r * (reducedMotion ? 1 : 0.94 + 0.06 * twinkle);
+      c.globalAlpha = midBaseAlpha * twinkle;
+      c.fillStyle = muted;
+      c.beginPath();
+      c.arc(bx, by, rr, 0, Math.PI * 2);
+      c.fill();
+    }
+    c.globalAlpha = 1;
+
+    // Hub aura — radial glow + rings (drawn behind core disk)
+    const accentRgb = parseCssColor(accent);
+    if (accentRgb) {
+      const pulse = reducedMotion ? 0 : 7 * Math.sin(animT * 0.72);
+      const breathe = reducedMotion ? 1 : 1 + 0.035 * Math.sin(animT * 0.48);
+      const rOuter = (54 + pulse) * breathe;
+      const rInner = 22 + pulse * 0.25;
+      const grad = c.createRadialGradient(
+        hub.x,
+        hub.y,
+        rInner * 0.4,
+        hub.x,
+        hub.y,
+        rOuter
+      );
+      const { r: ar, g: ag, b: ab } = accentRgb;
+      grad.addColorStop(0, `rgba(${ar},${ag},${ab},0)`);
+      grad.addColorStop(0.22, `rgba(${ar},${ag},${ab},0.14)`);
+      grad.addColorStop(0.5, `rgba(${ar},${ag},${ab},0.07)`);
+      grad.addColorStop(1, `rgba(${ar},${ag},${ab},0)`);
+      c.fillStyle = grad;
+      c.beginPath();
+      c.arc(hub.x, hub.y, rOuter, 0, Math.PI * 2);
+      c.fill();
+
+      const ringCount = reducedMotion ? 2 : 4;
+      for (let ring = 0; ring < ringCount; ring++) {
+        const baseR = 30 + ring * 9 + (reducedMotion ? 0 : Math.sin(animT * 0.65 + ring * 1.1) * 2.5);
+        const alpha = reducedMotion
+          ? 0.065 + ring * 0.015
+          : 0.07 + 0.06 * Math.sin(animT * 0.88 + ring * 0.9);
+        c.strokeStyle = `rgba(${ar},${ag},${ab},${alpha})`;
+        c.lineWidth = reducedMotion ? 1 : 1.2 + (ring % 2) * 0.35;
+        c.beginPath();
+        c.arc(hub.x, hub.y, baseR, 0, Math.PI * 2);
+        c.stroke();
+      }
+
+      if (!reducedMotion) {
+        const rot = animT * 0.38;
+        for (let s = 0; s < 3; s++) {
+          const arcR = 36 + s * 10;
+          const sweep = Math.PI * 1.15;
+          const a0 = rot + s * 1.05;
+          const arcAlpha = 0.09 + 0.06 * Math.sin(animT * 1.1 + s * 0.7);
+          c.strokeStyle = `rgba(${ar},${ag},${ab},${arcAlpha})`;
+          c.lineWidth = 2;
+          c.lineCap = 'round';
+          c.beginPath();
+          c.arc(hub.x, hub.y, arcR, a0, a0 + sweep);
+          c.stroke();
+        }
+        c.lineCap = 'butt';
+      }
+    }
+
     // Hub — galaxy center (slight pulse when motion on)
     const hubPulse = reducedMotion ? 1 : 0.92 + 0.08 * Math.sin(animT * 0.7);
     c.fillStyle = `${accent}38`;
@@ -446,7 +552,12 @@ export function initConstellation(
     c.fillStyle = muted;
     c.font = '14px system-ui, sans-serif';
     c.textAlign = 'center';
+    if (!reducedMotion) {
+      c.shadowColor = accent;
+      c.shadowBlur = 6 + 5 * Math.sin(animT * 0.65);
+    }
     c.fillText('Jeremy B.', hub.x, hub.y + 32);
+    c.shadowBlur = 0;
 
     // Hub → project lines (per-node hue when idle; bright when hovered)
     c.lineWidth = 1;
