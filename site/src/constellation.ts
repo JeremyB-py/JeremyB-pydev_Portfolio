@@ -38,14 +38,24 @@ interface MidOrbiter {
 interface SkillSat {
   parentIndex: number;
   label: string;
-  dist: number;
-  /** Angle (rad) in parent-local frame: radial u and tangent v from galaxy center */
+  /** Base clock angle (rad) around parent in the radial/tangent frame */
   phi: number;
+  /** Orbit radius (px) from parent — varies per satellite (moon-like distances) */
+  orbitRadius: number;
+  /** Phase offset for moon orbit (rad) */
+  moonPhase: number;
+  /** Angular speed around parent (rad per unit animT) — varies per satellite */
+  moonOmega: number;
 }
 
 const MAX_SKILLS = 5;
-/** Same orbit radius for all skill dots around a project node (clock-like spread). */
-const SKILL_ORBIT_DIST = 81;
+/** Skill satellites orbit between a legible inner radius and this outer cap (px). */
+const SKILL_ORBIT_MIN = 56;
+const SKILL_ORBIT_MAX = 90;
+/** Galaxy spin rate (rad per second) — time-based so throttled tabs stay smooth */
+const SPIN_PER_SEC = 0.108;
+/** animT rate (per second) — twinkle/breathe phases */
+const ANIM_PER_SEC = 1.08;
 /** Base radius for project nodes (CSS px); ~50% larger than original. */
 const NODE_R = 14;
 /** Skill satellite dot radii (CSS px) when highlighted / dim. */
@@ -293,7 +303,8 @@ function skillWorldPos(
   sat: SkillSat,
   cx: number,
   cy: number,
-  spin: number
+  spin: number,
+  animT: number
 ): { x: number; y: number } {
   const posP = galaxyPos(parent, cx, cy, spin);
   const dx = posP.x - cx;
@@ -303,12 +314,13 @@ function skillWorldPos(
   const uy = dy / len;
   const vx = -uy;
   const vy = ux;
-  const phi = sat.phi;
-  const ox = Math.cos(phi) * ux + Math.sin(phi) * vx;
-  const oy = Math.cos(phi) * uy + Math.sin(phi) * vy;
+  /** Moon-like orbit: angle advances at sat.moonOmega; radius is per-satellite */
+  const angle = sat.phi + sat.moonPhase + animT * sat.moonOmega;
+  const ox = Math.cos(angle) * ux + Math.sin(angle) * vx;
+  const oy = Math.cos(angle) * uy + Math.sin(angle) * vy;
   return {
-    x: posP.x + sat.dist * ox,
-    y: posP.y + sat.dist * oy,
+    x: posP.x + sat.orbitRadius * ox,
+    y: posP.y + sat.orbitRadius * oy,
   };
 }
 
@@ -322,11 +334,18 @@ function buildSkillSats(stars: Star[]): SkillSat[] {
     tech.forEach((label, k) => {
       const phi =
         n <= 1 ? basePhase : basePhase + (2 * Math.PI * k) / n;
+      const orbitRadius =
+        SKILL_ORBIT_MIN +
+        Math.random() * (SKILL_ORBIT_MAX - SKILL_ORBIT_MIN);
+      const moonPhase = Math.random() * Math.PI * 2;
+      const moonOmega = 0.08 + Math.random() * 0.52;
       out.push({
         parentIndex: si,
         label,
-        dist: SKILL_ORBIT_DIST,
         phi,
+        orbitRadius,
+        moonPhase,
+        moonOmega,
       });
     });
   });
@@ -388,6 +407,8 @@ export function initConstellation(
   let spin = 0;
   /** Wall-clock-ish phase for twinkle / breathe (skipped when reduced motion) */
   let animT = 0;
+  /** Time-based animation: last rAF timestamp (ms) for stable spin under tab throttle */
+  let lastFrameTime = performance.now();
   let wCss = 800;
   let hCss = 400;
   let galaxyCx = 0;
@@ -467,7 +488,8 @@ export function initConstellation(
     };
   }
 
-  function drawFrame(): void {
+  function drawFrame(time?: number): void {
+    const now = time ?? performance.now();
     const w = canvas.width / dpr;
     const h = canvas.height / dpr;
     const colors = readColors();
@@ -486,8 +508,17 @@ export function initConstellation(
     c.clearRect(0, 0, w, h);
 
     if (!reducedMotion) {
-      spin += 0.0018;
-      animT += 0.018;
+      if (!document.hidden) {
+        const rawDt = (now - lastFrameTime) / 1000;
+        lastFrameTime = now;
+        /** Cap dt so a long background pause doesn’t apply many seconds of spin in one frame (streaks).
+         *  Low-FPS / throttled rAF (mobile) can legitimately see rawDt ≈ 1s — allow up to 1s per frame. */
+        const dt = Math.min(Math.max(rawDt, 0), 1);
+        spin += SPIN_PER_SEC * dt;
+        animT += ANIM_PER_SEC * dt;
+      } else {
+        lastFrameTime = now;
+      }
     }
 
     const targetFade = hovered ? 1 : 0;
@@ -708,7 +739,7 @@ export function initConstellation(
       const parent = stars[sat.parentIndex];
       if (!parent) return;
       const posP = galaxyPos(parent, galaxyCx, galaxyCy, spin);
-      const posS = skillWorldPos(parent, sat, galaxyCx, galaxyCy, spin);
+      const posS = skillWorldPos(parent, sat, galaxyCx, galaxyCy, spin, animT);
       const isParentHi = hoveredIndex === sat.parentIndex;
       const pCol = nodePalette[sat.parentIndex];
       if (isPaper) {
@@ -726,7 +757,8 @@ export function initConstellation(
 
       const satTw =
         !isParentHi && !reducedMotion
-          ? 0.88 + 0.12 * Math.sin(animT * 1.1 + sat.parentIndex * 0.9 + sat.phi)
+          ? 0.88 +
+            0.12 * Math.sin(animT * 1.1 + sat.parentIndex * 0.9 + sat.phi + sat.moonPhase)
           : 1;
       const sr =
         (isParentHi ? SAT_R_HI : SAT_R_LO) *
@@ -850,7 +882,7 @@ export function initConstellation(
     });
 
     if (!reducedMotion) {
-      requestAnimationFrame(drawFrame);
+      requestAnimationFrame((t) => drawFrame(t));
     }
   }
 
@@ -877,6 +909,12 @@ export function initConstellation(
   canvas.addEventListener('mouseleave', onLeave);
   canvas.addEventListener('click', onClick);
 
+  document.addEventListener('visibilitychange', () => {
+    if (!document.hidden) {
+      lastFrameTime = performance.now();
+    }
+  });
+
   const themeObs = new MutationObserver(() => {
     if (reducedMotion) drawFrame();
   });
@@ -886,6 +924,7 @@ export function initConstellation(
   drawFrame();
 
   window.addEventListener('resize', () => {
+    lastFrameTime = performance.now();
     syncSize();
     if (reducedMotion) drawFrame();
   });

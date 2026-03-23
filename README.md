@@ -16,7 +16,7 @@
 I build practical applications that connect frontend experience, backend engineering, and automation.  
 
 ### Portfolio website
-An interactive portfolio UI lives in [`site/`](./site/) (Vite + TypeScript): theme switcher, scroll reveals, project constellation map, and deploy to GitHub Pages via [`.github/workflows/deploy-pages.yml`](./.github/workflows/deploy-pages.yml). See [`site/README.md`](./site/README.md) for commands.
+**Live site:** [jeremyb-py.github.io/JeremyB-pydev_Portfolio](https://jeremyb-py.github.io/JeremyB-pydev_Portfolio/) · **Repository:** [github.com/JeremyB-py/JeremyB-pydev_Portfolio](https://github.com/JeremyB-py/JeremyB-pydev_Portfolio)
 
 ---
 
@@ -147,4 +147,4 @@ Most of my time is spent learning new tools and applying them directly in projec
 
 ---
 
-*If you’d like to see detailed write-ups, visit the* [`/projects`](./projects) *folder in this repository.*
+*Detailed case studies are on the* [**live portfolio**](https://jeremyb-py.github.io/JeremyB-pydev_Portfolio/) *under each project; markdown sources also live in the* [`/projects`](./projects) *folder in this repository.*
