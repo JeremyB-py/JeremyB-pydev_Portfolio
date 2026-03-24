@@ -283,20 +283,14 @@
 }
 
 .hero__name {
-  font-size: clamp(2rem, 5.75vw, 3.1rem);
+  font-size: clamp(2.35rem, 6.5vw, 3.55rem);
   font-weight: 800;
-  line-height: 1.12;
-  margin: 0 0 0.35rem;
+  line-height: 1.1;
+  margin: 0 0 calc(0.35rem + 20px);
   background: linear-gradient(135deg, var(--color-text) 0%, var(--color-accent) 100%);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
-}
-
-[data-theme='paper'] .hero__name {
-  background: linear-gradient(135deg, #0f172a 0%, #0369a1 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
 }
 
 .hero__title {
@@ -310,8 +304,63 @@
   color: transparent;
 }
 
+/* Distinct hero lines per theme (name vs role) */
+:root .hero__name,
+[data-theme='nebula'] .hero__name {
+  background: linear-gradient(
+    135deg,
+    #f8fafc 0%,
+    #a5f3fc 42%,
+    #c4b5fd 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+
+:root .hero__title,
+[data-theme='nebula'] .hero__title {
+  background: linear-gradient(
+    135deg,
+    #bae6fd 0%,
+    #38bdf8 48%,
+    #6366f1 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+
+[data-theme='matrix'] .hero__name {
+  background: linear-gradient(135deg, #ecfdf5 0%, #6ee7b7 45%, #34d399 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+
+[data-theme='matrix'] .hero__title {
+  background: linear-gradient(135deg, #bbf7d0 0%, #22c55e 55%, #15803d 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+
+[data-theme='terminal'] .hero__name {
+  background: linear-gradient(135deg, #fffbeb 0%, #fde68a 40%, #fbbf24 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+
+[data-theme='terminal'] .hero__title {
+  background: linear-gradient(135deg, #fef3c7 0%, #f59e0b 50%, #b45309 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+
+[data-theme='paper'] .hero__name {
+  background: linear-gradient(135deg, #020617 0%, #0c4a6e 55%, #0369a1 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+
 [data-theme='paper'] .hero__title {
-  background: linear-gradient(135deg, #0f172a 0%, #0369a1 100%);
+  background: linear-gradient(135deg, #1e293b 0%, #0ea5e9 50%, #0284c7 100%);
   -webkit-background-clip: text;
   background-clip: text;
 }
