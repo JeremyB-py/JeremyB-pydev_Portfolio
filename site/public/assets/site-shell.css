@@ -538,11 +538,32 @@ html[data-theme='paper'] body::before {
   text-align: center;
 }
 
+.hero__heading {
+  margin: 0 0 1rem;
+}
+
+.hero__name {
+  font-size: clamp(2rem, 5.75vw, 3.1rem);
+  font-weight: 800;
+  line-height: 1.12;
+  margin: 0 0 0.35rem;
+  background: linear-gradient(135deg, var(--color-text) 0%, var(--color-accent) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+[data-theme='paper'] .hero__name {
+  background: linear-gradient(135deg, #0f172a 0%, #0369a1 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+
 .hero__title {
-  font-size: clamp(1.75rem, 5vw, 2.75rem);
+  font-size: clamp(1.55rem, 4.5vw, 2.45rem);
   font-weight: 800;
   line-height: 1.15;
-  margin: 0 0 1rem;
+  margin: 0;
   background: linear-gradient(135deg, var(--color-text) 0%, var(--color-accent) 100%);
   -webkit-background-clip: text;
   background-clip: text;

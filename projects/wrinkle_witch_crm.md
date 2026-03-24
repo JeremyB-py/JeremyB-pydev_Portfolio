@@ -104,4 +104,4 @@ This foundation allows new tools to plug into the same ecosystem — sharing a c
 
 This project is private due to business use.  
 A summarized showcase of the CRM platform is available here:  
-[github.com/JeremyB-py-Portfolio](https://github.com/JeremyB-py-Portfolio)
+[jeremyb-py.github.io/JeremyB-pydev_Portfolio](https://jeremyb-py.github.io/JeremyB-pydev_Portfolio/)

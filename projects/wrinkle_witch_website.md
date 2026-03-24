@@ -130,7 +130,7 @@ This keeps customer experiences fast and consistent while still supporting robus
 
 The codebase is private due to business content, but this page represents a comprehensive summary.
 A summarized showcase of the platform is available in the portfolio README:  
-[github.com/JeremyB-py-Portfolio](https://github.com/JeremyB-py-Portfolio)
+[jeremyb-py.github.io/JeremyB-pydev_Portfolio](https://jeremyb-py.github.io/JeremyB-pydev_Portfolio/)
 
 ---
 

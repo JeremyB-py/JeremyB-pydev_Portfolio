@@ -113,7 +113,7 @@ It connects directly to the CRM’s client database and shares common components
 **Related project:**  
 The **Wrinkle Witch CRM** core project is maintained as a separate private repository due to business sensitivity.  
 A summarized version is available here:
-[github.com/JeremyB-py-Portfolio](https://github.com/JeremyB-py-Portfolio)
+[jeremyb-py.github.io/JeremyB-pydev_Portfolio](https://jeremyb-py.github.io/JeremyB-pydev_Portfolio/)
 
 ---
 
@@ -129,5 +129,5 @@ A summarized version is available here:
 
 This module is maintained as a separate private repository due to business sensitivity.  
 A summarized version is available here:  
-[github.com/JeremyB-py-Portfolio](https://github.com/JeremyB-py-Portfolio)
+[jeremyb-py.github.io/JeremyB-pydev_Portfolio](https://jeremyb-py.github.io/JeremyB-pydev_Portfolio/)
 

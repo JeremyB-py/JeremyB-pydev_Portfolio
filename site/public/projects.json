@@ -6,7 +6,7 @@
     "title": "Wrinkle Witch Website & Multi-App Platform",
     "summary": "Static site, FastAPI backend, Streamlit admin, scheduled jobs; Square Bookings, referrals, specials.",
     "tech": ["Python", "FastAPI", "Streamlit", "SQLAlchemy", "Railway", "Cloudflare"],
-    "writeUpUrl": "https://github.com/JeremyB-py/JeremyB-pydev_Portfolio/blob/main/projects/wrinkle_witch_website.md",
+    "writeUpUrl": "https://jeremyb-py.github.io/JeremyB-pydev_Portfolio/projects/wrinkle-website/",
     "private": true
   },
   {
@@ -26,7 +26,7 @@
     "title": "Referral Tracker Module",
     "summary": "Referral tracking, PDF cards, session-state control, CSV sync; integrated in the multi-app platform.",
     "tech": ["Python", "Streamlit", "Pillow", "FPDF"],
-    "writeUpUrl": "https://github.com/JeremyB-py/JeremyB-pydev_Portfolio/blob/main/projects/referral_tracker.md",
+    "writeUpUrl": "https://jeremyb-py.github.io/JeremyB-pydev_Portfolio/projects/referral-tracker/",
     "private": true
   },
   {
@@ -36,7 +36,7 @@
     "title": "Agricultural Forecasting Dashboard",
     "summary": "Crop yield forecasting with regression, ARIMA, EDA, and Matplotlib visualizations.",
     "tech": ["Python", "Pandas", "Scikit-Learn", "Statsmodels"],
-    "writeUpUrl": "https://github.com/JeremyB-py/JeremyB-pydev_Portfolio/blob/main/projects/agricultural_forecasting.md",
+    "writeUpUrl": "https://jeremyb-py.github.io/JeremyB-pydev_Portfolio/projects/agricultural/",
     "private": false
   },
   {
@@ -46,7 +46,7 @@
     "title": "Continuous Learning AI Framework",
     "summary": "Experimental AI evolution: knowledge bases, checkpointing, rollback, rule-based adaptation.",
     "tech": ["Python", "JSON", "Modular design"],
-    "writeUpUrl": "https://github.com/JeremyB-py/JeremyB-pydev_Portfolio/blob/main/projects/continuous_learning_ai_prototype.md",
+    "writeUpUrl": "https://jeremyb-py.github.io/JeremyB-pydev_Portfolio/projects/claip/",
     "private": false
   },
   {
@@ -56,7 +56,7 @@
     "title": "Toy Blockchain",
     "summary": "Proof-of-work, transaction pool, and node sync in Python.",
     "tech": ["Python", "Flask", "Hashlib"],
-    "writeUpUrl": "https://github.com/JeremyB-py/JeremyB-pydev_Portfolio/blob/main/projects/crypto_prototype.md",
+    "writeUpUrl": "https://jeremyb-py.github.io/JeremyB-pydev_Portfolio/projects/blockchain/",
     "private": true
   },
   {
@@ -66,7 +66,7 @@
     "title": "Power BI Non-Profit Dashboard",
     "summary": "Multi-page dashboard for donor, event, and volunteer metrics with scalable data model.",
     "tech": ["Power BI", "Power Query", "DAX"],
-    "writeUpUrl": "https://github.com/JeremyB-py/JeremyB-pydev_Portfolio/blob/main/projects/powerbi_nonprofit_dashboard.md",
+    "writeUpUrl": "https://jeremyb-py.github.io/JeremyB-pydev_Portfolio/projects/powerbi/",
     "private": false
   }
 ]

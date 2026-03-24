@@ -119,10 +119,7 @@ function siteHeaderHtml(b) {
       </header>`;
 }
 
-function layoutHtml({ title, bodyHtml, githubUrl }) {
-  const gh = githubUrl
-    ? `<a href="${escapeAttr(githubUrl)}" target="_blank" rel="noopener noreferrer">View on GitHub</a>`
-    : '';
+function layoutHtml({ title, bodyHtml }) {
   const themeBoot = `<script>(function(){try{var t=localStorage.getItem('portfolio-theme');if(t&&['nebula','matrix','terminal','paper'].indexOf(t)>=0)document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>`;
   return `<!DOCTYPE html>
 <html lang="en">
@@ -143,7 +140,6 @@ function layoutHtml({ title, bodyHtml, githubUrl }) {
     <main class="project-content">
       <p class="project-back-row">
         <a href="${base}">← Back to portfolio</a>
-        ${gh ? ` · ${gh}` : ''}
       </p>
     ${bodyHtml}
     </main>
@@ -202,7 +198,6 @@ function main() {
     const page = layoutHtml({
       title: p.title,
       bodyHtml: html,
-      githubUrl: p.writeUpUrl,
     });
     fs.writeFileSync(path.join(outDir, 'index.html'), page, 'utf8');
     console.log(`Wrote projects/${slug}/index.html`);

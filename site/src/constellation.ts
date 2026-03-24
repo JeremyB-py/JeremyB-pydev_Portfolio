@@ -50,8 +50,12 @@ interface SkillSat {
 
 const MAX_SKILLS = 5;
 /** Skill satellites orbit between a legible inner radius and this outer cap (px). */
-const SKILL_ORBIT_MIN = 56;
-const SKILL_ORBIT_MAX = 90;
+const SKILL_ORBIT_MIN = 48;
+const SKILL_ORBIT_MAX = 80;
+/** Moon angular speed at outer orbit (rad per animT unit) — slower than legacy average. */
+const MOON_OMEGA_OUTER = 0.026;
+/** Moon angular speed at inner orbit — capped below legacy max (~0.6) so nothing spins faster than before. */
+const MOON_OMEGA_INNER = 0.36;
 /** Galaxy spin rate (rad per second) — time-based so throttled tabs stay smooth */
 const SPIN_PER_SEC = 0.108;
 /** animT rate (per second) — twinkle/breathe phases */
@@ -334,11 +338,16 @@ function buildSkillSats(stars: Star[]): SkillSat[] {
     tech.forEach((label, k) => {
       const phi =
         n <= 1 ? basePhase : basePhase + (2 * Math.PI * k) / n;
-      const orbitRadius =
-        SKILL_ORBIT_MIN +
-        Math.random() * (SKILL_ORBIT_MAX - SKILL_ORBIT_MIN);
+      const orbitSpread = SKILL_ORBIT_MAX - SKILL_ORBIT_MIN;
+      const orbitRadius = SKILL_ORBIT_MIN + Math.random() * orbitSpread;
       const moonPhase = Math.random() * Math.PI * 2;
-      const moonOmega = 0.08 + Math.random() * 0.52;
+      const radialT =
+        orbitSpread > 0 ? (orbitRadius - SKILL_ORBIT_MIN) / orbitSpread : 0;
+      // Closer to the project node → faster orbit; farther out → slower (inverse to radius).
+      const moonOmega =
+        (MOON_OMEGA_OUTER +
+          (MOON_OMEGA_INNER - MOON_OMEGA_OUTER) * (1 - radialT)) *
+        (0.94 + 0.12 * Math.random());
       out.push({
         parentIndex: si,
         label,
