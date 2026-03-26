@@ -16,7 +16,7 @@
 I build practical applications that connect frontend experience, backend engineering, and automation.  
 
 ### Portfolio website
-**Live site:** [jeremyb-py.github.io/JeremyB-pydev_Portfolio](https://jeremyb-py.github.io/JeremyB-pydev_Portfolio/) · **Repository:** [github.com/JeremyB-py/JeremyB-pydev_Portfolio](https://github.com/JeremyB-py/JeremyB-pydev_Portfolio)
+**Live site:** [JeremyB.dev](https://jeremyb.dev) · **Repository:** [github.com/JeremyB-py/JeremyB-pydev_Portfolio](https://github.com/JeremyB-py/JeremyB-pydev_Portfolio)
 
 ---
 
