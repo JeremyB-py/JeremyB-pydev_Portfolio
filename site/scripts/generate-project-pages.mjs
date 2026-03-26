@@ -13,8 +13,9 @@ const siteDir = path.join(__dirname, '..');
 const repoRoot = path.join(siteDir, '..');
 const publicDir = path.join(siteDir, 'public');
 
+const repo = 'JeremyB-pydev_Portfolio';
 const base =
-  process.env.GITHUB_PAGES === 'true' ? '/JeremyB-pydev_Portfolio/' : '/';
+  process.env.GITHUB_PAGES_SUBPATH === 'true' ? `/${repo}/` : '/';
 
 function rewriteMediaUrls(html) {
   let out = html;

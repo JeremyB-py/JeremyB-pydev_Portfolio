@@ -4,10 +4,11 @@ import { defineConfig } from 'vite';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
-// GitHub Pages project site: https://<user>.github.io/<repo>/
+// GitHub Pages: custom domain (e.g. jeremyb.dev) is served at /. Project URL
+// https://<user>.github.io/<repo>/ needs asset base /repo/ — set GITHUB_PAGES_SUBPATH=true for that.
 const repo = 'JeremyB-pydev_Portfolio';
 const base =
-  process.env.GITHUB_PAGES === 'true' ? `/${repo}/` : '/';
+  process.env.GITHUB_PAGES_SUBPATH === 'true' ? `/${repo}/` : '/';
 
 export default defineConfig({
   base,
