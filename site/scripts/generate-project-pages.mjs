@@ -16,6 +16,10 @@ const publicDir = path.join(siteDir, 'public');
 const repo = 'JeremyB-pydev_Portfolio';
 const base =
   process.env.GITHUB_PAGES_SUBPATH === 'true' ? `/${repo}/` : '/';
+const siteOrigin =
+  process.env.GITHUB_PAGES_SUBPATH === 'true'
+    ? `https://jeremyb-py.github.io/${repo}`
+    : 'https://jeremyb.dev';
 
 function rewriteMediaUrls(html) {
   let out = html;
@@ -120,14 +124,28 @@ function siteHeaderHtml(b) {
       </header>`;
 }
 
-function layoutHtml({ title, bodyHtml }) {
+function layoutHtml({ title, bodyHtml, slug }) {
   const themeBoot = `<script>(function(){try{var t=localStorage.getItem('portfolio-theme');if(t&&['nebula','matrix','terminal','paper'].indexOf(t)>=0)document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>`;
+  const pageUrl = `${siteOrigin}${base}projects/${slug}/`;
+  const desc = `${title} · case study · jeremyb.dev portfolio`;
+  const ogImage = `${siteOrigin}${base}og-image.png`;
   return `<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="${escapeAttr(title)} — case study" />
+  <meta name="description" content="${escapeAttr(desc)}" />
+  <link rel="canonical" href="${escapeAttr(pageUrl)}" />
+  <meta property="og:type" content="article" />
+  <meta property="og:locale" content="en_US" />
+  <meta property="og:url" content="${escapeAttr(pageUrl)}" />
+  <meta property="og:title" content="${escapeAttr(title)} | Jeremy B." />
+  <meta property="og:description" content="${escapeAttr(desc)}" />
+  <meta property="og:image" content="${escapeAttr(ogImage)}" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="${escapeAttr(title)}, case study preview" />
+  <!-- Open Graph: LinkedIn and others use these tags for link previews -->
   <title>${escapeAttr(title)} | Jeremy B.</title>
   ${themeBoot}
   <link rel="stylesheet" href="${base}assets/site-shell.css" />
@@ -199,6 +217,7 @@ function main() {
     const page = layoutHtml({
       title: p.title,
       bodyHtml: html,
+      slug,
     });
     fs.writeFileSync(path.join(outDir, 'index.html'), page, 'utf8');
     console.log(`Wrote projects/${slug}/index.html`);
