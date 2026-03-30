@@ -1,6 +1,6 @@
 # Verified findings
 
-**Only [CatalogerAgent](skills/cataloger-agent/SKILL.md)** appends or edits promoted sections here. Other agents: write to [`scratchpad.md`](scratchpad.md) only.
+**Only [CatalogerAgent](agents/cataloger-agent.md)** appends or edits promoted sections here. Other agents: write to [`scratchpad.md`](scratchpad.md) only.
 
 ## Merge rules
 

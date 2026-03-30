@@ -3,8 +3,8 @@
 Use as a checklist when orchestrating subagents.
 
 1. **Decompose** the user goal into **N** parallelizable tasks.
-2. For each task, spawn **Task** with:
-   - Persona (e.g. `repo-explorer-agent`, `api-integration-agent`)
+2. For each task, spawn **Task** with a custom subagent from [`.cursor/agents/`](../agents/) (e.g. `/repo-explorer-agent`, `/api-integration-agent`) or invoke by name:
+   - Persona files: `repo-explorer-agent.md`, `api-integration-agent.md`, etc.
    - Input JSON (task id, scope, constraints)
    - Paths: `.cursor/scratchpad.md`, `.cursor/VerifiedFindings.md` (section hints), `.cursor/repo-map.md`
    - Expected output: JSON envelope `schema_version: "1"`

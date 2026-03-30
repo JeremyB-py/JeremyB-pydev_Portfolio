@@ -1,6 +1,6 @@
 ---
 name: doc-fetch-playwright-cli
-description: Fetches JS-rendered or hard-to-scrape docs using Playwright CLI from scripts/ (token-efficient vs MCP). Use when static fetch fails or docs require browser interaction.
+description: Workflow to fetch JS-rendered or hard-to-scrape documentation using Playwright CLI under scripts/ (token-efficient vs MCP). Use when static HTTP fetch fails or pages need a real browser.
 ---
 
 # Doc fetch (Playwright CLI)
