@@ -1,0 +1,95 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://jeremyb.local/schemas/subagent-envelope.schema.json",
+  "title": "SubagentResponseEnvelope",
+  "description": "Coordinator-facing JSON for all Task subagents. Use status to distinguish success, informative empties, partial work, and failure.",
+  "type": "object",
+  "required": ["agent", "schema_version", "status"],
+  "properties": {
+    "agent": {
+      "type": "string",
+      "description": "Persona id, e.g. repo-explorer-agent"
+    },
+    "schema_version": {
+      "type": "string",
+      "const": "1"
+    },
+    "status": {
+      "type": "string",
+      "enum": ["success", "partial_success", "empty_result", "failure"]
+    },
+    "payload": {
+      "description": "Primary result when status is success or partial_success"
+    },
+    "sources": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "url_or_ref": { "type": "string" },
+          "title": { "type": "string" },
+          "retrieved_at": { "type": "string" }
+        },
+        "required": ["url_or_ref"]
+      }
+    },
+    "errors": {
+      "type": "array",
+      "description": "Required when status is failure; optional for partial_success",
+      "items": {
+        "type": "object",
+        "required": ["category", "message"],
+        "properties": {
+          "category": {
+            "type": "string",
+            "enum": ["syntax", "runtime", "logical", "internal", "external"]
+          },
+          "stage": { "type": "string" },
+          "message": { "type": "string", "minLength": 1 },
+          "evidence": { "type": "string" },
+          "suggested_next_step": { "type": "string" }
+        }
+      }
+    },
+    "empty_result": {
+      "type": "object",
+      "description": "When status is empty_result: search completed but nothing matched (not an error)",
+      "properties": {
+        "query_summary": { "type": "string" },
+        "scope": { "type": "string" },
+        "negative_evidence": { "type": "string" }
+      }
+    },
+    "blocked": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "For partial_success: what could not be done"
+    },
+    "remaining_steps": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "what_was_attempted": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Required for failure: concrete steps/tools tried"
+    }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "status": { "const": "failure" } } },
+      "then": {
+        "required": ["errors", "what_was_attempted"],
+        "not": { "required": ["payload"] }
+      }
+    },
+    {
+      "if": { "properties": { "status": { "const": "empty_result" } } },
+      "then": { "required": ["empty_result"] }
+    },
+    {
+      "if": { "properties": { "status": { "const": "success" } } },
+      "then": { "required": ["payload"] }
+    }
+  ]
+}

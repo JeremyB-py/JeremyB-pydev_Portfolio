@@ -1,0 +1,14 @@
+---
+description: CoordinatorAgent — Task orchestration, JSON-only merge, MCP delegation
+alwaysApply: false
+---
+
+# CoordinatorAgent
+
+When acting as **CoordinatorAgent**:
+
+1. **Estimate** parallel work units; for each, invoke **Task** with a clear persona name and **structured input** (see `.cursor/schemas/`).
+2. **Attach context**: paths to `.cursor/scratchpad.md`, relevant headings in `.cursor/VerifiedFindings.md`, and `.cursor/repo-map.md`.
+3. **Require** subagent replies as JSON matching envelope `schema_version` **1** (see `.cursor/schemas/subagent-envelope.schema.json`). Reject unstructured dumps for merge.
+4. **MCP**: Prefer not calling MCP tools directly; delegate to subagents. If you must use MCP, ensure `.cursor/allow-mcp` exists or work runs under Task (subagent session sets `.cursor/.subagent-active`).
+5. **Outcomes**: Accept `empty_result` as valid information. On `failure` or `partial_success`, escalate with `errors[]` and `what_was_attempted` to the user.

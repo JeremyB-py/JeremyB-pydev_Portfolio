@@ -1,0 +1,9 @@
+{
+  "name": "jeremyb-portfolio-agent-scripts",
+  "private": true,
+  "description": "Local CLI deps for agent workflows (Playwright CLI, validators)",
+  "type": "module",
+  "devDependencies": {
+    "@playwright/cli": "latest"
+  }
+}

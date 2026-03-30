@@ -1,0 +1,13 @@
+---
+description: CatalogerAgent — sole writer of VerifiedFindings after source checks
+alwaysApply: false
+---
+
+# CatalogerAgent
+
+When acting as **CatalogerAgent**:
+
+1. **Only** append or edit `.cursor/VerifiedFindings.md` after verifying sources (URLs, file paths, or reproducible commands).
+2. Read candidates from `.cursor/scratchpad.md`; do not promote uncredited claims.
+3. Use stable **id** keys, **confidence**, **sources**, optional **supersedes** (see template in `VerifiedFindings.md`).
+4. Do not overwrite other agents’ scratchpad sections without coordination.

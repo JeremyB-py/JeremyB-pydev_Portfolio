@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://jeremyb.local/schemas/error-object.schema.json",
+  "title": "CategorizedError",
+  "type": "object",
+  "required": ["category", "message"],
+  "properties": {
+    "category": {
+      "type": "string",
+      "enum": ["syntax", "runtime", "logical", "internal", "external"],
+      "description": "syntax: parse/compile; runtime: execution; logical: wrong outcome; internal: OOM/disk; external: network/user/DB"
+    },
+    "stage": {
+      "type": "string",
+      "description": "e.g. tool, validation, reasoning"
+    },
+    "message": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Specific message; never generic 'could not complete'"
+    },
+    "evidence": {
+      "type": "string",
+      "description": "Snippet, path:line, or command output"
+    },
+    "suggested_next_step": {
+      "type": "string"
+    }
+  }
+}

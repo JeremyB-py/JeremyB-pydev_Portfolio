@@ -1,0 +1,21 @@
+{
+  "version": 1,
+  "hooks": {
+    "subagentStart": [
+      {
+        "command": ".cursor/hooks/subagent-session-start.py"
+      }
+    ],
+    "subagentStop": [
+      {
+        "command": ".cursor/hooks/subagent-session-stop.py"
+      }
+    ],
+    "beforeMCPExecution": [
+      {
+        "command": ".cursor/hooks/mcp-gate.py",
+        "failClosed": true
+      }
+    ]
+  }
+}

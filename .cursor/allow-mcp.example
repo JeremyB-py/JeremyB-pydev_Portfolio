@@ -1,0 +1,12 @@
+# MCP consent (example)
+#
+# To allow MCP tools in this repository when not in a Task subagent session,
+# create an empty file next to this one named exactly:
+#
+#   allow-mcp
+#
+# Example:
+#   touch .cursor/allow-mcp
+#
+# Subagent sessions automatically create `.cursor/.subagent-active` via hooks
+# so MCP may run during Task without this file. See `.cursor/hooks/mcp-gate.py`.
