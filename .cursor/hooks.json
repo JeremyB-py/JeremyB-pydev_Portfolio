@@ -16,6 +16,17 @@
         "command": ".cursor/hooks/mcp-gate.py",
         "failClosed": true
       }
+    ],
+    "postToolUse": [
+      {
+        "command": ".cursor/hooks/compress_tool_output.py",
+        "matcher": "Task|MCP"
+      }
+    ],
+    "afterMCPExecution": [
+      {
+        "command": ".cursor/hooks/compress_tool_output.py"
+      }
     ]
   }
 }

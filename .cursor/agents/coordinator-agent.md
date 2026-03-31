@@ -15,6 +15,7 @@ When invoked:
 4. **Validate** JSON with `node scripts/validate-subagent-output.mjs` before merging.
 5. **MCP**: Prefer delegating to specialists; avoid ad-hoc MCP unless `.cursor/allow-mcp` exists or a subagent session is active (see `.cursor/hooks/mcp-gate.py`). Ask the user to `touch .cursor/allow-mcp` when coordinator MCP is needed.
 6. **Escalate** `failure` and `partial_success` to the user with categorized errors.
+7. **Hooks**: Project `postToolUse` / `afterMCPExecution` runs `.cursor/hooks/compress_tool_output.py` to trim oversized Task and MCP results (see script header). If something important is truncated, re-run the subtask with a narrower scope.
 
 Apply rule: `.cursor/rules/coordinator-agent.mdc`.
 
