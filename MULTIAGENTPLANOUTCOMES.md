@@ -16,7 +16,7 @@ Personas were **migrated** from `.cursor/skills/` into [`.cursor/agents/`](.curs
 | Area | Outcome |
 |------|---------|
 | **Schemas & templates** | JSON envelope + error object schemas; `scratchpad.md`, `VerifiedFindings.md`, `repo-map.md`; doc-cache with `.gitignore` |
-| **Coordinator / Cataloger** | Rules (`.mdc`); **subagents** [`.cursor/agents/coordinator-agent.md`](.cursor/agents/coordinator-agent.md), [`cataloger-agent.md`](.cursor/agents/cataloger-agent.md); slash command [`.cursor/commands/coordinate-task.md`](.cursor/commands/coordinate-task.md) |
+| **Coordinator / Cataloger** | Rules (`.mdc`); **subagents** [`.cursor/agents/coordinator-agent.md`](.cursor/agents/coordinator-agent.md), [`cataloger-agent.md`](.cursor/agents/cataloger-agent.md); slash command [`.cursor/commands/coordinate-task.md`](.cursor/commands/coordinate-task.md); **Task `subagent_type`** must match YAML **`name`** (Phase 1 refinement; routing table in coordinator rule) |
 | **Hooks** | [`.cursor/hooks.json`](.cursor/hooks.json): `beforeMCPExecution` (fail-closed), `subagentStart` / `subagentStop` session marker |
 | **Explorers** | Subagents [`repo-explorer-agent.md`](.cursor/agents/repo-explorer-agent.md), [`database-explorer-agent.md`](.cursor/agents/database-explorer-agent.md); doc-cache convention |
 | **Playwright** | Local `scripts/` npm package `@playwright/cli`; `playwright-cli install --skills`; upstream skill pack under `scripts/.claude/skills/playwright-cli/` |
@@ -121,6 +121,14 @@ Personas were **migrated** from `.cursor/skills/` into [`.cursor/agents/`](.curs
 1. **Hooks:** [`.cursor/hooks.json`](.cursor/hooks.json) at repo root.  
 2. **MCP:** `touch .cursor/allow-mcp` or subagent session (`.cursor/.subagent-active`).  
 3. **Skills:** Folder name must match YAML `name`; see [Agent Skills](https://cursor.com/docs/context/skills).  
-4. **Subagents:** See [Subagents](https://cursor.com/docs/subagents) — project files in `.cursor/agents/`.
+4. **Subagents:** See [Subagents](https://cursor.com/docs/subagents) — project files in `.cursor/agents/`.  
+5. **Task tool (`subagent_type`):** When orchestrating with **Task**, set **`subagent_type`** to the specialist’s YAML **`name`** from `.cursor/agents/<name>.md` (e.g. `repo-explorer-agent`). Omitting this often falls back to **`generalPurpose`**; avoid that unless no persona fits (document one line why). **Routing table:** [`.cursor/rules/coordinator-agent.mdc`](.cursor/rules/coordinator-agent.mdc). Use built-in **`explore`** for quick read-only codebase search; use **`repo-explorer-agent`** when the output should feed `.cursor/repo-map.md` / structured coordinator handoff. **`tool-builder-agent`** is reserved for a later phase (greenfield scripts); until then route repetition to **`script-optimizer-agent`**.
+
+### Subagent workflow refinement (plan phases)
+
+| Phase | Status | Notes |
+|-------|--------|--------|
+| 1 — Coordinator `subagent_type` + routing | **Done** | Rule, coordinator agent, `coordinate-task` command, operational note above |
+| 2+ | Pending | Efficiency gate, tool-builder, additional agents per plan |
 
 This completes the planned deliverables for the repository (including the skills vs agents split).

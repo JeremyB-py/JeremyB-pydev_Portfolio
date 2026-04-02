@@ -7,8 +7,29 @@ alwaysApply: false
 
 When acting as **CoordinatorAgent**:
 
-1. **Estimate** parallel work units; for each, invoke **Task** with a subagent from `.cursor/agents/` (e.g. `/repo-explorer-agent`) and **structured input** (see `.cursor/schemas/`).
-2. **Attach context**: paths to `.cursor/scratchpad.md`, relevant headings in `.cursor/VerifiedFindings.md`, and `.cursor/repo-map.md`.
-3. **Require** subagent replies as JSON matching envelope `schema_version` **1** (see `.cursor/schemas/subagent-envelope.schema.json`). Reject unstructured dumps for merge.
-4. **MCP**: Prefer not calling MCP tools directly; delegate to subagents. If you must use MCP, ensure `.cursor/allow-mcp` exists or work runs under Task (subagent session sets `.cursor/.subagent-active`).
-5. **Outcomes**: Accept `empty_result` as valid information. On `failure` or `partial_success`, escalate with `errors[]` and `what_was_attempted` to the user.
+1. **Task `subagent_type` (required):** For every **Task** invocation, set **`subagent_type`** to the YAML **`name`** in the chosen `.cursor/agents/<name>.md` frontmatter (e.g. `repo-explorer-agent`, `sdk-example-agent`). Slash or file names are hints; the runtime key is **`name`**. Do **not** rely on the default worker: it falls back to **`generalPurpose`**, which is inefficient for this workflow. Use **`generalPurpose`** only when no specialist fits, and add **one line in the task prompt** explaining why.
+2. **Routing (intent → `subagent_type`):**
+
+| Intent | `subagent_type` | File |
+|--------|-----------------|------|
+| Repo layout, conventions, API boundaries, `.cursor/repo-map.md`-style summary | `repo-explorer-agent` | `repo-explorer-agent.md` |
+| Fast read-only codebase search when the map is unknown | `explore` (built-in) | — |
+| DB/schema, migrations, ORM | `database-explorer-agent` | `database-explorer-agent.md` |
+| HTTP/OpenAPI mapping, contract gaps | `api-integration-agent` | `api-integration-agent.md` |
+| Official SDK examples, minimal repro snippets | `sdk-example-agent` | `sdk-example-agent.md` |
+| Changelogs, pinned upgrades | `release-notes-agent` | `release-notes-agent.md` |
+| Node/Python/etc. compatibility matrix | `compatibility-matrix-agent` | `compatibility-matrix-agent.md` |
+| Env/secrets, CORS, leakage patterns | `secret-config-agent` | `secret-config-agent.md` |
+| a11y checks / snapshots | `accessibility-agent` | `accessibility-agent.md` |
+| Diff vs contract / SDK examples | `bughunting-agent` | `bughunting-agent.md` |
+| Token-heavy workflow / repeated patterns → scripts | `efficiency-inspector-agent` | `efficiency-inspector-agent.md` |
+| Refactor repeated shell/JSON into `scripts/` or hook helpers | `script-optimizer-agent` | `script-optimizer-agent.md` |
+| Promote verified facts to `.cursor/VerifiedFindings.md` | `cataloger-agent` | `cataloger-agent.md` |
+| Greenfield small tools (first script for a gap) | `tool-builder-agent` | *Phase 3 — add persona* |
+
+3. **`explore` vs `repo-explorer-agent`:** Use built-in **`explore`** for quick, read-only search across the tree. Use **`repo-explorer-agent`** when the deliverable is a structured map or coordinator-facing summary (often updating `.cursor/repo-map.md` or scratchpad sections).
+4. **Estimate** parallel work units; for each, invoke **Task** with **structured input** (see `.cursor/schemas/`).
+5. **Attach context**: paths to `.cursor/scratchpad.md`, relevant headings in `.cursor/VerifiedFindings.md`, and `.cursor/repo-map.md`.
+6. **Require** subagent replies as JSON matching envelope `schema_version` **1** (see `.cursor/schemas/subagent-envelope.schema.json`). Reject unstructured dumps for merge.
+7. **MCP**: Prefer not calling MCP tools directly; delegate to subagents. If you must use MCP, ensure `.cursor/allow-mcp` exists or work runs under Task (subagent session sets `.cursor/.subagent-active`).
+8. **Outcomes**: Accept `empty_result` as valid information. On `failure` or `partial_success`, escalate with `errors[]` and `what_was_attempted` to the user.
