@@ -20,7 +20,7 @@ Personas were **migrated** from `.cursor/skills/` into [`.cursor/agents/`](.curs
 | **Hooks** | [`.cursor/hooks.json`](.cursor/hooks.json): `beforeMCPExecution` (fail-closed), `subagentStart` / `subagentStop` session marker |
 | **Explorers** | Subagents [`repo-explorer-agent.md`](.cursor/agents/repo-explorer-agent.md), [`database-explorer-agent.md`](.cursor/agents/database-explorer-agent.md); doc-cache convention |
 | **Playwright** | Local `scripts/` npm package `@playwright/cli`; `playwright-cli install --skills`; upstream skill pack under `scripts/.claude/skills/playwright-cli/` |
-| **Efficiency loop** | Subagents [`efficiency-inspector-agent.md`](.cursor/agents/efficiency-inspector-agent.md), [`script-optimizer-agent.md`](.cursor/agents/script-optimizer-agent.md); [`scripts/validate-subagent-output.mjs`](scripts/validate-subagent-output.mjs) |
+| **Efficiency loop** | Subagents [`efficiency-inspector-agent.md`](.cursor/agents/efficiency-inspector-agent.md) (pre-pass gate), [`script-optimizer-agent.md`](.cursor/agents/script-optimizer-agent.md) (refactor repetition), [`tool-builder-agent.md`](.cursor/agents/tool-builder-agent.md) (greenfield scripts); [`scripts/validate-subagent-output.mjs`](scripts/validate-subagent-output.mjs) |
 | **Optional API specialists** | Subagents: api-integration, release-notes, sdk-example, compatibility-matrix, secret-config, accessibility (all under `.cursor/agents/`) |
 | **Error protocol** | Skill [`error-reporting-protocol`](.cursor/skills/error-reporting-protocol/SKILL.md) |
 | **Envelope helper** | Skill [`subagent-json-envelope`](.cursor/skills/subagent-json-envelope/SKILL.md) |
@@ -57,7 +57,7 @@ Personas were **migrated** from `.cursor/skills/` into [`.cursor/agents/`](.curs
 
 ### 6. efficiency-loop — **Done** (as **subagents** + validator)
 
-- [`.cursor/agents/efficiency-inspector-agent.md`](.cursor/agents/efficiency-inspector-agent.md), [`script-optimizer-agent.md`](.cursor/agents/script-optimizer-agent.md)  
+- [`.cursor/agents/efficiency-inspector-agent.md`](.cursor/agents/efficiency-inspector-agent.md), [`script-optimizer-agent.md`](.cursor/agents/script-optimizer-agent.md), [`tool-builder-agent.md`](.cursor/agents/tool-builder-agent.md)  
 - [`scripts/validate-subagent-output.mjs`](scripts/validate-subagent-output.mjs)  
 
 ### 7. optional-api-agents — **Done** (as **subagents**)
@@ -98,6 +98,7 @@ Personas were **migrated** from `.cursor/skills/` into [`.cursor/agents/`](.curs
 | `database-explorer-agent.md` | database-explorer-agent |
 | `efficiency-inspector-agent.md` | efficiency-inspector-agent |
 | `script-optimizer-agent.md` | script-optimizer-agent |
+| `tool-builder-agent.md` | tool-builder-agent |
 | `api-integration-agent.md` | api-integration-agent |
 | `release-notes-agent.md` | release-notes-agent |
 | `sdk-example-agent.md` | sdk-example-agent |
@@ -122,13 +123,17 @@ Personas were **migrated** from `.cursor/skills/` into [`.cursor/agents/`](.curs
 2. **MCP:** `touch .cursor/allow-mcp` or subagent session (`.cursor/.subagent-active`).  
 3. **Skills:** Folder name must match YAML `name`; see [Agent Skills](https://cursor.com/docs/context/skills).  
 4. **Subagents:** See [Subagents](https://cursor.com/docs/subagents) — project files in `.cursor/agents/`.  
-5. **Task tool (`subagent_type`):** When orchestrating with **Task**, set **`subagent_type`** to the specialist’s YAML **`name`** from `.cursor/agents/<name>.md` (e.g. `repo-explorer-agent`). Omitting this often falls back to **`generalPurpose`**; avoid that unless no persona fits (document one line why). **Routing table:** [`.cursor/rules/coordinator-agent.mdc`](.cursor/rules/coordinator-agent.mdc). Use built-in **`explore`** for quick read-only codebase search; use **`repo-explorer-agent`** when the output should feed `.cursor/repo-map.md` / structured coordinator handoff. **`tool-builder-agent`** is reserved for a later phase (greenfield scripts); until then route repetition to **`script-optimizer-agent`**.
+5. **Task tool (`subagent_type`):** When orchestrating with **Task**, set **`subagent_type`** to the specialist’s YAML **`name`** from `.cursor/agents/<name>.md` (e.g. `repo-explorer-agent`). Omitting this often falls back to **`generalPurpose`**; avoid that unless no persona fits (document one line why). **Routing table:** [`.cursor/rules/coordinator-agent.mdc`](.cursor/rules/coordinator-agent.mdc). Use built-in **`explore`** for quick read-only codebase search; use **`repo-explorer-agent`** when the output should feed `.cursor/repo-map.md` / structured coordinator handoff. **Refactor** repeated commands → **`script-optimizer-agent`**; **greenfield** small tools → **`tool-builder-agent`**. When **N > 2** parallel workers or web/MCP-heavy / broad research, run **`efficiency-inspector-agent`** first (efficiency gate).
+
+6. **Efficiency gate:** Coordinators follow [`.cursor/rules/coordinator-agent.mdc`](.cursor/rules/coordinator-agent.mdc) step 4 and [`.cursor/commands/coordinate-task.md`](.cursor/commands/coordinate-task.md): optional pre-pass with **`efficiency-inspector-agent`**, **`planned_tasks[]`**, and respect for **`halt_or_narrow`** (especially **high** priority).
 
 ### Subagent workflow refinement (plan phases)
 
 | Phase | Status | Notes |
 |-------|--------|--------|
-| 1 — Coordinator `subagent_type` + routing | **Done** | Rule, coordinator agent, `coordinate-task` command, operational note above |
-| 2+ | Pending | Efficiency gate, tool-builder, additional agents per plan |
+| 1 — Coordinator `subagent_type` + routing | **Done** | Rule, coordinator agent, `coordinate-task` command |
+| 2 — Efficiency inspector gate + coordinator step | **Done** | `efficiency-inspector-agent` persona; coordinator rule / agent / command |
+| 3 — `script-optimizer` vs `tool-builder` split | **Done** | Narrowed script-optimizer; new `tool-builder-agent.md` |
+| 4+ | Pending | ci-failure, test-author, subagent-author, web-ref agents, security, etc. |
 
 This completes the planned deliverables for the repository (including the skills vs agents split).

@@ -22,14 +22,15 @@ When acting as **CoordinatorAgent**:
 | Env/secrets, CORS, leakage patterns | `secret-config-agent` | `secret-config-agent.md` |
 | a11y checks / snapshots | `accessibility-agent` | `accessibility-agent.md` |
 | Diff vs contract / SDK examples | `bughunting-agent` | `bughunting-agent.md` |
-| Token-heavy workflow / repeated patterns → scripts | `efficiency-inspector-agent` | `efficiency-inspector-agent.md` |
+| Pre-flight efficiency gate (many parallel workers, web/URLs/doc/MCP-heavy, broad research) | `efficiency-inspector-agent` | `efficiency-inspector-agent.md` |
 | Refactor repeated shell/JSON into `scripts/` or hook helpers | `script-optimizer-agent` | `script-optimizer-agent.md` |
 | Promote verified facts to `.cursor/VerifiedFindings.md` | `cataloger-agent` | `cataloger-agent.md` |
-| Greenfield small tools (first script for a gap) | `tool-builder-agent` | *Phase 3 — add persona* |
+| Greenfield small tools (first script for a gap; no repetition yet) | `tool-builder-agent` | `tool-builder-agent.md` |
 
 3. **`explore` vs `repo-explorer-agent`:** Use built-in **`explore`** for quick, read-only search across the tree. Use **`repo-explorer-agent`** when the deliverable is a structured map or coordinator-facing summary (often updating `.cursor/repo-map.md` or scratchpad sections).
-4. **Estimate** parallel work units; for each, invoke **Task** with **structured input** (see `.cursor/schemas/`).
-5. **Attach context**: paths to `.cursor/scratchpad.md`, relevant headings in `.cursor/VerifiedFindings.md`, and `.cursor/repo-map.md`.
-6. **Require** subagent replies as JSON matching envelope `schema_version` **1** (see `.cursor/schemas/subagent-envelope.schema.json`). Reject unstructured dumps for merge.
-7. **MCP**: Prefer not calling MCP tools directly; delegate to subagents. If you must use MCP, ensure `.cursor/allow-mcp` exists or work runs under Task (subagent session sets `.cursor/.subagent-active`).
-8. **Outcomes**: Accept `empty_result` as valid information. On `failure` or `partial_success`, escalate with `errors[]` and `what_was_attempted` to the user.
+4. **Efficiency gate (pre-pass when applicable):** Before spawning workers, if the plan has **more than two** parallel **Task** workers, or **web / many URLs / doc fetch / MCP-heavy** steps, or **broad research** without bounded scope, invoke **Task** once with **`subagent_type`: `efficiency-inspector-agent`**. Include **`planned_tasks[]`** `{ task_id, subagent_type, tools_risk }` and a one-line goal. Merge the envelope. If any **`recommendation_type`: `halt_or_narrow`** has **`priority`: `high`**, **narrow scope** or reduce parallelism **before** spawning the rest. **`suggested_owner`** (`script-optimizer-agent`, `tool-builder-agent`) is advisory—you spawn those workers **separately** if you adopt them.
+5. **Estimate** parallel work units; for each, invoke **Task** with **structured input** (see `.cursor/schemas/`).
+6. **Attach context**: paths to `.cursor/scratchpad.md`, relevant headings in `.cursor/VerifiedFindings.md`, and `.cursor/repo-map.md`.
+7. **Require** subagent replies as JSON matching envelope `schema_version` **1** (see `.cursor/schemas/subagent-envelope.schema.json`). Reject unstructured dumps for merge.
+8. **MCP**: Prefer not calling MCP tools directly; delegate to subagents. If you must use MCP, ensure `.cursor/allow-mcp` exists or work runs under Task (subagent session sets `.cursor/.subagent-active`).
+9. **Outcomes**: Accept `empty_result` as valid information. On `failure` or `partial_success`, escalate with `errors[]` and `what_was_attempted` to the user.
