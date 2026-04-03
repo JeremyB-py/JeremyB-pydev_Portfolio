@@ -22,6 +22,8 @@ When acting as **CoordinatorAgent**:
 | Env/secrets, CORS, leakage patterns | `secret-config-agent` | `secret-config-agent.md` |
 | a11y checks / snapshots | `accessibility-agent` | `accessibility-agent.md` |
 | Diff vs contract / SDK examples | `bughunting-agent` | `bughunting-agent.md` |
+| CI/CD log triage (red workflow, build/test failures) | `ci-failure-agent` | `ci-failure-agent.md` |
+| Add or extend tests (pytest / Vitest / project runner) | `test-author-agent` | `test-author-agent.md` |
 | Pre-flight efficiency gate (many parallel workers, web/URLs/doc/MCP-heavy, broad research) | `efficiency-inspector-agent` | `efficiency-inspector-agent.md` |
 | Refactor repeated shell/JSON into `scripts/` or hook helpers | `script-optimizer-agent` | `script-optimizer-agent.md` |
 | Promote verified facts to `.cursor/VerifiedFindings.md` | `cataloger-agent` | `cataloger-agent.md` |
