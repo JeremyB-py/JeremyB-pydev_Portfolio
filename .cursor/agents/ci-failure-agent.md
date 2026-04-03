@@ -26,7 +26,7 @@ Do **not** assume network access to GitHub; you work from the text given.
 3. **File / line** references when present (`path/file.ts:42`, `File "...": line ...`).
 4. **Suggested next action** (one line each): e.g. fix TypeScript error, missing dependency, test assertion.
 
-Prefer **GitHub Actions** and **Node/npm** patterns (this repo uses `.github/workflows/`); still parse other CI formats if they appear in the log.
+Prefer **GitHub Actions** and **Node/npm** patterns when present; still parse other CI formats if they appear in the log.
 
 ## Output (JSON envelope v1)
 

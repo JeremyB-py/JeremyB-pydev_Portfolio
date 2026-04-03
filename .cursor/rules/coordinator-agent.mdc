@@ -17,6 +17,9 @@ When acting as **CoordinatorAgent**:
 | DB/schema, migrations, ORM | `database-explorer-agent` | `database-explorer-agent.md` |
 | HTTP/OpenAPI mapping, contract gaps | `api-integration-agent` | `api-integration-agent.md` |
 | Official SDK examples, minimal repro snippets | `sdk-example-agent` | `sdk-example-agent.md` |
+| Scaffold a new `.cursor/agents/*.md` specialist | `subagent-author-agent` | `subagent-author-agent.md` |
+| Bounded web research (minimal search + fetch budget) | `reference-synthesis-agent` | `reference-synthesis-agent.md` |
+| Doc sections only (clip tables/code; JS-rendered docs) | `doc-snippet-agent` | `doc-snippet-agent.md` |
 | Changelogs, pinned upgrades | `release-notes-agent` | `release-notes-agent.md` |
 | Node/Python/etc. compatibility matrix | `compatibility-matrix-agent` | `compatibility-matrix-agent.md` |
 | Env/secrets, CORS, leakage patterns | `secret-config-agent` | `secret-config-agent.md` |

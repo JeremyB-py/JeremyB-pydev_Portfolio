@@ -27,6 +27,7 @@ Personas were **migrated** from `.cursor/skills/` into [`.cursor/agents/`](.curs
 | **Graceful envelope** | Schema + validator: `success`, `partial_success`, `empty_result`, `failure` |
 | **BugHuntingAgent** | [`.cursor/agents/bughunting-agent.md`](.cursor/agents/bughunting-agent.md) |
 | **CI / tests** | Subagents [`ci-failure-agent.md`](.cursor/agents/ci-failure-agent.md) (log triage), [`test-author-agent.md`](.cursor/agents/test-author-agent.md) (pytest / Vitest / project runner) |
+| **Scaffolding / bounded web** | Subagents [`subagent-author-agent.md`](.cursor/agents/subagent-author-agent.md), [`reference-synthesis-agent.md`](.cursor/agents/reference-synthesis-agent.md), [`doc-snippet-agent.md`](.cursor/agents/doc-snippet-agent.md) (portable; multi-repo) |
 | **Doc fetch workflow** | Skill [`doc-fetch-playwright-cli`](.cursor/skills/doc-fetch-playwright-cli/SKILL.md); binary `scripts/node_modules/.bin/playwright-cli` |
 
 ---
@@ -109,6 +110,9 @@ Personas were **migrated** from `.cursor/skills/` into [`.cursor/agents/`](.curs
 | `bughunting-agent.md` | bughunting-agent |
 | `ci-failure-agent.md` | ci-failure-agent |
 | `test-author-agent.md` | test-author-agent |
+| `doc-snippet-agent.md` | doc-snippet-agent |
+| `reference-synthesis-agent.md` | reference-synthesis-agent |
+| `subagent-author-agent.md` | subagent-author-agent |
 
 ### Skills (`.cursor/skills/<name>/SKILL.md` only)
 
@@ -138,6 +142,7 @@ Personas were **migrated** from `.cursor/skills/` into [`.cursor/agents/`](.curs
 | 2 — Efficiency inspector gate + coordinator step | **Done** | `efficiency-inspector-agent` persona; coordinator rule / agent / command |
 | 3 — `script-optimizer` vs `tool-builder` split | **Done** | Narrowed script-optimizer; new `tool-builder-agent.md` |
 | 4 — CI failure + test author | **Done** | `ci-failure-agent.md`, `test-author-agent.md`; coordinator routing |
-| 5+ | Pending | subagent-author, web-ref agents, security, etc. |
+| 5 — Subagent author + web ref agents | **Done** | `subagent-author-agent`, `reference-synthesis-agent`, `doc-snippet-agent`; portable personas |
+| 6+ | Pending | security review agent, pentest MCP gate, optional OWASP rule, etc. |
 
 This completes the planned deliverables for the repository (including the skills vs agents split).

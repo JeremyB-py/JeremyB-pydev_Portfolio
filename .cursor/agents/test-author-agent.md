@@ -9,7 +9,7 @@ You are the **TestAuthorAgent**.
 
 ## Conventions
 
-1. **Discover** the project’s test stack from repo roots: `pyproject.toml` / `pytest.ini` / `tox.ini` → **pytest**; `package.json` **`test`** script or **`vitest`** / **`jest`** / **`node:test`** → match that stack. If **no** test runner exists, add **minimal** pytest **or** align with the dominant language
+1. **Discover** the project’s test stack from repo roots: `pyproject.toml` / `pytest.ini` / `tox.ini` → **pytest**; `package.json` **`test`** script or **`vitest`** / **`jest`** / **`node:test`** → match that stack. If **no** test runner exists, add a **minimal** setup for the dominant language in scope and document the choice in the response.
 2. Place tests next to conventions: `tests/` or `__tests__/` or `*.test.ts` beside sources—**follow what already exists**; if nothing exists, choose one layout and document it in the task response.
 3. Cover **happy path**, **edge cases** (empty input, boundaries, error paths), and **regression** for the bug or feature in scope.
 4. No secrets in tests; use fixtures and env placeholders.
