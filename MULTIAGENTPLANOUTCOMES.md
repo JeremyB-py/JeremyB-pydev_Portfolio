@@ -24,7 +24,7 @@ Personas were **migrated** from `.cursor/skills/` into [`.cursor/agents/`](.curs
 | **Optional API specialists** | Subagents: api-integration, release-notes, sdk-example, compatibility-matrix, secret-config, accessibility (all under `.cursor/agents/`) |
 | **Error protocol** | Skill [`error-reporting-protocol`](.cursor/skills/error-reporting-protocol/SKILL.md) |
 | **Envelope helper** | Skill [`subagent-json-envelope`](.cursor/skills/subagent-json-envelope/SKILL.md) |
-| **OWASP LLM (2025)** | Skill [`owasp-llm-2025-baseline`](.cursor/skills/owasp-llm-2025-baseline/SKILL.md); alignment subsections in all first-party [`.cursor/agents/*.md`](.cursor/agents/) personas |
+| **OWASP LLM (2025)** | Skill [`owasp-llm-2025-baseline`](.cursor/skills/owasp-llm-2025-baseline/SKILL.md)—**two-tier**: in-persona bullets by default; full skill when unsure/surprising inputs or coordinator high-risk; always for **`app-security-review-agent`** and **`subagent-author-agent`** (drafting) |
 | **Graceful envelope** | Schema + validator: `success`, `partial_success`, `empty_result`, `failure` |
 | **BugHuntingAgent** | [`.cursor/agents/bughunting-agent.md`](.cursor/agents/bughunting-agent.md) |
 | **CI / tests** | Subagents [`ci-failure-agent.md`](.cursor/agents/ci-failure-agent.md) (log triage), [`test-author-agent.md`](.cursor/agents/test-author-agent.md) (pytest / Vitest / project runner) |
@@ -138,7 +138,7 @@ Personas were **migrated** from `.cursor/skills/` into [`.cursor/agents/`](.curs
 
 6. **Efficiency gate:** Coordinators follow [`.cursor/rules/coordinator-agent.mdc`](.cursor/rules/coordinator-agent.mdc) step 4 and [`.cursor/commands/coordinate-task.md`](.cursor/commands/coordinate-task.md): optional pre-pass with **`efficiency-inspector-agent`**, **`planned_tasks[]`**, and respect for **`halt_or_narrow`** (especially **high** priority).
 
-7. **OWASP LLM (2025):** Subagents reference **`@owasp-llm-2025-baseline`**; see [`.cursor/skills/owasp-llm-2025-baseline/SKILL.md`](.cursor/skills/owasp-llm-2025-baseline/SKILL.md). Coordinators: [`.cursor/rules/coordinator-agent.mdc`](.cursor/rules/coordinator-agent.mdc) step 10; command [`.cursor/commands/coordinate-task.md`](.cursor/commands/coordinate-task.md) step 9.
+7. **OWASP LLM (2025):** Most specialists keep **LLMxx bullets** in their persona and attach **`@owasp-llm-2025-baseline`** only when **unsure** or inputs are **surprising**. **`app-security-review-agent`** and **`subagent-author-agent`** (while drafting) **always** load the baseline. Coordinators may attach on **high-risk** runs. See [`.cursor/skills/owasp-llm-2025-baseline/SKILL.md`](.cursor/skills/owasp-llm-2025-baseline/SKILL.md) **Two-tier usage**; [`.cursor/rules/coordinator-agent.mdc`](.cursor/rules/coordinator-agent.mdc) step 10; [`.cursor/commands/coordinate-task.md`](.cursor/commands/coordinate-task.md) step 9.
 
 ### Subagent workflow refinement (plan phases)
 
@@ -150,6 +150,6 @@ Personas were **migrated** from `.cursor/skills/` into [`.cursor/agents/`](.curs
 | 4 — CI failure + test author | **Done** | `ci-failure-agent.md`, `test-author-agent.md`; coordinator routing |
 | 5 — Subagent author + web ref agents | **Done** | `subagent-author-agent`, `reference-synthesis-agent`, `doc-snippet-agent`; portable personas |
 | 6 — Security + pentest MCP gate | **Done** | `app-security-review-agent`; `mcp-gate.py` high-risk branch; `allow-pentest-mcp.example`; `pentest-mcp.mdc` |
-| 7 — OWASP LLM baseline in subagents | **Done** | Skill `owasp-llm-2025-baseline`; per-agent alignment sections; `subagent-author-agent` template requirement; coordinator rule/command step |
+| 7 — OWASP LLM baseline in subagents | **Done** | Skill `owasp-llm-2025-baseline` (two-tier); per-agent bullets + conditional full baseline; always baseline for `app-security-review-agent` / `subagent-author-agent` drafting; coordinator optional on high-risk |
 
 This completes the planned deliverables for the repository (including the skills vs agents split).

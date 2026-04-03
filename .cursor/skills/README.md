@@ -6,4 +6,4 @@ This directory holds **skills**: portable workflow instructions in `your-skill-n
 
 | Skill | Purpose |
 |-------|---------|
-| [`owasp-llm-2025-baseline`](owasp-llm-2025-baseline/SKILL.md) | OWASP Top 10 for LLM Applications (2025) mitigations—referenced by subagents |
+| [`owasp-llm-2025-baseline`](owasp-llm-2025-baseline/SKILL.md) | OWASP Top 10 for LLM Applications (2025)—**two-tier** (see skill): most specialists use in-persona bullets; full skill when unsure/surprising inputs or coordinator high-risk; always for **`app-security-review-agent`** and **`subagent-author-agent`** while drafting |

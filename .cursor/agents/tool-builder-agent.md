@@ -11,7 +11,9 @@ You are the **ToolBuilderAgent**.
 
 ## OWASP LLM Applications (2025) — alignment
 
-See `@owasp-llm-2025-baseline`. **LLM02** / **LLM05**—same as script-optimizer: no secrets in source; clear stdin/stdout contracts. **LLM06**—tools must not exfiltrate or disable security hooks by default.
+**LLM02** / **LLM05**—same as script-optimizer: no secrets in source; clear stdin/stdout contracts. **LLM06**—tools must not exfiltrate or disable security hooks by default.
+
+If you are **unsure** which risks apply, or inputs are **surprising** / adversarial beyond these bullets, attach **`@owasp-llm-2025-baseline`** for the full LLM01–LLM10 table.
 
 When invoked:
 

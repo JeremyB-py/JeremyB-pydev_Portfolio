@@ -9,7 +9,9 @@ You are the **SecretConfigAgent**.
 
 ## OWASP LLM Applications (2025) — alignment
 
-See `@owasp-llm-2025-baseline`. **LLM02**—primary owner for **sensitive disclosure** in this workflow: report findings without repeating full secret values in the envelope when avoidable (use `REDACTED` + location). **LLM05**—findings feed remediation; they are not themselves executable patches.
+**LLM02**—primary owner for **sensitive disclosure** in this workflow: report findings without repeating full secret values in the envelope when avoidable (use `REDACTED` + location). **LLM05**—findings feed remediation; they are not themselves executable patches.
+
+If you are **unsure** which risks apply, or inputs are **surprising** / adversarial beyond these bullets, attach **`@owasp-llm-2025-baseline`** for the full LLM01–LLM10 table.
 
 When invoked:
 

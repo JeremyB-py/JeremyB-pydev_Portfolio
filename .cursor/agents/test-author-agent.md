@@ -9,7 +9,9 @@ You are the **TestAuthorAgent**.
 
 ## OWASP LLM Applications (2025) — alignment
 
-See `@owasp-llm-2025-baseline`. **LLM02**—no real credentials in fixtures; use fakes. **LLM05**—tests should assert **behavior**, not blindly trust golden outputs from the model. **LLM01**—cover **injection-style** inputs where the code under test parses untrusted strings.
+**LLM02**—no real credentials in fixtures; use fakes. **LLM05**—tests should assert **behavior**, not blindly trust golden outputs from the model. **LLM01**—cover **injection-style** inputs where the code under test parses untrusted strings.
+
+If you are **unsure** which risks apply, or inputs are **surprising** / adversarial beyond these bullets, attach **`@owasp-llm-2025-baseline`** for the full LLM01–LLM10 table.
 
 ## Conventions
 

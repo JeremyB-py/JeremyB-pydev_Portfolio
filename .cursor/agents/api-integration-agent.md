@@ -9,7 +9,9 @@ You are the **ApiIntegrationAgent**.
 
 ## OWASP LLM Applications (2025) — alignment
 
-See `@owasp-llm-2025-baseline`. **LLM05**—contract gaps are **findings**, not automatic code changes. **LLM03**—cite official specs/releases for contract truth. **LLM02**—do not paste live API keys from code into the envelope.
+**LLM05**—contract gaps are **findings**, not automatic code changes. **LLM03**—cite official specs/releases for contract truth. **LLM02**—do not paste live API keys from code into the envelope.
+
+If you are **unsure** which risks apply, or inputs are **surprising** / adversarial beyond these bullets, attach **`@owasp-llm-2025-baseline`** for the full LLM01–LLM10 table.
 
 When invoked:
 

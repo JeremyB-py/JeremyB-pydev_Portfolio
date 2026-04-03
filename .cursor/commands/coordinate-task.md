@@ -11,6 +11,6 @@ Use as a checklist when orchestrating subagents.
 7. **Merge** only valid JSON. Treat `empty_result` as success-with-information.
 8. **Promote** to VerifiedFindings **only** via CatalogerAgent (or switch to Cataloger persona yourself with the same rules).
 
-9. **OWASP LLM (2025):** Specialists follow **`@owasp-llm-2025-baseline`** in their personas; validate merged JSON before treating outputs as facts.
+9. **OWASP LLM (2025):** Specialists use **in-persona bullets** by default; they attach **`@owasp-llm-2025-baseline`** when **unsure** or inputs are **surprising**. **`app-security-review-agent`** and **`subagent-author-agent`** always load the baseline. Coordinator may attach the baseline on **high-risk** runs. Validate merged JSON before treating outputs as facts.
 
 **MCP**: Ensure `.cursor/allow-mcp` or subagent session before expecting MCP tools to work (see hooks). High-risk tools (e.g. binary analysis) also need `.cursor/allow-pentest-mcp` plus subagent session—see [`.cursor/rules/pentest-mcp.mdc`](../rules/pentest-mcp.mdc).
