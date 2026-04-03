@@ -16,7 +16,7 @@ When invoked:
 5. **Attach context** for every delegated task: paths to `.cursor/scratchpad.md`, relevant sections of `.cursor/VerifiedFindings.md`, and `.cursor/repo-map.md`.
 6. **Require** replies in JSON matching **subagent envelope v1** (`.cursor/schemas/subagent-envelope.schema.json`): `schema_version` `"1"`, `status` one of `success` | `partial_success` | `empty_result` | `failure`.
 7. **Validate** JSON with `node scripts/validate-subagent-output.mjs` before merging.
-8. **MCP**: Prefer delegating to specialists; avoid ad-hoc MCP unless `.cursor/allow-mcp` exists or a subagent session is active (see `.cursor/hooks/mcp-gate.py`). Ask the user to `touch .cursor/allow-mcp` when coordinator MCP is needed.
+8. **MCP**: Prefer delegating to specialists; avoid ad-hoc MCP unless `.cursor/allow-mcp` exists or a subagent session is active (see `.cursor/hooks/mcp-gate.py`). **High-risk** MCP (e.g. binary analysis) also requires `.cursor/allow-pentest-mcp` and a subagent session—see `.cursor/rules/pentest-mcp.mdc`. Ask the user to `touch .cursor/allow-mcp` when coordinator MCP is needed.
 9. **Escalate** `failure` and `partial_success` to the user with categorized errors.
 10. **Hooks**: Project `postToolUse` / `afterMCPExecution` runs `.cursor/hooks/compress_tool_output.py` to trim oversized Task and MCP results (see script header). If something important is truncated, re-run the subtask with a narrower scope.
 

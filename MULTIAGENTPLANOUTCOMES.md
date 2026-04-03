@@ -17,7 +17,7 @@ Personas were **migrated** from `.cursor/skills/` into [`.cursor/agents/`](.curs
 |------|---------|
 | **Schemas & templates** | JSON envelope + error object schemas; `scratchpad.md`, `VerifiedFindings.md`, `repo-map.md`; doc-cache with `.gitignore` |
 | **Coordinator / Cataloger** | Rules (`.mdc`); **subagents** [`.cursor/agents/coordinator-agent.md`](.cursor/agents/coordinator-agent.md), [`cataloger-agent.md`](.cursor/agents/cataloger-agent.md); slash command [`.cursor/commands/coordinate-task.md`](.cursor/commands/coordinate-task.md); **Task `subagent_type`** must match YAML **`name`** (Phase 1 refinement; routing table in coordinator rule) |
-| **Hooks** | [`.cursor/hooks.json`](.cursor/hooks.json): `beforeMCPExecution` (fail-closed), `subagentStart` / `subagentStop` session marker |
+| **Hooks** | [`.cursor/hooks.json`](.cursor/hooks.json): `beforeMCPExecution` ([`mcp-gate.py`](.cursor/hooks/mcp-gate.py)—MCP consent + high-risk / pentest gate), `subagentStart` / `subagentStop` session marker |
 | **Explorers** | Subagents [`repo-explorer-agent.md`](.cursor/agents/repo-explorer-agent.md), [`database-explorer-agent.md`](.cursor/agents/database-explorer-agent.md); doc-cache convention |
 | **Playwright** | Local `scripts/` npm package `@playwright/cli`; `playwright-cli install --skills`; upstream skill pack under `scripts/.claude/skills/playwright-cli/` |
 | **Efficiency loop** | Subagents [`efficiency-inspector-agent.md`](.cursor/agents/efficiency-inspector-agent.md) (pre-pass gate), [`script-optimizer-agent.md`](.cursor/agents/script-optimizer-agent.md) (refactor repetition), [`tool-builder-agent.md`](.cursor/agents/tool-builder-agent.md) (greenfield scripts); [`scripts/validate-subagent-output.mjs`](scripts/validate-subagent-output.mjs) |
@@ -28,6 +28,7 @@ Personas were **migrated** from `.cursor/skills/` into [`.cursor/agents/`](.curs
 | **BugHuntingAgent** | [`.cursor/agents/bughunting-agent.md`](.cursor/agents/bughunting-agent.md) |
 | **CI / tests** | Subagents [`ci-failure-agent.md`](.cursor/agents/ci-failure-agent.md) (log triage), [`test-author-agent.md`](.cursor/agents/test-author-agent.md) (pytest / Vitest / project runner) |
 | **Scaffolding / bounded web** | Subagents [`subagent-author-agent.md`](.cursor/agents/subagent-author-agent.md), [`reference-synthesis-agent.md`](.cursor/agents/reference-synthesis-agent.md), [`doc-snippet-agent.md`](.cursor/agents/doc-snippet-agent.md) (portable; multi-repo) |
+| **Security review** | Subagent [`app-security-review-agent.md`](.cursor/agents/app-security-review-agent.md); rule [`.cursor/rules/pentest-mcp.mdc`](.cursor/rules/pentest-mcp.mdc); consent [`allow-pentest-mcp.example`](.cursor/allow-pentest-mcp.example), optional [`pentest-mcp-tools.txt.example`](.cursor/pentest-mcp-tools.txt.example) |
 | **Doc fetch workflow** | Skill [`doc-fetch-playwright-cli`](.cursor/skills/doc-fetch-playwright-cli/SKILL.md); binary `scripts/node_modules/.bin/playwright-cli` |
 
 ---
@@ -113,6 +114,7 @@ Personas were **migrated** from `.cursor/skills/` into [`.cursor/agents/`](.curs
 | `doc-snippet-agent.md` | doc-snippet-agent |
 | `reference-synthesis-agent.md` | reference-synthesis-agent |
 | `subagent-author-agent.md` | subagent-author-agent |
+| `app-security-review-agent.md` | app-security-review-agent |
 
 ### Skills (`.cursor/skills/<name>/SKILL.md` only)
 
@@ -143,6 +145,7 @@ Personas were **migrated** from `.cursor/skills/` into [`.cursor/agents/`](.curs
 | 3 — `script-optimizer` vs `tool-builder` split | **Done** | Narrowed script-optimizer; new `tool-builder-agent.md` |
 | 4 — CI failure + test author | **Done** | `ci-failure-agent.md`, `test-author-agent.md`; coordinator routing |
 | 5 — Subagent author + web ref agents | **Done** | `subagent-author-agent`, `reference-synthesis-agent`, `doc-snippet-agent`; portable personas |
-| 6+ | Pending | security review agent, pentest MCP gate, optional OWASP rule, etc. |
+| 6 — Security + pentest MCP gate | **Done** | `app-security-review-agent`; `mcp-gate.py` high-risk branch; `allow-pentest-mcp.example`; `pentest-mcp.mdc` |
+| 7+ | Optional | `owasp-llm-2025-coordinator.mdc` rule file (if desired) |
 
 This completes the planned deliverables for the repository (including the skills vs agents split).
