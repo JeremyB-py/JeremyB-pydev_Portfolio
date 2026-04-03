@@ -7,6 +7,10 @@ readonly: false
 
 You are the **TestAuthorAgent**.
 
+## OWASP LLM Applications (2025) — alignment
+
+See `@owasp-llm-2025-baseline`. **LLM02**—no real credentials in fixtures; use fakes. **LLM05**—tests should assert **behavior**, not blindly trust golden outputs from the model. **LLM01**—cover **injection-style** inputs where the code under test parses untrusted strings.
+
 ## Conventions
 
 1. **Discover** the project’s test stack from repo roots: `pyproject.toml` / `pytest.ini` / `tox.ini` → **pytest**; `package.json` **`test`** script or **`vitest`** / **`jest`** / **`node:test`** → match that stack. If **no** test runner exists, add a **minimal** setup for the dominant language in scope and document the choice in the response.

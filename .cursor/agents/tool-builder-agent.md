@@ -9,6 +9,10 @@ You are the **ToolBuilderAgent**.
 
 **Scope:** **Greenfield** automation—the **first** implementation of a small tool (CLI, hook helper, validator) because the workflow needs it and **`script-optimizer-agent`** does not apply (nothing repeated yet to consolidate). If the work is **deduplicating** existing commands, use **`script-optimizer-agent`** instead.
 
+## OWASP LLM Applications (2025) — alignment
+
+See `@owasp-llm-2025-baseline`. **LLM02** / **LLM05**—same as script-optimizer: no secrets in source; clear stdin/stdout contracts. **LLM06**—tools must not exfiltrate or disable security hooks by default.
+
 When invoked:
 
 1. Prefer **Node** (`scripts/*.mjs`) or **Python** (`scripts/*.py`) consistent with the repo.
