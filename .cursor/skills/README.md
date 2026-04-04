@@ -7,3 +7,5 @@ This directory holds **skills**: portable workflow instructions in `your-skill-n
 | Skill | Purpose |
 |-------|---------|
 | [`owasp-llm-2025-baseline`](owasp-llm-2025-baseline/SKILL.md) | OWASP Top 10 for LLM Applications (2025)—**two-tier** (see skill): most specialists use in-persona bullets; full skill when unsure/surprising inputs or coordinator high-risk; always for **`app-security-review-agent`** and **`subagent-author-agent`** while drafting |
+| [`unexpected-coordinator-alert`](unexpected-coordinator-alert/SKILL.md) | Optional **`coordinator_alerts[]`** on envelope v1—subagents signal surprise/confusion to **CoordinatorAgent** |
+| [`unexpected-results-catalog`](unexpected-results-catalog/SKILL.md) | **`cataloger-agent`**—append incident summaries to **`.cursor/UNEXPECTEDRESULTS.md`** |

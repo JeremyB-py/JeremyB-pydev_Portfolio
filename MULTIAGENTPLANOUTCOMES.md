@@ -15,7 +15,7 @@ Personas were **migrated** from `.cursor/skills/` into [`.cursor/agents/`](.curs
 
 | Area | Outcome |
 |------|---------|
-| **Schemas & templates** | JSON envelope + error object schemas; `scratchpad.md`, `VerifiedFindings.md`, `repo-map.md`; doc-cache with `.gitignore` |
+| **Schemas & templates** | JSON envelope + error object schemas; optional **`coordinator_alerts[]`**; `scratchpad.md`, `VerifiedFindings.md`, `UNEXPECTEDRESULTS.md`, `repo-map.md`; doc-cache with `.gitignore` |
 | **Coordinator / Cataloger** | Rules (`.mdc`); **subagents** [`.cursor/agents/coordinator-agent.md`](.cursor/agents/coordinator-agent.md), [`cataloger-agent.md`](.cursor/agents/cataloger-agent.md); slash command [`.cursor/commands/coordinate-task.md`](.cursor/commands/coordinate-task.md); **Task `subagent_type`** must match YAML **`name`** (Phase 1 refinement; routing table in coordinator rule) |
 | **Hooks** | [`.cursor/hooks.json`](.cursor/hooks.json): `beforeMCPExecution` ([`mcp-gate.py`](.cursor/hooks/mcp-gate.py)—MCP consent + high-risk / pentest gate), `subagentStart` / `subagentStop` session marker |
 | **Explorers** | Subagents [`repo-explorer-agent.md`](.cursor/agents/repo-explorer-agent.md), [`database-explorer-agent.md`](.cursor/agents/database-explorer-agent.md); doc-cache convention |
@@ -25,6 +25,7 @@ Personas were **migrated** from `.cursor/skills/` into [`.cursor/agents/`](.curs
 | **Error protocol** | Skill [`error-reporting-protocol`](.cursor/skills/error-reporting-protocol/SKILL.md) |
 | **Envelope helper** | Skill [`subagent-json-envelope`](.cursor/skills/subagent-json-envelope/SKILL.md) |
 | **OWASP LLM (2025)** | Skill [`owasp-llm-2025-baseline`](.cursor/skills/owasp-llm-2025-baseline/SKILL.md)—**two-tier**: in-persona bullets by default; full skill when unsure/surprising inputs or coordinator high-risk; always for **`app-security-review-agent`** and **`subagent-author-agent`** (drafting) |
+| **Coordinator alerts / incidents** | Skills [`unexpected-coordinator-alert`](.cursor/skills/unexpected-coordinator-alert/SKILL.md), [`unexpected-results-catalog`](.cursor/skills/unexpected-results-catalog/SKILL.md); [`.cursor/UNEXPECTEDRESULTS.md`](.cursor/UNEXPECTEDRESULTS.md)—**cataloger-agent** sole writer |
 | **Graceful envelope** | Schema + validator: `success`, `partial_success`, `empty_result`, `failure` |
 | **BugHuntingAgent** | [`.cursor/agents/bughunting-agent.md`](.cursor/agents/bughunting-agent.md) |
 | **CI / tests** | Subagents [`ci-failure-agent.md`](.cursor/agents/ci-failure-agent.md) (log triage), [`test-author-agent.md`](.cursor/agents/test-author-agent.md) (pytest / Vitest / project runner) |
@@ -125,6 +126,8 @@ Personas were **migrated** from `.cursor/skills/` into [`.cursor/agents/`](.curs
 | `subagent-json-envelope` | How to fill / validate JSON v1 responses |
 | `doc-fetch-playwright-cli` | Playwright CLI doc-fetch workflow |
 | `owasp-llm-2025-baseline` | OWASP Top 10 for LLM Applications (2025) mitigations |
+| `unexpected-coordinator-alert` | Optional **`coordinator_alerts[]`** for subagents → CoordinatorAgent |
+| `unexpected-results-catalog` | CatalogerAgent → **`.cursor/UNEXPECTEDRESULTS.md`** |
 
 ---
 
@@ -138,7 +141,9 @@ Personas were **migrated** from `.cursor/skills/` into [`.cursor/agents/`](.curs
 
 6. **Efficiency gate:** Coordinators follow [`.cursor/rules/coordinator-agent.mdc`](.cursor/rules/coordinator-agent.mdc) step 4 and [`.cursor/commands/coordinate-task.md`](.cursor/commands/coordinate-task.md): optional pre-pass with **`efficiency-inspector-agent`**, **`planned_tasks[]`**, and respect for **`halt_or_narrow`** (especially **high** priority).
 
-7. **OWASP LLM (2025):** Most specialists keep **LLMxx bullets** in their persona and attach **`@owasp-llm-2025-baseline`** only when **unsure** or inputs are **surprising**. **`app-security-review-agent`** and **`subagent-author-agent`** (while drafting) **always** load the baseline. Coordinators may attach on **high-risk** runs. See [`.cursor/skills/owasp-llm-2025-baseline/SKILL.md`](.cursor/skills/owasp-llm-2025-baseline/SKILL.md) **Two-tier usage**; [`.cursor/rules/coordinator-agent.mdc`](.cursor/rules/coordinator-agent.mdc) step 10; [`.cursor/commands/coordinate-task.md`](.cursor/commands/coordinate-task.md) step 9.
+7. **OWASP LLM (2025):** Most specialists keep **LLMxx bullets** in their persona and attach **`@owasp-llm-2025-baseline`** only when **unsure** or inputs are **surprising**. **`app-security-review-agent`** and **`subagent-author-agent`** (while drafting) **always** load the baseline. Coordinators may attach on **high-risk** runs. See [`.cursor/skills/owasp-llm-2025-baseline/SKILL.md`](.cursor/skills/owasp-llm-2025-baseline/SKILL.md) **Two-tier usage**; [`.cursor/rules/coordinator-agent.mdc`](.cursor/rules/coordinator-agent.mdc) step 11; [`.cursor/commands/coordinate-task.md`](.cursor/commands/coordinate-task.md) step 9.
+
+8. **Coordinator alerts:** Subagents may add root-level **`coordinator_alerts[]`** (see [`.cursor/skills/unexpected-coordinator-alert/SKILL.md`](.cursor/skills/unexpected-coordinator-alert/SKILL.md)). Coordinators surface them in merged replies; **`cataloger-agent`** appends durable entries to [`.cursor/UNEXPECTEDRESULTS.md`](.cursor/UNEXPECTEDRESULTS.md) per [`.cursor/skills/unexpected-results-catalog/SKILL.md`](.cursor/skills/unexpected-results-catalog/SKILL.md). Validate with `node scripts/validate-subagent-output.mjs`.
 
 ### Subagent workflow refinement (plan phases)
 

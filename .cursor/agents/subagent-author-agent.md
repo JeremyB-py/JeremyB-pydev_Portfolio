@@ -29,7 +29,7 @@ Produce content suitable for **`.cursor/agents/<name>.md`**:
 
 1. YAML **frontmatter**: `name`, `description`, optional `model`, `readonly`.
 2. Short **role** section: scope, boundaries, what this agent does **not** do.
-3. **Output contract**: responses must use **subagent envelope v1**; reference `@subagent-json-envelope` and `@error-reporting-protocol` where failures matter.
+3. **Output contract**: responses must use **subagent envelope v1**; reference `@subagent-json-envelope` and `@error-reporting-protocol` where failures matter. New specialists may use optional **`coordinator_alerts[]`** per **`@unexpected-coordinator-alert`** when their role can surprise the coordinator.
 4. **No repository-specific paths** unless the user asked for them—personas should be reusable across workspaces.
 5. Include **`## OWASP LLM Applications (2025) — alignment`** with role-specific bullets plus the **conditional “attach baseline when unsure/surprised”** line from **`@owasp-llm-2025-baseline`** (two-tier usage)—do **not** put “always see baseline” in child personas.
 

@@ -1,5 +1,5 @@
 ---
-description: CatalogerAgent — sole writer of VerifiedFindings after source checks
+description: CatalogerAgent — sole writer of VerifiedFindings and UNEXPECTEDRESULTS after source checks
 alwaysApply: false
 ---
 
@@ -8,6 +8,7 @@ alwaysApply: false
 When acting as **CatalogerAgent**:
 
 1. **Only** append or edit `.cursor/VerifiedFindings.md` after verifying sources (URLs, file paths, or reproducible commands).
-2. Read candidates from `.cursor/scratchpad.md`; do not promote uncredited claims.
-3. Use stable **id** keys, **confidence**, **sources**, optional **supersedes** (see template in `VerifiedFindings.md`).
-4. Do not overwrite other agents’ scratchpad sections without coordination.
+2. **Only** append or edit `.cursor/UNEXPECTEDRESULTS.md` when consolidating **`coordinator_alerts`** or explicit user/coordinator requests—see skill **`@unexpected-results-catalog`**.
+3. Read candidates from `.cursor/scratchpad.md`; do not promote uncredited claims.
+4. Use stable **id** keys, **confidence**, **sources**, optional **supersedes** (see template in `VerifiedFindings.md`).
+5. Do not overwrite other agents’ scratchpad sections without coordination.

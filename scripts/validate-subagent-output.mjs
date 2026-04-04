@@ -13,6 +13,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const CATEGORIES = new Set(["syntax", "runtime", "logical", "internal", "external"]);
 const STATUSES = new Set(["success", "partial_success", "empty_result", "failure"]);
+const ALERT_KINDS = new Set(["surprise", "confusion", "anomaly", "policy_block", "other"]);
 
 function readInput(arg) {
   if (arg === "-" || arg === undefined) {
@@ -34,11 +35,25 @@ function validateErrorObject(e, i) {
   }
 }
 
+function validateCoordinatorAlert(a, i) {
+  if (!a || typeof a !== "object") err(`coordinator_alerts[${i}] must be object`);
+  if (!ALERT_KINDS.has(a.kind)) err(`coordinator_alerts[${i}].kind invalid`);
+  if (typeof a.summary !== "string" || a.summary.trim().length < 1) {
+    err(`coordinator_alerts[${i}].summary required`);
+  }
+}
+
 function validate(data) {
   if (!data || typeof data !== "object") err("root must be object");
   if (typeof data.agent !== "string" || !data.agent) err("agent required");
   if (data.schema_version !== "1") err("schema_version must be '1'");
   if (!STATUSES.has(data.status)) err("status invalid");
+
+  if (Array.isArray(data.coordinator_alerts)) {
+    data.coordinator_alerts.forEach(validateCoordinatorAlert);
+  } else if (data.coordinator_alerts !== undefined) {
+    err("coordinator_alerts must be an array when present");
+  }
 
   switch (data.status) {
     case "success":
