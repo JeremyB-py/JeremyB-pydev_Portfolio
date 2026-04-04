@@ -11,6 +11,10 @@ description: Fills and validates subagent JSON response envelope v1 (success, pa
 - `schema_version` — `"1"`
 - `status` — one of: `success` | `partial_success` | `empty_result` | `failure`
 
+## Optional: `coordinator_alerts`
+
+When something **surprised** or **confused** you but you still completed (or usefully emptied) the task, add **`coordinator_alerts[]`** at the **root** of the envelope so **CoordinatorAgent** can merge and optionally route **`cataloger-agent`** to **`.cursor/UNEXPECTEDRESULTS.md`**. See **`@unexpected-coordinator-alert`**.
+
 ## Status rules
 
 | status | When | Required |

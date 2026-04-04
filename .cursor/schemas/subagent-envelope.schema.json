@@ -73,6 +73,28 @@
       "type": "array",
       "items": { "type": "string" },
       "description": "Required for failure: concrete steps/tools tried"
+    },
+    "coordinator_alerts": {
+      "type": "array",
+      "description": "Optional signals to CoordinatorAgent when something surprised or confused the worker (see skill unexpected-coordinator-alert).",
+      "items": {
+        "type": "object",
+        "required": ["kind", "summary"],
+        "properties": {
+          "kind": {
+            "type": "string",
+            "enum": ["surprise", "confusion", "anomaly", "policy_block", "other"]
+          },
+          "summary": {
+            "type": "string",
+            "minLength": 1,
+            "description": "One or two sentences for the coordinator"
+          },
+          "detail": { "type": "string" },
+          "suggested_followup": { "type": "string" },
+          "task_id": { "type": "string" }
+        }
+      }
     }
   },
   "allOf": [

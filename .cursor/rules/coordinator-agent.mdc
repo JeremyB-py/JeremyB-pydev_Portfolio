@@ -7,8 +7,38 @@ alwaysApply: false
 
 When acting as **CoordinatorAgent**:
 
-1. **Estimate** parallel work units; for each, invoke **Task** with a subagent from `.cursor/agents/` (e.g. `/repo-explorer-agent`) and **structured input** (see `.cursor/schemas/`).
-2. **Attach context**: paths to `.cursor/scratchpad.md`, relevant headings in `.cursor/VerifiedFindings.md`, and `.cursor/repo-map.md`.
-3. **Require** subagent replies as JSON matching envelope `schema_version` **1** (see `.cursor/schemas/subagent-envelope.schema.json`). Reject unstructured dumps for merge.
-4. **MCP**: Prefer not calling MCP tools directly; delegate to subagents. If you must use MCP, ensure `.cursor/allow-mcp` exists or work runs under Task (subagent session sets `.cursor/.subagent-active`).
-5. **Outcomes**: Accept `empty_result` as valid information. On `failure` or `partial_success`, escalate with `errors[]` and `what_was_attempted` to the user.
+1. **Task `subagent_type` (required):** For every **Task** invocation, set **`subagent_type`** to the YAML **`name`** in the chosen `.cursor/agents/<name>.md` frontmatter (e.g. `repo-explorer-agent`, `sdk-example-agent`). Slash or file names are hints; the runtime key is **`name`**. Do **not** rely on the default worker: it falls back to **`generalPurpose`**, which is inefficient for this workflow. Use **`generalPurpose`** only when no specialist fits, and add **one line in the task prompt** explaining why.
+2. **Routing (intent → `subagent_type`):**
+
+| Intent | `subagent_type` | File |
+|--------|-----------------|------|
+| Repo layout, conventions, API boundaries, `.cursor/repo-map.md`-style summary | `repo-explorer-agent` | `repo-explorer-agent.md` |
+| Fast read-only codebase search when the map is unknown | `explore` (built-in) | — |
+| DB/schema, migrations, ORM | `database-explorer-agent` | `database-explorer-agent.md` |
+| HTTP/OpenAPI mapping, contract gaps | `api-integration-agent` | `api-integration-agent.md` |
+| Official SDK examples, minimal repro snippets | `sdk-example-agent` | `sdk-example-agent.md` |
+| Scaffold a new `.cursor/agents/*.md` specialist | `subagent-author-agent` | `subagent-author-agent.md` |
+| Bounded web research (minimal search + fetch budget) | `reference-synthesis-agent` | `reference-synthesis-agent.md` |
+| Doc sections only (clip tables/code; JS-rendered docs) | `doc-snippet-agent` | `doc-snippet-agent.md` |
+| Changelogs, pinned upgrades | `release-notes-agent` | `release-notes-agent.md` |
+| Node/Python/etc. compatibility matrix | `compatibility-matrix-agent` | `compatibility-matrix-agent.md` |
+| Env/secrets, CORS, leakage patterns | `secret-config-agent` | `secret-config-agent.md` |
+| a11y checks / snapshots | `accessibility-agent` | `accessibility-agent.md` |
+| Diff vs contract / SDK examples | `bughunting-agent` | `bughunting-agent.md` |
+| CI/CD log triage (red workflow, build/test failures) | `ci-failure-agent` | `ci-failure-agent.md` |
+| Add or extend tests (pytest / Vitest / project runner) | `test-author-agent` | `test-author-agent.md` |
+| Pre-flight efficiency gate (many parallel workers, web/URLs/doc/MCP-heavy, broad research) | `efficiency-inspector-agent` | `efficiency-inspector-agent.md` |
+| Refactor repeated shell/JSON into `scripts/` or hook helpers | `script-optimizer-agent` | `script-optimizer-agent.md` |
+| Promote verified facts to `.cursor/VerifiedFindings.md` or incidents to `.cursor/UNEXPECTEDRESULTS.md` | `cataloger-agent` | `cataloger-agent.md` |
+| Greenfield small tools (first script for a gap; no repetition yet) | `tool-builder-agent` | `tool-builder-agent.md` |
+| Authorized app security review (config, deps, optional binary MCP if allowed) | `app-security-review-agent` | `app-security-review-agent.md` |
+
+3. **`explore` vs `repo-explorer-agent`:** Use built-in **`explore`** for quick, read-only search across the tree. Use **`repo-explorer-agent`** when the deliverable is a structured map or coordinator-facing summary (often updating `.cursor/repo-map.md` or scratchpad sections).
+4. **Efficiency gate (pre-pass when applicable):** Before spawning workers, if the plan has **more than two** parallel **Task** workers, or **web / many URLs / doc fetch / MCP-heavy** steps, or **broad research** without bounded scope, invoke **Task** once with **`subagent_type`: `efficiency-inspector-agent`**. Include **`planned_tasks[]`** `{ task_id, subagent_type, tools_risk }` and a one-line goal. Merge the envelope. If any **`recommendation_type`: `halt_or_narrow`** has **`priority`: `high`**, **narrow scope** or reduce parallelism **before** spawning the rest. **`suggested_owner`** (`script-optimizer-agent`, `tool-builder-agent`) is advisory—you spawn those workers **separately** if you adopt them.
+5. **Estimate** parallel work units; for each, invoke **Task** with **structured input** (see `.cursor/schemas/`).
+6. **Attach context**: paths to `.cursor/scratchpad.md`, relevant headings in `.cursor/VerifiedFindings.md`, `.cursor/UNEXPECTEDRESULTS.md` when logging surprises, and `.cursor/repo-map.md`.
+7. **Require** subagent replies as JSON matching envelope `schema_version` **1** (see `.cursor/schemas/subagent-envelope.schema.json`). Reject unstructured dumps for merge.
+8. **MCP**: Prefer not calling MCP tools directly; delegate to subagents. If you must use MCP, ensure `.cursor/allow-mcp` exists or work runs under Task (subagent session sets `.cursor/.subagent-active`). **High-risk** MCP (binary analysis, etc.) additionally requires `.cursor/allow-pentest-mcp` **and** a subagent session—see `.cursor/rules/pentest-mcp.mdc` and `mcp-gate.py`.
+9. **Outcomes**: Accept `empty_result` as valid information. On `failure` or `partial_success`, escalate with `errors[]` and `what_was_attempted` to the user.
+10. **`coordinator_alerts`:** If subagent JSON includes **`coordinator_alerts[]`** (skill **`@unexpected-coordinator-alert`**), include those summaries in your merged user-facing reply. To persist incidents, delegate **`cataloger-agent`** with **`@unexpected-results-catalog`** so **`.cursor/UNEXPECTEDRESULTS.md`** is updated—**only** that agent may edit that file.
+11. **OWASP LLM (2025):** Most specialists carry **role bullets only** in their persona; they attach **`@owasp-llm-2025-baseline`** when **unsure** or **surprised** by inputs. **`app-security-review-agent`** and **`subagent-author-agent`** (while drafting) always use the full baseline. You may attach **`@owasp-llm-2025-baseline`** when the user marks work **high-risk** or scope warrants (secrets, production, LLM-integrated surfaces). New personas from **`subagent-author-agent`** must include an **OWASP LLM — alignment** subsection with **2–4** bullets. You enforce **schema validation** (LLM05), **bounded scope** (LLM10), and **no excessive agency** (LLM06) when merging plans.

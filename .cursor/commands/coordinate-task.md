@@ -3,13 +3,14 @@
 Use as a checklist when orchestrating subagents.
 
 1. **Decompose** the user goal into **N** parallelizable tasks.
-2. For each task, spawn **Task** with a custom subagent from [`.cursor/agents/`](../agents/) (e.g. `/repo-explorer-agent`, `/api-integration-agent`) or invoke by name:
-   - Persona files: `repo-explorer-agent.md`, `api-integration-agent.md`, etc.
-   - Input JSON (task id, scope, constraints)
-   - Paths: `.cursor/scratchpad.md`, `.cursor/VerifiedFindings.md` (section hints), `.cursor/repo-map.md`
-   - Expected output: JSON envelope `schema_version: "1"`
-3. **Validate** responses: `node scripts/validate-subagent-output.mjs <file.json>`
-4. **Merge** only valid JSON. Treat `empty_result` as success-with-information.
-5. **Promote** to VerifiedFindings **only** via CatalogerAgent (or switch to Cataloger persona yourself with the same rules).
+2. **Efficiency gate (when applicable):** If **N > 2**, or the work is **web / many URLs / doc fetch / MCP-heavy**, or **broad research** without scope, run **`efficiency-inspector-agent`** first with **`planned_tasks[]`** and merge JSON. Obey **`halt_or_narrow`** when **priority** is **high**. See [`.cursor/rules/coordinator-agent.mdc`](../rules/coordinator-agent.mdc) step 4.
+3. For each task, spawn **Task** with **`subagent_type` = YAML `name`** from the chosen [`.cursor/agents/`](../agents/) file (e.g. `repo-explorer-agent`, `api-integration-agent`). Persona files: `repo-explorer-agent.md`, etc. The **`name`** field in frontmatter is what the Task tool must receive; slash commands are optional UX. **Avoid** defaulting to **`generalPurpose`**—if you use it, add **one line** in the task prompt explaining why no specialist fit.
+4. **Routing:** Full table in [`.cursor/rules/coordinator-agent.mdc`](../rules/coordinator-agent.mdc). Short map: repo map / conventions → `repo-explorer-agent`; quick codebase search → `explore`; DB → `database-explorer-agent`; API contracts → `api-integration-agent`; SDK samples → `sdk-example-agent`; **new subagent file** → `subagent-author-agent`; **minimal web research** → `reference-synthesis-agent`; **doc snippets / clipped sections** → `doc-snippet-agent`; changelogs → `release-notes-agent`; env matrix → `compatibility-matrix-agent`; secrets/CORS → `secret-config-agent`; a11y → `accessibility-agent`; diff vs contract → `bughunting-agent`; **CI log triage** → `ci-failure-agent`; **tests** → `test-author-agent`; **authorized security review** → `app-security-review-agent`; pre-flight efficiency → `efficiency-inspector-agent`; **refactor** repeated commands → `script-optimizer-agent`; **greenfield** small tools → `tool-builder-agent`; verified findings → `cataloger-agent`.
+5. Per task, include: input JSON (`task_id`, scope, constraints); paths `.cursor/scratchpad.md`, `.cursor/VerifiedFindings.md`, `.cursor/UNEXPECTEDRESULTS.md` (if incident logging applies), `.cursor/repo-map.md`; expected output JSON envelope `schema_version: "1"` (optional root-level **`coordinator_alerts[]`** per **`@unexpected-coordinator-alert`**).
+6. **Validate** responses: `node scripts/validate-subagent-output.mjs <file.json>`
+7. **Merge** only valid JSON. Treat `empty_result` as success-with-information.
+8. **Promote** to VerifiedFindings **only** via CatalogerAgent (or switch to Cataloger persona yourself with the same rules). **Log unexpected incidents** to **`.cursor/UNEXPECTEDRESULTS.md`** **only** via CatalogerAgent when merging **`coordinator_alerts[]`** or when asked (skills **`@unexpected-coordinator-alert`**, **`@unexpected-results-catalog`**).
 
-**MCP**: Ensure `.cursor/allow-mcp` or subagent session before expecting MCP tools to work (see hooks).
+9. **OWASP LLM (2025):** Specialists use **in-persona bullets** by default; they attach **`@owasp-llm-2025-baseline`** when **unsure** or inputs are **surprising**. **`app-security-review-agent`** and **`subagent-author-agent`** always load the baseline. Coordinator may attach the baseline on **high-risk** runs. Validate merged JSON before treating outputs as facts.
+
+**MCP**: Ensure `.cursor/allow-mcp` or subagent session before expecting MCP tools to work (see hooks). High-risk tools (e.g. binary analysis) also need `.cursor/allow-pentest-mcp` plus subagent session—see [`.cursor/rules/pentest-mcp.mdc`](../rules/pentest-mcp.mdc).
