@@ -1,0 +1,24 @@
+# Markdown resume (optional local); PDFs under docs/ are tracked
+docs/*.md
+
+# Maintainer-only site commands / deploy notes (keep a local copy)
+SITE_OPERATIONS.local.md
+
+.gitignore
+
+site/node_modules
+site/dist
+
+# Multi-agent workspace (local consent / session flags)
+.cursor/allow-mcp
+.cursor/allow-pentest-mcp
+.cursor/.subagent-active
+.cursor/hooks/__pycache__/
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Agent scripts: npm deps and Playwright CLI workspace files
+scripts/node_modules/
+scripts/.playwright/
+scripts/.claude/
