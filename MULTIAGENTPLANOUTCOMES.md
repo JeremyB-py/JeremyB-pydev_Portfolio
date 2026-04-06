@@ -26,6 +26,8 @@ Personas were **migrated** from `.cursor/skills/` into [`.cursor/agents/`](.curs
 | **Envelope helper** | Skill [`subagent-json-envelope`](.cursor/skills/subagent-json-envelope/SKILL.md) |
 | **OWASP LLM (2025)** | Skill [`owasp-llm-2025-baseline`](.cursor/skills/owasp-llm-2025-baseline/SKILL.md)—**two-tier**: in-persona bullets by default; full skill when unsure/surprising inputs or coordinator high-risk; always for **`app-security-review-agent`** and **`subagent-author-agent`** (drafting) |
 | **Coordinator alerts / incidents** | Skills [`unexpected-coordinator-alert`](.cursor/skills/unexpected-coordinator-alert/SKILL.md), [`unexpected-results-catalog`](.cursor/skills/unexpected-results-catalog/SKILL.md); [`.cursor/UNEXPECTEDRESULTS.md`](.cursor/UNEXPECTEDRESULTS.md)—**cataloger-agent** sole writer |
+| **MCP + capabilities index** | [`.cursor/mcp.json`](.cursor/mcp.json), [`.cursor/mcp.json.example`](.cursor/mcp.json.example), [`.cursor/MCP.md`](.cursor/MCP.md); on-demand [`.cursor/capabilities-inventory.md`](.cursor/capabilities-inventory.md) |
+| **Deterministic parse first** | Skill [`deterministic-parse-first`](.cursor/skills/deterministic-parse-first/SKILL.md); coordinator / `script-optimizer-agent` / `tool-builder-agent` |
 | **Graceful envelope** | Schema + validator: `success`, `partial_success`, `empty_result`, `failure` |
 | **BugHuntingAgent** | [`.cursor/agents/bughunting-agent.md`](.cursor/agents/bughunting-agent.md) |
 | **CI / tests** | Subagents [`ci-failure-agent.md`](.cursor/agents/ci-failure-agent.md) (log triage), [`test-author-agent.md`](.cursor/agents/test-author-agent.md) (pytest / Vitest / project runner) |
@@ -128,6 +130,7 @@ Personas were **migrated** from `.cursor/skills/` into [`.cursor/agents/`](.curs
 | `owasp-llm-2025-baseline` | OWASP Top 10 for LLM Applications (2025) mitigations |
 | `unexpected-coordinator-alert` | Optional **`coordinator_alerts[]`** for subagents → CoordinatorAgent |
 | `unexpected-results-catalog` | CatalogerAgent → **`.cursor/UNEXPECTEDRESULTS.md`** |
+| `deterministic-parse-first` | Prefer scripts / `jq` / validators before LLM over large raw data |
 
 ---
 
@@ -144,6 +147,8 @@ Personas were **migrated** from `.cursor/skills/` into [`.cursor/agents/`](.curs
 7. **OWASP LLM (2025):** Most specialists keep **LLMxx bullets** in their persona and attach **`@owasp-llm-2025-baseline`** only when **unsure** or inputs are **surprising**. **`app-security-review-agent`** and **`subagent-author-agent`** (while drafting) **always** load the baseline. Coordinators may attach on **high-risk** runs. See [`.cursor/skills/owasp-llm-2025-baseline/SKILL.md`](.cursor/skills/owasp-llm-2025-baseline/SKILL.md) **Two-tier usage**; [`.cursor/rules/coordinator-agent.mdc`](.cursor/rules/coordinator-agent.mdc) step 11; [`.cursor/commands/coordinate-task.md`](.cursor/commands/coordinate-task.md) step 9.
 
 8. **Coordinator alerts:** Subagents may add root-level **`coordinator_alerts[]`** (see [`.cursor/skills/unexpected-coordinator-alert/SKILL.md`](.cursor/skills/unexpected-coordinator-alert/SKILL.md)). Coordinators surface them in merged replies; **`cataloger-agent`** appends durable entries to [`.cursor/UNEXPECTEDRESULTS.md`](.cursor/UNEXPECTEDRESULTS.md) per [`.cursor/skills/unexpected-results-catalog/SKILL.md`](.cursor/skills/unexpected-results-catalog/SKILL.md). Validate with `node scripts/validate-subagent-output.mjs`.
+
+9. **MCP + capabilities:** Project MCP config [`.cursor/mcp.json`](.cursor/mcp.json); examples and Ghidra placeholder [`.cursor/mcp.json.example`](.cursor/mcp.json.example), [`.cursor/MCP.md`](.cursor/MCP.md). On-demand index of skills, MCP pointers, and routing: [`.cursor/capabilities-inventory.md`](.cursor/capabilities-inventory.md). **Deterministic parsing:** [`.cursor/skills/deterministic-parse-first/SKILL.md`](.cursor/skills/deterministic-parse-first/SKILL.md). Prompt caching is not configured in-repo—see **Efficiency** in `capabilities-inventory.md`.
 
 ### Subagent workflow refinement (plan phases)
 

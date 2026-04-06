@@ -4,8 +4,11 @@ This directory holds **skills**: portable workflow instructions in `your-skill-n
 
 **Subagent personas** (coordinator, cataloger, explorers, etc.) are defined in [`.cursor/agents/`](../agents/README.md), not under `skills/`.
 
+**On-demand index** (when to `@` what, MCP pointers, routing): [`.cursor/capabilities-inventory.md`](../capabilities-inventory.md).
+
 | Skill | Purpose |
 |-------|---------|
 | [`owasp-llm-2025-baseline`](owasp-llm-2025-baseline/SKILL.md) | OWASP Top 10 for LLM Applications (2025)—**two-tier** (see skill): most specialists use in-persona bullets; full skill when unsure/surprising inputs or coordinator high-risk; always for **`app-security-review-agent`** and **`subagent-author-agent`** while drafting |
 | [`unexpected-coordinator-alert`](unexpected-coordinator-alert/SKILL.md) | Optional **`coordinator_alerts[]`** on envelope v1—subagents signal surprise/confusion to **CoordinatorAgent** |
 | [`unexpected-results-catalog`](unexpected-results-catalog/SKILL.md) | **`cataloger-agent`**—append incident summaries to **`.cursor/UNEXPECTEDRESULTS.md`** |
+| [`deterministic-parse-first`](deterministic-parse-first/SKILL.md) | Prefer **scripts / jq / validators** to slice structured data before LLM reasoning—saves tokens; pair with **`script-optimizer-agent`** / **`tool-builder-agent`** when patterns repeat |

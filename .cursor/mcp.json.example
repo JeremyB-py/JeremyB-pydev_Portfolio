@@ -1,0 +1,17 @@
+{
+  "mcpServers": {
+    "ghidra-mcp": {
+      "command": "uvx",
+      "args": [
+        "--from",
+        "ghidramcp",
+        "ghidra-mcp"
+      ],
+      "env": {
+        "GHIDRA_INSTALL_DIR": "/absolute/path/to/ghidra",
+        "JAVA_HOME": "/absolute/path/to/java"
+      },
+      "disabled": true
+    }
+  }
+}

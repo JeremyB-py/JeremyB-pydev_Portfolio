@@ -32,6 +32,7 @@ Produce content suitable for **`.cursor/agents/<name>.md`**:
 3. **Output contract**: responses must use **subagent envelope v1**; reference `@subagent-json-envelope` and `@error-reporting-protocol` where failures matter. New specialists may use optional **`coordinator_alerts[]`** per **`@unexpected-coordinator-alert`** when their role can surprise the coordinator.
 4. **No repository-specific paths** unless the user asked for them—personas should be reusable across workspaces.
 5. Include **`## OWASP LLM Applications (2025) — alignment`** with role-specific bullets plus the **conditional “attach baseline when unsure/surprised”** line from **`@owasp-llm-2025-baseline`** (two-tier usage)—do **not** put “always see baseline” in child personas.
+6. For personas that **parse logs, JSON, lockfiles, or API specs**, add **1–2 bullets** (or a single line) referencing **`@deterministic-parse-first`**—prefer scripts/`jq`/validators over pasting large blobs; skip for purely narrative roles.
 
 ## Output (JSON envelope v1)
 
@@ -41,7 +42,7 @@ Use `@subagent-json-envelope` and `@error-reporting-protocol` on failures.
 
 - **`proposed_path`:** `.cursor/agents/<name>.md`
 - **`markdown_body`** (string): full file contents ready to write, or **`unified_diff`** if updating an existing file.
-- **`validation_checklist[]`:** strings (e.g. "YAML `name` matches `subagent_type`", "envelope v1 referenced", "no secrets in examples", "OWASP LLM subsection present", "conditional baseline attach in child persona").
+- **`validation_checklist[]`:** strings (e.g. "YAML `name` matches `subagent_type`", "envelope v1 referenced", "no secrets in examples", "OWASP LLM subsection present", "conditional baseline attach in child persona", "`deterministic-parse-first` for parse-heavy roles where applicable").
 - **`post_write_commands[]`** (optional): e.g. run the workspace’s subagent JSON validator if the project defines one.
 
 Do **not** claim a **`success`** that requires writing the file unless the coordinator’s scope includes applying the patch; returning the body for the parent to apply is enough.
