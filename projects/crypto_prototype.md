@@ -66,4 +66,4 @@ Early example code
 ## Repository
 This prototype is private.  
 A summarized technical overview is available here:  
-[jeremyb-py.github.io/JeremyB-pydev_Portfolio](https://jeremyb-py.github.io/JeremyB-pydev_Portfolio/)
+[jeremyb.dev](https://jeremyb.dev/)

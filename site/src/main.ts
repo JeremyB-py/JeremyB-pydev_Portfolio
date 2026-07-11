@@ -5,7 +5,7 @@ import './styles/sections.css';
 import { getCurrentTheme, initTheme } from './themes';
 import { initScrollReveal } from './scrollReveal';
 import { syncMatrixRain } from './matrixRain';
-import { initConstellation, type ProjectForMap } from './constellation';
+import { initConstellation, type OrbitTier, type ProjectForMap } from './constellation';
 
 interface ProjectJson {
   id: string;
@@ -15,6 +15,15 @@ interface ProjectJson {
   tech: string[];
   writeUpUrl: string;
   private: boolean;
+  orbitTier?: OrbitTier;
+  orbitGroup?: string | null;
+  sortOrder?: number;
+}
+
+function sortProjects(projects: ProjectJson[]): ProjectJson[] {
+  return [...projects].sort(
+    (a, b) => (a.sortOrder ?? 999) - (b.sortOrder ?? 999)
+  );
 }
 
 function projectPageHref(slug: string): string {
@@ -121,7 +130,7 @@ async function main(): Promise<void> {
   initNav();
 
   try {
-    const projects = await loadProjects();
+    const projects = sortProjects(await loadProjects());
     renderProjects(projects);
 
     const mapData: ProjectForMap[] = projects.map((p, index) => ({
@@ -130,6 +139,8 @@ async function main(): Promise<void> {
       title: p.title,
       writeUpUrl: sanitizeHttpUrl(p.writeUpUrl) ?? '',
       tech: Array.isArray(p.tech) ? p.tech : [],
+      orbitTier: p.orbitTier ?? 'featured',
+      orbitGroup: p.orbitGroup ?? null,
     }));
     const canvas = document.getElementById('constellation-canvas') as HTMLCanvasElement | null;
     if (canvas) {

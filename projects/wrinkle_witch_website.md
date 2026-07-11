@@ -61,9 +61,11 @@ This keeps customer experiences fast and consistent while still supporting robus
 | `Shared Modules and Reusable Integrations` | Shared Square OAuth refactor: OAuth moved into `shared/square_auth.py`, token storage standardized with a token adapter protocol so each app can provide its own DB model/storage. Shared SquareManager focuses on Square API calls, while OAuth/token lifecycle lives in the shared auth module. Shared business_id handling: `get_business_id()` moved into `shared/business_id.py` to work in Streamlit, FastAPI, and CLI contexts. Domain/environment utilities: Shared helpers for staging vs production URL construction and routing-ready subdomain strategy. |
 | `Security & Admin Tooling` | Database-backed authentication + roles: Upgraded from simple password checks to bcrypt password hashing, role-based access control (admin/user), and session persistence within Streamlit. Added an admin-only User Management page: create users, change passwords, delete users (with safety checks), optional login attempt rate limiting + failed login logging. OAuth flow safety: OAuth callback routes are configured to avoid auth interruptions during the Square connection handshake (prevents broken OAuth sessions). |
 | `Specials / Packages System (Marketing Engine)` | A major feature addition is a full Specials/Deals management system that powers dynamic homepage content. Admin can create/edit specials (title, description, dates, featured/active flags) with optional images with automatic optimization (resize/compress for web). Frontend: `booking.html` and `index.html` show specials slideshows and featured specials (with fallback when none exist); clickable images route to booking/service links. Analytics tracking: View/click tracking events stored in the database, admin analytics dashboard with totals + CTR-style metrics + exports. A/B testing groundwork: Variant fields + traffic split logic exist in the backend layer, admin UI supports creating tests and comparing performance (frontend variant selection can be wired in as a next enhancement). |
-| `Performance & Caching` | Backend GET endpoints support ETag + conditional requests (304); frontend uses cache-aware fetching with sessionStorage fallback; static asset caching documented for CDN/server. |
-| `Security & SEO` | Favicon, `robots.txt`, and `sitemap.xml` served by backend; dotfile probe protection (410) for common scanner paths; user-agent logging; log rotation and file permissions. Security headers and sanitized errors across the API. |
-| `Testing & CI` | Component-level tests across the monorepo (shared modules, referral app, homepage HTML validation). CI with path-based filtering and PR support. Addressed SQLAlchemy deployment issues, pytest DB/import-order failures, and table registration in CI. |
+| `Referral Program (Overhaul)` | Event-based status (invited → booked → completed), two-sided rewards, milestone bonuses (1/3/5/10/15/20/30/40/50 referrals), quarterly leaderboard with prizes, booking tokens with pre-filled links, fraud prevention (self-referral, new-client validation), automated email/SMS notifications. |
+| `Staging & E2E` | Staging homepage (`staging.thewrinklewitch.com`) and API (`staging-api.thewrinklewitch.com`) with automatic env detection in `api-base.js`; Playwright E2E tests runnable against staging (`E2E_HOME_BASE` / `E2E_API_BASE`). |
+| `Observability` | Structured JSON logging to stdout (Railway-visible); `X-Request-ID` on every response for log correlation; optional Sentry DSN for 5xx and unhandled exceptions. |
+| `Security & SEO` | Favicon, `robots.txt`, and `sitemap.xml` served by backend; dotfile probe protection (410) for common scanner paths; user-agent logging; log rotation and file permissions. Security headers and sanitized errors across the API. Cloudflare DNS guidance: gray-cloud API subdomain for accurate client IP rate limiting. |
+| `Testing & CI` | Component-level tests across the monorepo (shared modules, referral app, homepage HTML validation). CI with path-based filtering and PR support; git-based change detection for conditional test runs. |
 
 ---
 
@@ -72,7 +74,7 @@ This keeps customer experiences fast and consistent while still supporting robus
 - **Frontend (Public):** HTML · CSS · JavaScript (static site)
 - **Admin UI:** Streamlit + custom styling
 - **Backend:** FastAPI + Uvicorn
-- **Data Layer:** SQLAlchemy ORM · PostgreSQL (prod) / SQLite (dev/testing)
+- **Data Layer:** PostgreSQL (prod) / SQLite (dev/testing) with SQLAlchemy models
 - **Integrations:** Square OAuth, Bookings API, Catalog, Web Payments SDK (card tokenization); shared adapter design
 - **Deployment:** Cloudflare Pages (static site) · Railway (API service + cron for scheduled jobs)
 - **Tooling:** pytest · GitHub Actions CI · scheduled jobs (apscheduler/croniter) · structured monorepo
@@ -120,7 +122,8 @@ This keeps customer experiences fast and consistent while still supporting robus
 
 - Unified platform: static site, FastAPI backend, Streamlit admin apps, and scheduled jobs in one monorepo.
 - Square Bookings and Web Payments SDK power online appointment booking with optional card-on-file and referral credit support.
-- Referral program: event-based status, two-sided rewards, milestones, quarterly leaderboard/prizes, booking tokens, and fraud checks.
+- Referral program overhaul complete: event-based tracking, milestones, quarterly leaderboard/prizes, booking tokens, and fraud checks.
+- Staging environment with Playwright E2E and structured logging for production debugging.
 - Job dashboard and maintenance messaging keep operations visible without blocking the site.
 - Clean, maintainable architecture; real-world use with evolving business needs.
 
@@ -130,7 +133,7 @@ This keeps customer experiences fast and consistent while still supporting robus
 
 The codebase is private due to business content, but this page represents a comprehensive summary.
 A summarized showcase of the platform is available in the portfolio README:  
-[jeremyb-py.github.io/JeremyB-pydev_Portfolio](https://jeremyb-py.github.io/JeremyB-pydev_Portfolio/)
+[jeremyb.dev](https://jeremyb.dev/)
 
 ---
 
@@ -140,14 +143,13 @@ A summarized showcase of the platform is available in the portfolio README:
 - Modular monorepo architecture with shared utilities
 - FastAPI + Uvicorn services; Pydantic validation; CORS, rate limiting, and structured errors
 - Payment and booking flows (Square Bookings API, Web Payments SDK, tokenization)
-- SQLAlchemy modeling + practical production/CI debugging
+- PostgreSQL data modeling and production deployment debugging
 - Secure auth patterns (bcrypt hashing, roles, admin tooling)
 - API integration patterns (Square OAuth refactor + adapter interfaces)
-- Performance optimization (ETag/conditional GET, HTTP caching + resilient frontend fetching)
 - Marketing/analytics engineering (specials engine, tracking, A/B testing groundwork)
 - JavaScript & responsive static UI (multi-step booking, theme toggle, slideshows)
 - Cloudflare Pages (static site) + Railway (API, cron jobs, apscheduler/croniter)
-- pytest & GitHub Actions CI (path-filtered pipelines, import-order and DB fixtures)
+- pytest & GitHub Actions CI (path-filtered pipelines, Playwright E2E on staging)
 - QR codes, branded URLs, and customer-facing HTML flows (referral, unsubscribe)
 - SEO & ops hygiene (robots.txt, sitemap, security headers, logging)
 

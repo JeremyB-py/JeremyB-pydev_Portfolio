@@ -1,10 +1,21 @@
+export type OrbitTier = 'featured' | 'outer' | 'archive';
+
 export interface ProjectForMap {
   id: string;
   slug: string;
   title: string;
   writeUpUrl: string;
   tech: string[];
+  orbitTier?: OrbitTier;
+  orbitGroup?: string | null;
 }
+
+const OUTER_ORBIT_MUL = 1.22;
+const ARCHIVE_NODE_SCALE = 0.65;
+const OUTER_NODE_SCALE = 0.85;
+/** Fixed angle (rad) for the archive mini-system on the galaxy ellipse */
+const ARCHIVE_GROUP_ANGLE = Math.PI * 0.72;
+const ARCHIVE_SPREAD_RAD = 0.1;
 
 interface Star {
   baseAngle: number;
@@ -12,6 +23,64 @@ interface Star {
   orbitRy: number;
   project: ProjectForMap;
   r: number;
+  tier: OrbitTier;
+}
+
+function tierOf(p: ProjectForMap): OrbitTier {
+  return p.orbitTier ?? 'featured';
+}
+
+function buildStars(projects: ProjectForMap[], wCss: number, hCss: number): Star[] {
+  const featured = projects.filter((p) => tierOf(p) === 'featured');
+  const outer = projects.filter((p) => tierOf(p) === 'outer');
+  const archive = projects.filter((p) => tierOf(p) === 'archive');
+  const stars: Star[] = [];
+
+  featured.forEach((project, i) => {
+    const count = featured.length;
+    const t = (i / Math.max(count, 1)) * Math.PI * 2 - Math.PI / 2 + 0.12;
+    const ripple = 0.82 + (i % 4) * 0.05;
+    stars.push({
+      baseAngle: t,
+      orbitRx: wCss * 0.36 * ripple,
+      orbitRy: hCss * 0.28 * ripple,
+      project,
+      r: NODE_R,
+      tier: 'featured',
+    });
+  });
+
+  outer.forEach((project, i) => {
+    const count = outer.length;
+    const t = (i / Math.max(count, 1)) * Math.PI * 2 - Math.PI / 2 + 0.55;
+    const ripple = 0.9;
+    stars.push({
+      baseAngle: t,
+      orbitRx: wCss * 0.36 * ripple * OUTER_ORBIT_MUL,
+      orbitRy: hCss * 0.28 * ripple * OUTER_ORBIT_MUL,
+      project,
+      r: NODE_R * OUTER_NODE_SCALE,
+      tier: 'outer',
+    });
+  });
+
+  const clusterRipple = 0.78;
+  const clusterRx = wCss * 0.36 * clusterRipple;
+  const clusterRy = hCss * 0.28 * clusterRipple;
+  archive.forEach((project, i) => {
+    const n = archive.length;
+    const offset = n <= 1 ? 0 : (i - (n - 1) / 2) * ARCHIVE_SPREAD_RAD;
+    stars.push({
+      baseAngle: ARCHIVE_GROUP_ANGLE + offset,
+      orbitRx: clusterRx,
+      orbitRy: clusterRy,
+      project,
+      r: NODE_R * ARCHIVE_NODE_SCALE,
+      tier: 'archive',
+    });
+  });
+
+  return stars;
 }
 
 interface BgDot {
@@ -442,18 +511,7 @@ export function initConstellation(
     hub.x = galaxyCx;
     hub.y = galaxyCy;
 
-    const count = projects.length;
-    stars = projects.map((project, i) => {
-      const t = (i / Math.max(count, 1)) * Math.PI * 2 - Math.PI / 2 + 0.12;
-      const ripple = 0.82 + (i % 4) * 0.05;
-      return {
-        baseAngle: t,
-        orbitRx: wCss * 0.36 * ripple,
-        orbitRy: hCss * 0.28 * ripple,
-        project,
-        r: NODE_R,
-      };
-    });
+    stars = buildStars(projects, wCss, hCss);
     skillSats = buildSkillSats(stars);
     /* 100+ more mini-stars than prior pass; still tiny specks */
     const bgCount = reducedMotion ? 180 : 280;
@@ -723,6 +781,21 @@ export function initConstellation(
       c.shadowBlur = 0;
     }
 
+    // Faint ellipse around archive cluster center
+    const archiveStars = stars.filter((s) => s.tier === 'archive');
+    if (archiveStars.length > 0 && !isMatrix) {
+      const ref = archiveStars[0];
+      const clusterPos = galaxyPos(ref, galaxyCx, galaxyCy, spin);
+      const ellipseRx = ref.orbitRx * 0.14;
+      const ellipseRy = ref.orbitRy * 0.12;
+      c.strokeStyle = isPaper ? withAlpha(muted, 0.35) : withAlpha(muted, 0.22);
+      c.lineWidth = isPaper ? 1.5 : 1;
+      c.globalAlpha = 1;
+      c.beginPath();
+      c.ellipse(clusterPos.x, clusterPos.y, ellipseRx, ellipseRy, spin * 0.15, 0, Math.PI * 2);
+      c.stroke();
+    }
+
     // Hub → project lines (solid ink strokes on paper)
     c.lineWidth = isPaper ? 2 : 1;
     stars.forEach((s, si) => {
@@ -859,15 +932,19 @@ export function initConstellation(
         c.arc(pos.x, pos.y, radius, 0, Math.PI * 2);
         c.stroke();
       } else {
-        c.globalAlpha = isHi ? 1 : 0.46;
+        const tierDim =
+          s.tier === 'archive' ? 0.32 : s.tier === 'outer' ? 0.38 : 0.46;
+        c.globalAlpha = isHi ? 1 : tierDim;
         c.fillStyle = isHi ? np.fill : np.fillDim;
         c.shadowColor = isHi ? np.glow : np.shadowDim;
-        c.shadowBlur = isHi ? 22 : reducedMotion ? 0 : 10;
+        c.shadowBlur = isHi ? 22 : reducedMotion ? 0 : s.tier === 'archive' ? 4 : 10;
         c.beginPath();
         c.arc(pos.x, pos.y, radius, 0, Math.PI * 2);
         c.fill();
         c.shadowBlur = 0;
       }
+      const labelAlpha =
+        s.tier === 'archive' ? 0.16 : s.tier === 'outer' ? 0.18 : 0.22;
       c.globalAlpha = isPaper
         ? 0.88
         : isMatrix
@@ -876,7 +953,7 @@ export function initConstellation(
             : 0.52
           : isHi
             ? 1
-            : 0.22;
+            : labelAlpha;
       c.fillStyle = isPaper ? withAlpha(text, 0.94) : text;
       c.font = isMatrix ? `15px ${monoFont}` : '16px system-ui, sans-serif';
       c.textAlign = 'center';
