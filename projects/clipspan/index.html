@@ -3,19 +3,19 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="ClipSpan — Universal Clipboard Sync · case study · jeremyb.dev portfolio" />
+  <meta name="description" content="ClipSpan: Universal Clipboard Sync · case study · jeremyb.dev portfolio" />
   <link rel="canonical" href="https://jeremyb.dev/projects/clipspan/" />
   <meta property="og:type" content="article" />
   <meta property="og:locale" content="en_US" />
   <meta property="og:url" content="https://jeremyb.dev/projects/clipspan/" />
-  <meta property="og:title" content="ClipSpan — Universal Clipboard Sync | Jeremy B." />
-  <meta property="og:description" content="ClipSpan — Universal Clipboard Sync · case study · jeremyb.dev portfolio" />
+  <meta property="og:title" content="ClipSpan: Universal Clipboard Sync | Jeremy B." />
+  <meta property="og:description" content="ClipSpan: Universal Clipboard Sync · case study · jeremyb.dev portfolio" />
   <meta property="og:image" content="https://jeremyb.dev/og-image.png" />
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
-  <meta property="og:image:alt" content="ClipSpan — Universal Clipboard Sync, case study preview" />
+  <meta property="og:image:alt" content="ClipSpan: Universal Clipboard Sync, case study preview" />
   <!-- Open Graph: LinkedIn and others use these tags for link previews -->
-  <title>ClipSpan — Universal Clipboard Sync | Jeremy B.</title>
+  <title>ClipSpan: Universal Clipboard Sync | Jeremy B.</title>
   <script>(function(){try{var t=localStorage.getItem('portfolio-theme');if(t&&['nebula','matrix','terminal','paper'].indexOf(t)>=0)document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>
   <link rel="stylesheet" href="/assets/site-shell.css" />
   <link rel="stylesheet" href="/assets/project.css" />
@@ -109,9 +109,9 @@
         <a href="/">← Back to portfolio</a>
       </p>
     <section class="section">
-<h1>ClipSpan — Universal Clipboard Sync</h1>
-<p><strong>ClipSpan</strong> is a cross-platform clipboard history and sync system. The goal: copy or select content on Android and paste it on a Linux desktop (and vice versa), with searchable history across devices — without root access or unsafe permission workarounds.</p>
-<p><strong>Status:</strong> v0.8.x — QR pairing, offline-resilient history, ClipSpan Keyboard with toolbar send/paste. Android ↔ Ubuntu/Linux first; Windows and macOS planned.</p>
+<h1>ClipSpan : Universal Clipboard Sync</h1>
+<p><strong>ClipSpan</strong> is a cross-platform clipboard history and sync system. The goal: copy or select content on Android and paste it on a Linux desktop (and vice versa), with searchable history across devices : without root access or unsafe permission workarounds.</p>
+<p><strong>Status:</strong> v0.8.x : QR pairing, offline-resilient history, ClipSpan Keyboard with toolbar send/paste. Android ↔ Ubuntu/Linux first; Windows and macOS planned.</p>
 <hr>
 </section>
 <section class="section">
@@ -123,7 +123,7 @@
 <li>Linux daemon <strong>Send to Android</strong> (tray action)</li>
 <li>Searchable cross-device history with clear delete controls</li>
 </ul>
-<p>Long-term north star: frictionless install, pair, and daily paste — but privacy and user control come first.</p>
+<p>Long-term north star: frictionless install, pair, and daily paste : but privacy and user control come first.</p>
 <hr>
 </section>
 <section class="section">
@@ -140,10 +140,10 @@ Platform adapter layer
 <p>Each layer is decoupled so the Android keyboard, companion app, Linux daemon, and future Windows/macOS clients can evolve independently.</p>
 <h3>Android (Gradle Multi-Module)</h3>
 <ul>
-<li><code>sync-core/</code> — HTTP clients, protocol, Room history, sync coordinator</li>
-<li><code>sync-ime-bridge/</code> — fork-agnostic IME toolbar (push/pull/history, password guard)</li>
-<li><code>companion-app/</code> — settings UI, share targets, history, Connect screen with QR scan</li>
-<li><code>keyboard/</code> — <strong>ClipSpan Keyboard</strong> (FlorisBoard fork) with ClipSpan toolbar and embedded history grid</li>
+<li><code>sync-core/</code> : HTTP clients, protocol, Room history, sync coordinator</li>
+<li><code>sync-ime-bridge/</code> : fork-agnostic IME toolbar (push/pull/history, password guard)</li>
+<li><code>companion-app/</code> : settings UI, share targets, history, Connect screen with QR scan</li>
+<li><code>keyboard/</code> : <strong>ClipSpan Keyboard</strong> (FlorisBoard fork) with ClipSpan toolbar and embedded history grid</li>
 </ul>
 <h3>Linux Daemon (FastAPI)</h3>
 <ul>
@@ -151,7 +151,7 @@ Platform adapter layer
 <li>SQLite local history; QR pairing API with per-peer sync tokens and device roster</li>
 <li>Pairing QR uses minimal token URL (<code>/p?t=…</code>); mDNS discovery optional</li>
 </ul>
-<h3>Phase 7.5 — Offline-Resilient History</h3>
+<h3>Phase 7.5 : Offline-Resilient History</h3>
 <ul>
 <li>Merge-only history sync: local Room cache never wiped when desktop is unreachable</li>
 <li>Offline paste fallback from last-pulled hash or most recent saved history</li>
@@ -195,7 +195,7 @@ Platform adapter layer
 </tr>
 <tr>
 <td><code>Dev Workflow</code></td>
-<td><code>./scripts/install-android-debug.sh</code> — one-command debug build + adb install for companion + keyboard.</td>
+<td><code>./scripts/install-android-debug.sh</code> : one-command debug build + adb install for companion + keyboard.</td>
 </tr>
 </tbody></table>
 <hr>
@@ -213,7 +213,7 @@ Platform adapter layer
 <section class="section">
 <h2>Highlights</h2>
 <ul>
-<li>User-visible control first — manual send/paste validates protocol before automatic sync.</li>
+<li>User-visible control first : manual send/paste validates protocol before automatic sync.</li>
 <li>Modular architecture ready for Windows service and future macOS client.</li>
 <li>FlorisBoard keyboard integration with dual-clipboard policy (ClipSpan history vs Floris local panel).</li>
 <li>QR pairing + mDNS discovery reduce setup friction on the same LAN.</li>

@@ -3,19 +3,19 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Zap — Open Source Contributions · case study · jeremyb.dev portfolio" />
+  <meta name="description" content="Zap: Open Source Contributions · case study · jeremyb.dev portfolio" />
   <link rel="canonical" href="https://jeremyb.dev/projects/zap-contributions/" />
   <meta property="og:type" content="article" />
   <meta property="og:locale" content="en_US" />
   <meta property="og:url" content="https://jeremyb.dev/projects/zap-contributions/" />
-  <meta property="og:title" content="Zap — Open Source Contributions | Jeremy B." />
-  <meta property="og:description" content="Zap — Open Source Contributions · case study · jeremyb.dev portfolio" />
+  <meta property="og:title" content="Zap: Open Source Contributions | Jeremy B." />
+  <meta property="og:description" content="Zap: Open Source Contributions · case study · jeremyb.dev portfolio" />
   <meta property="og:image" content="https://jeremyb.dev/og-image.png" />
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
-  <meta property="og:image:alt" content="Zap — Open Source Contributions, case study preview" />
+  <meta property="og:image:alt" content="Zap: Open Source Contributions, case study preview" />
   <!-- Open Graph: LinkedIn and others use these tags for link previews -->
-  <title>Zap — Open Source Contributions | Jeremy B.</title>
+  <title>Zap: Open Source Contributions | Jeremy B.</title>
   <script>(function(){try{var t=localStorage.getItem('portfolio-theme');if(t&&['nebula','matrix','terminal','paper'].indexOf(t)>=0)document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>
   <link rel="stylesheet" href="/assets/site-shell.css" />
   <link rel="stylesheet" href="/assets/project.css" />
@@ -109,15 +109,15 @@
         <a href="/">← Back to portfolio</a>
       </p>
     <section class="section">
-<h1>Zap — Open Source Contributions</h1>
-<p>Contributions to <strong><a href="https://github.com/zerx-lab/zap">Zap</a></strong> — an open, local-first terminal with first-class AI and agent support (Rust, forked from Warp). Zap emphasizes privacy defaults: no mandatory cloud, bring-your-own-provider (BYOP) AI keys, and third-party CLI agents wired into Blocks.</p>
+<h1>Zap : Open Source Contributions</h1>
+<p>Contributions to <strong><a href="https://github.com/zerx-lab/zap">Zap</a></strong> : an open, local-first terminal with first-class AI and agent support (Rust, forked from Warp). Zap emphasizes privacy defaults: no mandatory cloud, bring-your-own-provider (BYOP) AI keys, and third-party CLI agents wired into Blocks.</p>
 <p>These three merged pull requests (July 2026) focus on making <strong>BYOP Agent Mode</strong> reliable on Linux with local and third-party AI providers.</p>
 <hr>
 </section>
 <section class="section">
 <h2>Overview</h2>
 <p>Zap&#39;s BYOP path lets users plug in any OpenAI-compatible endpoint plus native OpenAI, Anthropic, Gemini, DeepSeek, and Ollama protocols. Agent Mode sends tools to the model and executes shell commands when the model requests them.</p>
-<p>Before these fixes, local models (Ollama <code>llama3.1</code>, etc.) often returned tool-shaped JSON in assistant text instead of native <code>tool_calls</code> stream events — Zap displayed the JSON but did not execute commands. Provider routing also sent gpt-5.x models to the wrong API endpoint, and Linux Settings lacked paste support for configuring API keys.</p>
+<p>Before these fixes, local models (Ollama <code>llama3.1</code>, etc.) often returned tool-shaped JSON in assistant text instead of native <code>tool_calls</code> stream events : Zap displayed the JSON but did not execute commands. Provider routing also sent gpt-5.x models to the wrong API endpoint, and Linux Settings lacked paste support for configuring API keys.</p>
 <hr>
 </section>
 <section class="section">
@@ -153,8 +153,8 @@
 <hr>
 </section>
 <section class="section">
-<h2>PR #305 — BYOP Agent Tool Execution</h2>
-<p><strong>Problem:</strong> Local BYOP providers respond to agent prompts but often do not emit native <code>message.tool_calls</code> stream events. Models emit tool-shaped JSON in assistant <code>content</code> instead — displayed but not executed. Multi-turn follow-ups could not use prior command output.</p>
+<h2>PR #305 : BYOP Agent Tool Execution</h2>
+<p><strong>Problem:</strong> Local BYOP providers respond to agent prompts but often do not emit native <code>message.tool_calls</code> stream events. Models emit tool-shaped JSON in assistant <code>content</code> instead : displayed but not executed. Multi-turn follow-ups could not use prior command output.</p>
 <p><strong>Changes:</strong></p>
 <ul>
 <li>New <code>content_tool_calls.rs</code>: parse tool-shaped JSON from assistant text when native stream events are absent</li>
@@ -168,8 +168,8 @@
 <hr>
 </section>
 <section class="section">
-<h2>PR #306 — BYOP Provider Routing</h2>
-<p><strong>Problem:</strong> Agent Mode requests with tools failed with HTTP 400/404 on wrong endpoints — gpt-5.x hitting <code>/v1/chat/completions</code>, Ollama hitting <code>/v1/api/chat</code>, Anthropic double <code>/messages/messages</code>.</p>
+<h2>PR #306 : BYOP Provider Routing</h2>
+<p><strong>Problem:</strong> Agent Mode requests with tools failed with HTTP 400/404 on wrong endpoints : gpt-5.x hitting <code>/v1/chat/completions</code>, Ollama hitting <code>/v1/api/chat</code>, Anthropic double <code>/messages/messages</code>.</p>
 <p><strong>Changes:</strong></p>
 <ul>
 <li><code>effective_adapter_kind_for</code>: resolve genai adapter from <code>api_type</code>, model id, and <code>base_url</code></li>
@@ -182,8 +182,8 @@
 <hr>
 </section>
 <section class="section">
-<h2>PR #307 — Linux Settings Paste</h2>
-<p><strong>Problem:</strong> Settings view text editor on Linux did not support Ctrl+V paste or context-menu Cut/Copy/Paste — difficult to configure BYOP API keys and base URLs.</p>
+<h2>PR #307 : Linux Settings Paste</h2>
+<p><strong>Problem:</strong> Settings view text editor on Linux did not support Ctrl+V paste or context-menu Cut/Copy/Paste : difficult to configure BYOP API keys and base URLs.</p>
 <p><strong>Changes:</strong></p>
 <ul>
 <li>Ctrl+V paste keybinding on Linux in <code>app/src/editor/view/mod.rs</code></li>
