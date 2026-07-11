@@ -1,6 +1,6 @@
 # Markdown resume (optional local); PDFs under docs/ are tracked
 docs/*.md
-
+docs/social-copy.txt
 # Maintainer-only site commands / deploy notes (keep a local copy)
 SITE_OPERATIONS.local.md
 
