@@ -1,6 +1,6 @@
-# Zap — Open Source Contributions
+# Zap : Open Source Contributions
 
-Contributions to **[Zap](https://github.com/zerx-lab/zap)** — an open, local-first terminal with first-class AI and agent support (Rust, forked from Warp). Zap emphasizes privacy defaults: no mandatory cloud, bring-your-own-provider (BYOP) AI keys, and third-party CLI agents wired into Blocks.
+Contributions to **[Zap](https://github.com/zerx-lab/zap)** : an open, local-first terminal with first-class AI and agent support (Rust, forked from Warp). Zap emphasizes privacy defaults: no mandatory cloud, bring-your-own-provider (BYOP) AI keys, and third-party CLI agents wired into Blocks.
 
 These three merged pull requests (July 2026) focus on making **BYOP Agent Mode** reliable on Linux with local and third-party AI providers.
 
@@ -10,7 +10,7 @@ These three merged pull requests (July 2026) focus on making **BYOP Agent Mode**
 
 Zap's BYOP path lets users plug in any OpenAI-compatible endpoint plus native OpenAI, Anthropic, Gemini, DeepSeek, and Ollama protocols. Agent Mode sends tools to the model and executes shell commands when the model requests them.
 
-Before these fixes, local models (Ollama `llama3.1`, etc.) often returned tool-shaped JSON in assistant text instead of native `tool_calls` stream events — Zap displayed the JSON but did not execute commands. Provider routing also sent gpt-5.x models to the wrong API endpoint, and Linux Settings lacked paste support for configuring API keys.
+Before these fixes, local models (Ollama `llama3.1`, etc.) often returned tool-shaped JSON in assistant text instead of native `tool_calls` stream events : Zap displayed the JSON but did not execute commands. Provider routing also sent gpt-5.x models to the wrong API endpoint, and Linux Settings lacked paste support for configuring API keys.
 
 ---
 
@@ -24,9 +24,9 @@ Before these fixes, local models (Ollama `llama3.1`, etc.) often returned tool-s
 
 ---
 
-## PR #305 — BYOP Agent Tool Execution
+## PR #305 : BYOP Agent Tool Execution
 
-**Problem:** Local BYOP providers respond to agent prompts but often do not emit native `message.tool_calls` stream events. Models emit tool-shaped JSON in assistant `content` instead — displayed but not executed. Multi-turn follow-ups could not use prior command output.
+**Problem:** Local BYOP providers respond to agent prompts but often do not emit native `message.tool_calls` stream events. Models emit tool-shaped JSON in assistant `content` instead : displayed but not executed. Multi-turn follow-ups could not use prior command output.
 
 **Changes:**
 
@@ -41,9 +41,9 @@ Before these fixes, local models (Ollama `llama3.1`, etc.) often returned tool-s
 
 ---
 
-## PR #306 — BYOP Provider Routing
+## PR #306 : BYOP Provider Routing
 
-**Problem:** Agent Mode requests with tools failed with HTTP 400/404 on wrong endpoints — gpt-5.x hitting `/v1/chat/completions`, Ollama hitting `/v1/api/chat`, Anthropic double `/messages/messages`.
+**Problem:** Agent Mode requests with tools failed with HTTP 400/404 on wrong endpoints : gpt-5.x hitting `/v1/chat/completions`, Ollama hitting `/v1/api/chat`, Anthropic double `/messages/messages`.
 
 **Changes:**
 
@@ -57,9 +57,9 @@ Before these fixes, local models (Ollama `llama3.1`, etc.) often returned tool-s
 
 ---
 
-## PR #307 — Linux Settings Paste
+## PR #307 : Linux Settings Paste
 
-**Problem:** Settings view text editor on Linux did not support Ctrl+V paste or context-menu Cut/Copy/Paste — difficult to configure BYOP API keys and base URLs.
+**Problem:** Settings view text editor on Linux did not support Ctrl+V paste or context-menu Cut/Copy/Paste : difficult to configure BYOP API keys and base URLs.
 
 **Changes:**
 

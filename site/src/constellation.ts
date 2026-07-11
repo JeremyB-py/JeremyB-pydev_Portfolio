@@ -13,9 +13,66 @@ export interface ProjectForMap {
 const OUTER_ORBIT_MUL = 1.22;
 const ARCHIVE_NODE_SCALE = 0.65;
 const OUTER_NODE_SCALE = 0.85;
-/** Fixed angle (rad) for the archive mini-system on the galaxy ellipse */
-const ARCHIVE_GROUP_ANGLE = Math.PI * 0.72;
-const ARCHIVE_SPREAD_RAD = 0.1;
+/** Main galaxy position of the Archives sub-hub (rad) */
+const ARCHIVE_HUB_ANGLE = Math.PI * 0.78;
+const ARCHIVE_HUB_RIPPLE = 0.82;
+/** Radius (px) at which archive moons orbit the Archives hub */
+const ARCHIVE_MOON_ORBIT_PX = 54;
+/** Slow orbit speed for archive moons around the Archives hub (animT units) */
+const ARCHIVE_MOON_OMEGA = 0.28;
+/** Wall-clock seconds each archive title is shown in the carousel */
+const ARCHIVE_LABEL_SLOT_SEC = 4.2;
+const ARCHIVE_HUB_HIT_R = 30;
+const ARCHIVE_HUB_HINT = 'Earlier work; skills still apply.';
+const ARCHIVE_LABEL_FADE_IN = 0.18;
+const ARCHIVE_LABEL_HOLD_END = 0.72;
+
+/** Per-slug placement: CCW angle (rad) and orbit ripple for featured projects */
+const FEATURED_LAYOUT: Record<string, { angle: number; ripple: number }> = {
+  'wrinkle-website': { angle: -Math.PI / 2 + 0.15, ripple: 0.84 },
+  /* Left arc between Website (top) and Archives hub (lower-left) */
+  'wrinkle-crm': { angle: 3.78, ripple: 0.86 },
+  'referral-tracker': { angle: -0.28, ripple: 0.86 },
+  'likely-cause': { angle: 0.42, ripple: 0.72 },
+  'clipspan': { angle: 1.22, ripple: 0.9 },
+};
+
+/** Short canvas labels (avoid long titles on the constellation map) */
+function mapLabel(project: ProjectForMap): string {
+  const bySlug: Record<string, string> = {
+    'likely-cause': 'Likely Cause',
+    clipspan: 'ClipSpan',
+    'zap-contributions': 'Zap: Open Source',
+  };
+  return bySlug[project.slug] ?? project.title;
+}
+
+/** One archive title at a time: fade in, hold, fade out, then switch index. */
+function archiveLabelSpotlight(
+  animT: number,
+  count: number
+): { idx: number; alpha: number } {
+  if (count <= 0) return { idx: 0, alpha: 0 };
+  const tSec = animT / ANIM_PER_SEC;
+  const phase = (tSec % ARCHIVE_LABEL_SLOT_SEC) / ARCHIVE_LABEL_SLOT_SEC;
+  const idx = Math.floor(tSec / ARCHIVE_LABEL_SLOT_SEC) % count;
+  let alpha = 0;
+  if (phase < ARCHIVE_LABEL_FADE_IN) {
+    alpha = phase / ARCHIVE_LABEL_FADE_IN;
+  } else if (phase < ARCHIVE_LABEL_HOLD_END) {
+    alpha = 1;
+  } else {
+    alpha = (1 - phase) / (1 - ARCHIVE_LABEL_HOLD_END);
+  }
+  return { idx, alpha: Math.max(0, Math.min(1, alpha)) };
+}
+
+interface ArchiveHubState {
+  baseAngle: number;
+  orbitRx: number;
+  orbitRy: number;
+  ringRadius: number;
+}
 
 interface Star {
   baseAngle: number;
@@ -24,22 +81,31 @@ interface Star {
   project: ProjectForMap;
   r: number;
   tier: OrbitTier;
+  /** When true, this node orbits the Archives hub instead of the galaxy center */
+  orbitsArchiveHub?: boolean;
+  /** Fixed phase on the archive moon ring (rad) */
+  moonAngle?: number;
+  /** Index among archive moons for rotating label spotlight */
+  archiveIndex?: number;
 }
 
 function tierOf(p: ProjectForMap): OrbitTier {
   return p.orbitTier ?? 'featured';
 }
 
-function buildStars(projects: ProjectForMap[], wCss: number, hCss: number): Star[] {
+function buildStars(projects: ProjectForMap[], wCss: number, hCss: number): {
+  stars: Star[];
+  archiveHub: ArchiveHubState | null;
+} {
   const featured = projects.filter((p) => tierOf(p) === 'featured');
   const outer = projects.filter((p) => tierOf(p) === 'outer');
   const archive = projects.filter((p) => tierOf(p) === 'archive');
   const stars: Star[] = [];
 
   featured.forEach((project, i) => {
-    const count = featured.length;
-    const t = (i / Math.max(count, 1)) * Math.PI * 2 - Math.PI / 2 + 0.12;
-    const ripple = 0.82 + (i % 4) * 0.05;
+    const layout = FEATURED_LAYOUT[project.slug];
+    const t = layout?.angle ?? (i / Math.max(featured.length, 1)) * Math.PI * 2 - Math.PI / 2 + 0.12;
+    const ripple = layout?.ripple ?? 0.82 + (i % 4) * 0.05;
     stars.push({
       baseAngle: t,
       orbitRx: wCss * 0.36 * ripple,
@@ -64,23 +130,64 @@ function buildStars(projects: ProjectForMap[], wCss: number, hCss: number): Star
     });
   });
 
-  const clusterRipple = 0.78;
-  const clusterRx = wCss * 0.36 * clusterRipple;
-  const clusterRy = hCss * 0.28 * clusterRipple;
-  archive.forEach((project, i) => {
-    const n = archive.length;
-    const offset = n <= 1 ? 0 : (i - (n - 1) / 2) * ARCHIVE_SPREAD_RAD;
-    stars.push({
-      baseAngle: ARCHIVE_GROUP_ANGLE + offset,
-      orbitRx: clusterRx,
-      orbitRy: clusterRy,
-      project,
-      r: NODE_R * ARCHIVE_NODE_SCALE,
-      tier: 'archive',
+  let archiveHub: ArchiveHubState | null = null;
+  if (archive.length > 0) {
+    archiveHub = {
+      baseAngle: ARCHIVE_HUB_ANGLE,
+      orbitRx: wCss * 0.36 * ARCHIVE_HUB_RIPPLE,
+      orbitRy: hCss * 0.28 * ARCHIVE_HUB_RIPPLE,
+      ringRadius: ARCHIVE_MOON_ORBIT_PX,
+    };
+    archive.forEach((project, i) => {
+      const n = archive.length;
+      const moonAngle = (i / n) * Math.PI * 2 - Math.PI / 2;
+      stars.push({
+        baseAngle: 0,
+        orbitRx: 0,
+        orbitRy: 0,
+        project,
+        r: NODE_R * ARCHIVE_NODE_SCALE,
+        tier: 'archive',
+        orbitsArchiveHub: true,
+        moonAngle,
+        archiveIndex: i,
+      });
     });
-  });
+  }
 
-  return stars;
+  return { stars, archiveHub };
+}
+
+function archiveHubPos(
+  hub: ArchiveHubState,
+  cx: number,
+  cy: number,
+  spin: number
+): { x: number; y: number } {
+  const a = hub.baseAngle + spin;
+  return {
+    x: cx + Math.cos(a) * hub.orbitRx,
+    y: cy + Math.sin(a) * hub.orbitRy,
+  };
+}
+
+function starWorldPos(
+  s: Star,
+  cx: number,
+  cy: number,
+  spin: number,
+  animT: number,
+  hub: ArchiveHubState | null
+): { x: number; y: number } {
+  if (s.orbitsArchiveHub && hub && s.moonAngle != null) {
+    const hp = archiveHubPos(hub, cx, cy, spin);
+    const angle = s.moonAngle + animT * ARCHIVE_MOON_OMEGA;
+    return {
+      x: hp.x + Math.cos(angle) * hub.ringRadius,
+      y: hp.y + Math.sin(angle) * hub.ringRadius,
+    };
+  }
+  return galaxyPos(s, cx, cy, spin);
 }
 
 interface BgDot {
@@ -377,9 +484,10 @@ function skillWorldPos(
   cx: number,
   cy: number,
   spin: number,
-  animT: number
+  animT: number,
+  archiveHub: ArchiveHubState | null
 ): { x: number; y: number } {
-  const posP = galaxyPos(parent, cx, cy, spin);
+  const posP = starWorldPos(parent, cx, cy, spin, animT, archiveHub);
   const dx = posP.x - cx;
   const dy = posP.y - cy;
   const len = Math.hypot(dx, dy) || 1;
@@ -400,6 +508,7 @@ function skillWorldPos(
 function buildSkillSats(stars: Star[]): SkillSat[] {
   const out: SkillSat[] = [];
   stars.forEach((s, si) => {
+    if (s.tier === 'archive') return;
     const tech = s.project.tech.slice(0, MAX_SKILLS);
     const n = tech.length;
     // Rotate the whole clock pattern per project so adjacent projects don't align
@@ -476,10 +585,12 @@ export function initConstellation(
   const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   let stars: Star[] = [];
+  let archiveHubState: ArchiveHubState | null = null;
   let skillSats: SkillSat[] = [];
   let bgDots: BgDot[] = [];
   let midOrbiters: MidOrbiter[] = [];
   let hovered: Star | null = null;
+  let hoveredArchiveHub = false;
   let skillFade = 0;
   let dpr = Math.min(window.devicePixelRatio || 1, 2);
   let spin = 0;
@@ -511,7 +622,9 @@ export function initConstellation(
     hub.x = galaxyCx;
     hub.y = galaxyCy;
 
-    stars = buildStars(projects, wCss, hCss);
+    const built = buildStars(projects, wCss, hCss);
+    stars = built.stars;
+    archiveHubState = built.archiveHub;
     skillSats = buildSkillSats(stars);
     /* 100+ more mini-stars than prior pass; still tiny specks */
     const bgCount = reducedMotion ? 180 : 280;
@@ -525,7 +638,7 @@ export function initConstellation(
     let best: Star | null = null;
     let bestD = Infinity;
     for (const s of stars) {
-      const pos = galaxyPos(s, galaxyCx, galaxyCy, spin);
+      const pos = starWorldPos(s, galaxyCx, galaxyCy, spin, animT, archiveHubState);
       const dx = clientX - rect.left - pos.x;
       const dy = clientY - rect.top - pos.y;
       const d = Math.sqrt(dx * dx + dy * dy);
@@ -535,6 +648,15 @@ export function initConstellation(
       }
     }
     return best;
+  }
+
+  function pickArchiveHub(clientX: number, clientY: number): boolean {
+    if (!archiveHubState) return false;
+    const ahPos = archiveHubPos(archiveHubState, galaxyCx, galaxyCy, spin);
+    const rect = canvas.getBoundingClientRect();
+    const dx = clientX - rect.left - ahPos.x;
+    const dy = clientY - rect.top - ahPos.y;
+    return dx * dx + dy * dy <= ARCHIVE_HUB_HIT_R * ARCHIVE_HUB_HIT_R;
   }
 
   function readColors(): {
@@ -595,6 +717,11 @@ export function initConstellation(
     }
 
     const hoveredIndex = hovered ? stars.indexOf(hovered) : -1;
+    const archiveMoonStars = stars.filter((s) => s.tier === 'archive');
+    const archiveHubHovered = hovered?.tier === 'archive';
+    const archiveSpot = archiveLabelSpotlight(animT, archiveMoonStars.length);
+    const archiveSpotIdx = archiveSpot.idx;
+    const archiveSpotFade = archiveSpot.alpha;
 
     // Background mini-stars (non-interactive): brighter + subtle twinkle
     const bgBaseAlpha = reducedMotion ? 0.32 : 0.48;
@@ -781,25 +908,81 @@ export function initConstellation(
       c.shadowBlur = 0;
     }
 
-    // Faint ellipse around archive cluster center
-    const archiveStars = stars.filter((s) => s.tier === 'archive');
-    if (archiveStars.length > 0 && !isMatrix) {
-      const ref = archiveStars[0];
-      const clusterPos = galaxyPos(ref, galaxyCx, galaxyCy, spin);
-      const ellipseRx = ref.orbitRx * 0.14;
-      const ellipseRy = ref.orbitRy * 0.12;
-      c.strokeStyle = isPaper ? withAlpha(muted, 0.35) : withAlpha(muted, 0.22);
-      c.lineWidth = isPaper ? 1.5 : 1;
-      c.globalAlpha = 1;
-      c.beginPath();
-      c.ellipse(clusterPos.x, clusterPos.y, ellipseRx, ellipseRy, spin * 0.15, 0, Math.PI * 2);
-      c.stroke();
+    // Archives sub-hub: orbit ring + label (moons orbit this point, not Jeremy B.)
+    if (archiveHubState && archiveMoonStars.length > 0) {
+      const ahPos = archiveHubPos(archiveHubState, galaxyCx, galaxyCy, spin);
+      const ringR = archiveHubState.ringRadius;
+      const hubNodeR = 8;
+      const hubHi = hoveredArchiveHub;
+
+      if (isMatrix) {
+        c.strokeStyle = withAlpha(hubHi ? accent : muted, hubHi ? 0.55 : 0.32);
+        c.lineWidth = hubHi ? 1.35 : 1;
+        c.globalAlpha = 1;
+        c.beginPath();
+        c.arc(ahPos.x, ahPos.y, ringR, 0, Math.PI * 2);
+        c.stroke();
+
+        const hubFs = 13;
+        c.fillStyle = hubHi ? accent : withAlpha(accent, 0.72);
+        c.font = `${hubFs}px ${monoFont}`;
+        c.textAlign = 'center';
+        c.textBaseline = 'middle';
+        if (!reducedMotion && hubHi) {
+          c.shadowColor = accent;
+          c.shadowBlur = 8;
+        }
+        c.fillText('[ARC]', ahPos.x, ahPos.y);
+        c.shadowBlur = 0;
+
+        c.fillStyle = withAlpha(text, hubHi ? 0.92 : 0.68);
+        c.font = `12px ${monoFont}`;
+        c.textBaseline = 'alphabetic';
+        c.fillText('Archives', ahPos.x, ahPos.y + hubFs * 0.45 + 12);
+      } else {
+        c.strokeStyle = isPaper
+          ? withAlpha(muted, hubHi ? 0.55 : 0.42)
+          : withAlpha(muted, hubHi ? 0.38 : 0.28);
+        c.lineWidth = isPaper ? 1.6 : 1.15;
+        c.globalAlpha = 1;
+        c.beginPath();
+        c.arc(ahPos.x, ahPos.y, ringR, 0, Math.PI * 2);
+        c.stroke();
+
+        c.fillStyle = isPaper
+          ? withAlpha(muted, hubHi ? 0.32 : 0.2)
+          : withAlpha(accent, hubHi ? 0.32 : 0.22);
+        c.beginPath();
+        c.arc(ahPos.x, ahPos.y, hubNodeR, 0, Math.PI * 2);
+        c.fill();
+        c.strokeStyle = isPaper
+          ? withAlpha(muted, hubHi ? 0.9 : 0.75)
+          : withAlpha(accent, hubHi ? 0.72 : 0.55);
+        c.lineWidth = isPaper ? 2 : 1.25;
+        c.stroke();
+
+        c.fillStyle = isPaper ? withAlpha(text, 0.9) : withAlpha(text, hubHi ? 0.92 : 0.78);
+        c.font = isPaper ? '13px system-ui, sans-serif' : '12px system-ui, sans-serif';
+        c.textAlign = 'center';
+        c.textBaseline = 'alphabetic';
+        c.fillText('Archives', ahPos.x, ahPos.y + hubNodeR + 14);
+      }
+
+      if (hubHi) {
+        c.fillStyle = isPaper ? withAlpha(muted, 0.88) : withAlpha(muted, 0.82);
+        c.font = isMatrix ? `11px ${monoFont}` : '11px system-ui, sans-serif';
+        c.textAlign = 'center';
+        c.textBaseline = 'alphabetic';
+        c.globalAlpha = 1;
+        c.fillText(ARCHIVE_HUB_HINT, ahPos.x, ahPos.y + hubNodeR + (isMatrix ? 30 : 28));
+      }
     }
 
-    // Hub → project lines (solid ink strokes on paper)
+    // Hub → featured/outer lines; single line to Archives sub-hub
     c.lineWidth = isPaper ? 2 : 1;
     stars.forEach((s, si) => {
-      const pos = galaxyPos(s, galaxyCx, galaxyCy, spin);
+      if (s.orbitsArchiveHub) return;
+      const pos = starWorldPos(s, galaxyCx, galaxyCy, spin, animT, archiveHubState);
       const isHi = hovered === s;
       const np = nodePalette[si];
       if (isPaper) {
@@ -814,14 +997,55 @@ export function initConstellation(
       c.lineTo(pos.x, pos.y);
       c.stroke();
     });
+
+    if (archiveHubState && archiveMoonStars.length > 0) {
+      const ahPos = archiveHubPos(archiveHubState, galaxyCx, galaxyCy, spin);
+      const isArchiveSystemHi = archiveHubHovered;
+      c.strokeStyle = isPaper
+        ? withAlpha(muted, isArchiveSystemHi ? 0.88 : 0.62)
+        : isArchiveSystemHi
+          ? 'rgba(255, 255, 255, 0.72)'
+          : withAlpha(muted, 0.35);
+      c.globalAlpha = 1;
+      c.beginPath();
+      c.moveTo(hub.x, hub.y);
+      c.lineTo(ahPos.x, ahPos.y);
+      c.stroke();
+
+      archiveMoonStars.forEach((s) => {
+        const si = stars.indexOf(s);
+        const pos = starWorldPos(s, galaxyCx, galaxyCy, spin, animT, archiveHubState);
+        const isHi = hovered === s;
+        const np = nodePalette[si];
+        c.strokeStyle = isPaper
+          ? withAlpha(isHi ? np.fill : muted, isHi ? 0.9 : 0.5)
+          : isHi
+            ? np.fill
+            : np.hubLineMuted;
+        c.globalAlpha = isHi ? 0.85 : 0.55;
+        c.lineWidth = isPaper ? (isHi ? 1.8 : 1.2) : isHi ? 1.1 : 0.85;
+        c.beginPath();
+        c.moveTo(ahPos.x, ahPos.y);
+        c.lineTo(pos.x, pos.y);
+        c.stroke();
+      });
+    }
     c.globalAlpha = 1;
 
     // Branch lines + skill nodes (inherit parent color)
     skillSats.forEach((sat, satIdx) => {
       const parent = stars[sat.parentIndex];
-      if (!parent) return;
-      const posP = galaxyPos(parent, galaxyCx, galaxyCy, spin);
-      const posS = skillWorldPos(parent, sat, galaxyCx, galaxyCy, spin, animT);
+      if (!parent || parent.tier === 'archive') return;
+      const posP = starWorldPos(parent, galaxyCx, galaxyCy, spin, animT, archiveHubState);
+      const posS = skillWorldPos(
+        parent,
+        sat,
+        galaxyCx,
+        galaxyCy,
+        spin,
+        animT,
+        archiveHubState
+      );
       const isParentHi = hoveredIndex === sat.parentIndex;
       const pCol = nodePalette[sat.parentIndex];
       if (isPaper) {
@@ -895,12 +1119,12 @@ export function initConstellation(
 
     // Project nodes + titles (per-theme palette + soft breathe)
     stars.forEach((s, si) => {
-      const pos = galaxyPos(s, galaxyCx, galaxyCy, spin);
+      const pos = starWorldPos(s, galaxyCx, galaxyCy, spin, animT, archiveHubState);
       const isHi = hovered === s;
       const np = nodePalette[si];
       const breathe = reducedMotion
         ? 1
-        : 1 + 0.045 * Math.sin(animT * 0.65 + s.baseAngle * 1.4 + si * 0.2);
+        : 1 + 0.045 * Math.sin(animT * 0.65 + (s.baseAngle || 0) * 1.4 + si * 0.2);
       const baseR = isHi ? s.r + 3 : s.r * 0.75;
       const radius = baseR * (isHi ? 1 + (reducedMotion ? 0 : 0.03 * Math.sin(animT * 0.85)) : breathe);
 
@@ -943,28 +1167,45 @@ export function initConstellation(
         c.fill();
         c.shadowBlur = 0;
       }
-      const labelAlpha =
-        s.tier === 'archive' ? 0.16 : s.tier === 'outer' ? 0.18 : 0.22;
-      c.globalAlpha = isPaper
-        ? 0.88
-        : isMatrix
-          ? isHi
-            ? 1
-            : 0.52
-          : isHi
-            ? 1
+
+      const label = mapLabel(s.project);
+      const shortLabel = label.length > 26 ? `${label.slice(0, 24)}…` : label;
+      const isArchiveMoon = s.tier === 'archive';
+      const archiveMoonIdx = isArchiveMoon
+        ? archiveMoonStars.indexOf(s)
+        : -1;
+      const showArchiveSpotlight =
+        isArchiveMoon &&
+        !archiveHubHovered &&
+        archiveMoonIdx === archiveSpotIdx &&
+        archiveSpotFade > 0.04;
+      const showLabel = !isArchiveMoon || isHi || showArchiveSpotlight;
+
+      if (showLabel) {
+        const labelAlpha = isHi
+          ? 1
+          : isArchiveMoon
+            ? archiveSpotFade * 0.92
+            : s.tier === 'outer'
+              ? 0.18
+              : 0.22;
+        c.globalAlpha = isPaper
+          ? 0.88
+          : isMatrix
+            ? isHi
+              ? 1
+              : 0.52
             : labelAlpha;
-      c.fillStyle = isPaper ? withAlpha(text, 0.94) : text;
-      c.font = isMatrix ? `15px ${monoFont}` : '16px system-ui, sans-serif';
-      c.textAlign = 'center';
-      c.textBaseline = 'alphabetic';
-      const label =
-        s.project.title.length > 26 ? `${s.project.title.slice(0, 24)}…` : s.project.title;
-      const labelY = isMatrix
-        ? pos.y - matrixNodeGlyphFs * 0.52 - 12
-        : pos.y - radius - 10;
-      c.fillText(label, pos.x, labelY);
-      c.globalAlpha = 1;
+        c.fillStyle = isPaper ? withAlpha(text, 0.94) : text;
+        c.font = isMatrix ? `15px ${monoFont}` : '16px system-ui, sans-serif';
+        c.textAlign = 'center';
+        c.textBaseline = 'alphabetic';
+        const labelY = isMatrix
+          ? pos.y - matrixNodeGlyphFs * 0.52 - 12
+          : pos.y - radius - 10;
+        c.fillText(shortLabel, pos.x, labelY);
+        c.globalAlpha = 1;
+      }
     });
 
     if (!reducedMotion) {
@@ -974,12 +1215,14 @@ export function initConstellation(
 
   function onMove(e: MouseEvent): void {
     hovered = pickStar(e.clientX, e.clientY);
-    canvas.style.cursor = hovered ? 'pointer' : 'crosshair';
+    hoveredArchiveHub = !hovered && pickArchiveHub(e.clientX, e.clientY);
+    canvas.style.cursor = hovered ? 'pointer' : hoveredArchiveHub ? 'help' : 'crosshair';
     if (reducedMotion) drawFrame();
   }
 
   function onLeave(): void {
     hovered = null;
+    hoveredArchiveHub = false;
     if (reducedMotion) drawFrame();
   }
 

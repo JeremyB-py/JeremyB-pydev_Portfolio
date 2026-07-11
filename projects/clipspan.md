@@ -1,8 +1,8 @@
-# ClipSpan — Universal Clipboard Sync
+# ClipSpan : Universal Clipboard Sync
 
-**ClipSpan** is a cross-platform clipboard history and sync system. The goal: copy or select content on Android and paste it on a Linux desktop (and vice versa), with searchable history across devices — without root access or unsafe permission workarounds.
+**ClipSpan** is a cross-platform clipboard history and sync system. The goal: copy or select content on Android and paste it on a Linux desktop (and vice versa), with searchable history across devices : without root access or unsafe permission workarounds.
 
-**Status:** v0.8.x — QR pairing, offline-resilient history, ClipSpan Keyboard with toolbar send/paste. Android ↔ Ubuntu/Linux first; Windows and macOS planned.
+**Status:** v0.8.x : QR pairing, offline-resilient history, ClipSpan Keyboard with toolbar send/paste. Android ↔ Ubuntu/Linux first; Windows and macOS planned.
 
 ---
 
@@ -15,7 +15,7 @@ ClipSpan treats clipboard data as **sensitive by default** (passwords, tokens, a
 - Linux daemon **Send to Android** (tray action)
 - Searchable cross-device history with clear delete controls
 
-Long-term north star: frictionless install, pair, and daily paste — but privacy and user control come first.
+Long-term north star: frictionless install, pair, and daily paste : but privacy and user control come first.
 
 ---
 
@@ -37,10 +37,10 @@ Each layer is decoupled so the Android keyboard, companion app, Linux daemon, an
 
 ### Android (Gradle Multi-Module)
 
-- `sync-core/` — HTTP clients, protocol, Room history, sync coordinator
-- `sync-ime-bridge/` — fork-agnostic IME toolbar (push/pull/history, password guard)
-- `companion-app/` — settings UI, share targets, history, Connect screen with QR scan
-- `keyboard/` — **ClipSpan Keyboard** (FlorisBoard fork) with ClipSpan toolbar and embedded history grid
+- `sync-core/` : HTTP clients, protocol, Room history, sync coordinator
+- `sync-ime-bridge/` : fork-agnostic IME toolbar (push/pull/history, password guard)
+- `companion-app/` : settings UI, share targets, history, Connect screen with QR scan
+- `keyboard/` : **ClipSpan Keyboard** (FlorisBoard fork) with ClipSpan toolbar and embedded history grid
 
 ### Linux Daemon (FastAPI)
 
@@ -48,7 +48,7 @@ Each layer is decoupled so the Android keyboard, companion app, Linux daemon, an
 - SQLite local history; QR pairing API with per-peer sync tokens and device roster
 - Pairing QR uses minimal token URL (`/p?t=…`); mDNS discovery optional
 
-### Phase 7.5 — Offline-Resilient History
+### Phase 7.5 : Offline-Resilient History
 
 - Merge-only history sync: local Room cache never wiped when desktop is unreachable
 - Offline paste fallback from last-pulled hash or most recent saved history
@@ -67,7 +67,7 @@ Each layer is decoupled so the Android keyboard, companion app, Linux daemon, an
 | `Companion App` | Connect screen, history list, share targets, desktop settings provider; ClipSpan Nebula Material3 theme. |
 | `Linux Daemon` | FastAPI endpoints for health, status, pair session, push/pull, history; config at `~/.config/clipspan/daemon.json`. |
 | `History Model` | Room DB with `syncStatus` (`local_only` \| `synced`); display order `created_at DESC`; password-field guard on sync. |
-| `Dev Workflow` | `./scripts/install-android-debug.sh` — one-command debug build + adb install for companion + keyboard. |
+| `Dev Workflow` | `./scripts/install-android-debug.sh` : one-command debug build + adb install for companion + keyboard. |
 
 ---
 
@@ -82,7 +82,7 @@ Each layer is decoupled so the Android keyboard, companion app, Linux daemon, an
 
 ## Highlights
 
-- User-visible control first — manual send/paste validates protocol before automatic sync.
+- User-visible control first : manual send/paste validates protocol before automatic sync.
 - Modular architecture ready for Windows service and future macOS client.
 - FlorisBoard keyboard integration with dual-clipboard policy (ClipSpan history vs Floris local panel).
 - QR pairing + mDNS discovery reduce setup friction on the same LAN.

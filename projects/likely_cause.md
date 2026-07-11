@@ -1,4 +1,4 @@
-# Likely Cause — Dependency Health Dashboard
+# Likely Cause : Dependency Health Dashboard
 
 **Likely Cause** is a mobile-first dependency health dashboard for solo developers, freelancers, and small teams. It answers a practical question when something breaks:
 
@@ -6,7 +6,7 @@
 
 This is **not** primarily an uptime monitor. The differentiator is **lightweight incident triage**: combining your own health checks with official third-party status data to infer the likely failure layer with evidence and suggested next steps.
 
-**Status:** v0.12.x — native home-screen widgets (Android + iOS scaffold), rule-based diagnosis engine, offline sync. Next: team accounts.
+**Status:** v0.12.x : native home-screen widgets (Android + iOS scaffold), rule-based diagnosis engine, offline sync. Next: team accounts.
 
 ---
 
@@ -58,17 +58,17 @@ Suggested action:
 Check backend logs and database connection settings.
 ```
 
-Rules ship before AI — every label cites checks that support it.
+Rules ship before AI : every label cites checks that support it.
 
 ### Check Types
 
 Monitors support multiple check strategies:
 
-- `http_status` — HTTP status code validation
-- `response_time` — latency thresholds
-- `keyword` — body content matching
-- `json_path` — structured response field checks
-- `health_endpoint` — structured `/health` contract parsing
+- `http_status` : HTTP status code validation
+- `response_time` : latency thresholds
+- `keyword` : body content matching
+- `json_path` : structured response field checks
+- `health_endpoint` : structured `/health` contract parsing
 
 URL discovery includes parallel path probing, sitemap mining, and rate-limit fallback with sequential retry.
 
@@ -100,7 +100,7 @@ URL discovery includes parallel path probing, sitemap mining, and rate-limit fal
 
 ## Highlights
 
-- Mobile-first incident triage — not just red/green uptime dots.
+- Mobile-first incident triage : not just red/green uptime dots.
 - Monorepo with shared check runner code path for API manual checks and worker scheduled checks.
 - Phases 0–10 complete: auth, monitors, worker, push, providers, diagnosis, widgets, offline sync.
 - Real-world diagnosis example tied to the Wrinkle Witch API stack (dogfooding my own platform).
@@ -131,8 +131,8 @@ Portfolio case study: [jeremyb.dev/projects/likely-cause/](https://jeremyb.dev/p
 
 ## Next Steps
 
-- Phase 11 — Team accounts and RBAC
+- Phase 11 : Team accounts and RBAC
 - Railway production deployment
-- Phase 12 — AI-assisted diagnosis (summarization layer on top of rules)
+- Phase 12 : AI-assisted diagnosis (summarization layer on top of rules)
 
 ---

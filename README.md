@@ -35,8 +35,8 @@ Write-up Link: [Wrinkle Witch Website Showcase](https://github.com/JeremyB-py/Je
 
 ---
 
-### Likely Cause — Dependency Health Dashboard
-> Mobile-first incident triage for solo developers: custom health monitors plus third-party status feeds produce a rule-based "likely cause" with evidence and suggested next checks — not just uptime dots.
+### Likely Cause: Dependency Health Dashboard
+> Mobile-first incident triage for solo developers: custom health monitors plus third-party status feeds produce a rule-based "likely cause" with evidence and suggested next checks, not just uptime dots.
 
 - **Tech:** Python · FastAPI · React Native · Expo · PostgreSQL · Docker  
 - **Highlights:** Monorepo (Expo Router mobile, FastAPI API, background worker); scheduled checks + Expo push alerts; provider status adapters; rule-based diagnosis engine; native Android/iOS home-screen widgets (v0.12.x)  
@@ -46,7 +46,7 @@ Write-up Link: [Likely Cause Showcase](https://github.com/JeremyB-py/JeremyB-pyd
 
 ---
 
-### ClipSpan — Universal Clipboard Sync
+### ClipSpan: Universal Clipboard Sync
 > Cross-device clipboard history and sync between Android and Linux: companion app, FlorisBoard-based keyboard, Linux daemon, QR pairing, and offline-resilient history.
 
 - **Tech:** Python · FastAPI · Kotlin · Android · Rust · SQLite  
@@ -57,7 +57,7 @@ Write-up Link: [ClipSpan Showcase](https://github.com/JeremyB-py/JeremyB-pydev_P
 
 ---
 
-### Zap — Open Source Contributions
+### Zap: Open Source Contributions
 > Three merged PRs to [zerx-lab/zap](https://github.com/zerx-lab/zap), an open local-first Rust terminal with BYOP AI and agent support.
 
 - **Tech:** Rust · BYOP AI · Open Source  
@@ -80,7 +80,7 @@ Write-up Link: [Wrinkle Witch CRM Showcase](https://github.com/JeremyB-py/Jeremy
 ---
 
 ### Referral Tracker Module
-> Streamlit app that automates referral tracking, rewards, PDF card creation, and batch exports — fully integrated in the Wrinkle Witch platform.
+> Streamlit app that automates referral tracking, rewards, PDF card creation, and batch exports, fully integrated in the Wrinkle Witch platform.
 
 - **Tech:** Python · Streamlit · Pandas · Pillow · FPDF  
 - **Highlights:** Modular codebase, automated PDF generation, referral logic, session-state control, and CSV synchronization.  
@@ -94,10 +94,10 @@ Write-up link: [Wrinkle Witch Referral Tracker Showcase](https://github.com/Jere
 
 Earlier experiments and learning projects (case studies still on the portfolio):
 
-- [Agricultural Forecasting Dashboard](projects/agricultural_forecasting.md) — Python, Pandas, ARIMA
-- [Power BI Non-Profit Dashboard](projects/powerbi_nonprofit_dashboard.md) — Power BI, DAX
-- [Continuous Learning AI Prototype](projects/continuous_learning_ai_prototype.md) — Python, modular AI experiment
-- [Toy Blockchain](projects/crypto_prototype.md) — Python, Flask, proof-of-work
+- [Agricultural Forecasting Dashboard](projects/agricultural_forecasting.md): Python, Pandas, ARIMA
+- [Power BI Non-Profit Dashboard](projects/powerbi_nonprofit_dashboard.md): Power BI, DAX
+- [Continuous Learning AI Prototype](projects/continuous_learning_ai_prototype.md): Python, modular AI experiment
+- [Toy Blockchain](projects/crypto_prototype.md): Python, Flask, proof-of-work
 
 ---
 
@@ -125,7 +125,7 @@ Earlier experiments and learning projects (case studies still on the portfolio):
 ## About Me
 I am a full stack Python developer focused on building web applications, mobile tools, and automation. After nine years in logistics, I bring a process driven mindset to designing systems that are reliable and practical for real businesses.
 
-Most of my time is spent learning new tools and applying them directly in projects — from the Wrinkle Witch platform to Likely Cause, ClipSpan, and open-source work on the Zap terminal.
+Most of my time is spent learning new tools and applying them directly in projects, from the Wrinkle Witch platform to Likely Cause, ClipSpan, and open-source work on the Zap terminal.
 
 ---
 
