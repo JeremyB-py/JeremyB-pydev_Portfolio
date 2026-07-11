@@ -5,9 +5,12 @@
     "sourceMarkdown": "projects/wrinkle_witch_website.md",
     "title": "Wrinkle Witch Website & Multi-App Platform",
     "summary": "Static site, FastAPI backend, Streamlit admin, scheduled jobs; Square Bookings, referrals, specials.",
-    "tech": ["Python", "FastAPI", "Streamlit", "SQLAlchemy", "Railway", "Cloudflare", "HTML", "CSS", "JavaScript"],
+    "tech": ["Python", "FastAPI", "Streamlit", "PostgreSQL", "Railway", "Cloudflare", "HTML", "CSS", "JavaScript"],
     "writeUpUrl": "https://jeremyb.dev/projects/wrinkle-website/",
-    "private": true
+    "private": true,
+    "orbitTier": "featured",
+    "orbitGroup": null,
+    "sortOrder": 10
   },
   {
     "id": "wrinkle-crm",
@@ -17,7 +20,10 @@
     "summary": "Modular Streamlit CRM: product database, data pipelines, extensible for referrals and Square.",
     "tech": ["Python", "Streamlit", "Pandas", "SQLite"],
     "writeUpUrl": "https://jeremyb.dev/projects/wrinkle-crm/",
-    "private": true
+    "private": true,
+    "orbitTier": "featured",
+    "orbitGroup": null,
+    "sortOrder": 20
   },
   {
     "id": "referral-tracker",
@@ -27,17 +33,49 @@
     "summary": "Referral tracking, PDF cards, session-state control, CSV sync; integrated in the multi-app platform.",
     "tech": ["Python", "Streamlit", "Pillow", "FPDF"],
     "writeUpUrl": "https://jeremyb.dev/projects/referral-tracker/",
-    "private": true
+    "private": true,
+    "orbitTier": "featured",
+    "orbitGroup": null,
+    "sortOrder": 30
   },
   {
-    "id": "agricultural",
-    "slug": "agricultural",
-    "sourceMarkdown": "projects/agricultural_forecasting.md",
-    "title": "Agricultural Forecasting Dashboard",
-    "summary": "Crop yield forecasting with regression, ARIMA, EDA, and Matplotlib visualizations.",
-    "tech": ["Python", "Pandas", "Scikit-Learn", "Statsmodels"],
-    "writeUpUrl": "https://jeremyb.dev/projects/agricultural/",
-    "private": false
+    "id": "likely-cause",
+    "slug": "likely-cause",
+    "sourceMarkdown": "projects/likely_cause.md",
+    "title": "Likely Cause — Dependency Health Dashboard",
+    "summary": "Mobile-first incident triage: custom health monitors, provider status, rule-based likely cause.",
+    "tech": ["Python", "FastAPI", "React Native", "Expo", "PostgreSQL", "Docker"],
+    "writeUpUrl": "https://github.com/JeremyB-py/health_check_app",
+    "private": true,
+    "orbitTier": "featured",
+    "orbitGroup": null,
+    "sortOrder": 40
+  },
+  {
+    "id": "clipspan",
+    "slug": "clipspan",
+    "sourceMarkdown": "projects/clipspan.md",
+    "title": "ClipSpan — Universal Clipboard Sync",
+    "summary": "Cross-device clipboard history and sync: Android keyboard, companion app, Linux daemon, QR pairing.",
+    "tech": ["Python", "FastAPI", "Kotlin", "Android", "Rust", "SQLite"],
+    "writeUpUrl": "https://github.com/JeremyB-py/clipspan",
+    "private": true,
+    "orbitTier": "featured",
+    "orbitGroup": null,
+    "sortOrder": 50
+  },
+  {
+    "id": "zap-contributions",
+    "slug": "zap-contributions",
+    "sourceMarkdown": "projects/zap_contributions.md",
+    "title": "Zap — Open Source Contributions",
+    "summary": "Merged PRs to zerx-lab/zap: BYOP agent tool execution, provider routing, Linux Settings paste.",
+    "tech": ["Rust", "Open Source", "BYOP AI"],
+    "writeUpUrl": "https://github.com/zerx-lab/zap",
+    "private": false,
+    "orbitTier": "outer",
+    "orbitGroup": null,
+    "sortOrder": 60
   },
   {
     "id": "claip",
@@ -47,7 +85,10 @@
     "summary": "Experimental AI evolution: knowledge bases, checkpointing, rollback, rule-based adaptation.",
     "tech": ["Python", "JSON", "Modular design"],
     "writeUpUrl": "https://jeremyb.dev/projects/claip/",
-    "private": false
+    "private": false,
+    "orbitTier": "archive",
+    "orbitGroup": "archive-lab",
+    "sortOrder": 90
   },
   {
     "id": "blockchain",
@@ -57,7 +98,23 @@
     "summary": "Proof-of-work, transaction pool, and node sync in Python.",
     "tech": ["Python", "Flask", "Hashlib"],
     "writeUpUrl": "https://jeremyb.dev/projects/blockchain/",
-    "private": true
+    "private": true,
+    "orbitTier": "archive",
+    "orbitGroup": "archive-lab",
+    "sortOrder": 100
+  },
+  {
+    "id": "agricultural",
+    "slug": "agricultural",
+    "sourceMarkdown": "projects/agricultural_forecasting.md",
+    "title": "Agricultural Forecasting Dashboard",
+    "summary": "Crop yield forecasting with regression, ARIMA, EDA, and Matplotlib visualizations.",
+    "tech": ["Python", "Pandas", "Scikit-Learn", "Statsmodels"],
+    "writeUpUrl": "https://jeremyb.dev/projects/agricultural/",
+    "private": false,
+    "orbitTier": "archive",
+    "orbitGroup": "archive-lab",
+    "sortOrder": 110
   },
   {
     "id": "powerbi",
@@ -67,6 +124,9 @@
     "summary": "Multi-page dashboard for donor, event, and volunteer metrics with scalable data model.",
     "tech": ["Power BI", "Power Query", "DAX"],
     "writeUpUrl": "https://jeremyb.dev/projects/powerbi/",
-    "private": false
+    "private": false,
+    "orbitTier": "archive",
+    "orbitGroup": "archive-lab",
+    "sortOrder": 120
   }
 ]

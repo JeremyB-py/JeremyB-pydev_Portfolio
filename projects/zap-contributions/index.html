@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Zap — Open Source Contributions · case study · jeremyb.dev portfolio" />
+  <link rel="canonical" href="https://jeremyb.dev/projects/zap-contributions/" />
+  <meta property="og:type" content="article" />
+  <meta property="og:locale" content="en_US" />
+  <meta property="og:url" content="https://jeremyb.dev/projects/zap-contributions/" />
+  <meta property="og:title" content="Zap — Open Source Contributions | Jeremy B." />
+  <meta property="og:description" content="Zap — Open Source Contributions · case study · jeremyb.dev portfolio" />
+  <meta property="og:image" content="https://jeremyb.dev/og-image.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="Zap — Open Source Contributions, case study preview" />
+  <!-- Open Graph: LinkedIn and others use these tags for link previews -->
+  <title>Zap — Open Source Contributions | Jeremy B.</title>
+  <script>(function(){try{var t=localStorage.getItem('portfolio-theme');if(t&&['nebula','matrix','terminal','paper'].indexOf(t)>=0)document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>
+  <link rel="stylesheet" href="/assets/site-shell.css" />
+  <link rel="stylesheet" href="/assets/project.css" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+</head>
+<body>
+  <canvas id="matrix-rain" aria-hidden="true"></canvas>
+  <div class="site-wrap">
+    <header class="site-header">
+        <div class="container site-header__inner">
+          <a class="site-logo" href="/#hero">JeremyB.py</a>
+          <button type="button" class="nav-toggle" id="nav-toggle" aria-expanded="false" aria-controls="site-nav">
+            Menu
+          </button>
+          <nav id="site-nav" class="site-nav" aria-label="Primary">
+            <a href="/#about">About</a>
+            <a href="/#map">Projects</a>
+            <a href="/#skills">Skills</a>
+            <a href="/#contact">Contact</a>
+          </nav>
+          <div class="site-header__actions">
+            <div class="social-links" aria-label="Social and resume">
+              <a
+                href="mailto:JeremyB.pydev@gmail.com"
+                title="Email"
+                aria-label="Email JeremyB.pydev@gmail.com"
+              >
+                <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                  <path
+                    d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"
+                  />
+                </svg>
+              </a>
+              <a
+                href="https://github.com/JeremyB-py"
+                target="_blank"
+                rel="noopener noreferrer"
+                title="GitHub"
+                aria-label="GitHub profile"
+              >
+                <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                  <path
+                    d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"
+                  />
+                </svg>
+              </a>
+              <a
+                href="https://www.linkedin.com/in/jeremyb-pydev/"
+                target="_blank"
+                rel="noopener noreferrer"
+                title="LinkedIn"
+                aria-label="LinkedIn profile"
+              >
+                <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                  <path
+                    d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"
+                  />
+                </svg>
+              </a>
+              <a
+                id="resume-link"
+                href="/docs/JeremyB_Resume.pdf"
+                target="_blank"
+                rel="noopener noreferrer"
+                title="Resume"
+                aria-label="Resume (PDF)"
+              >
+                <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                  <path
+                    d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"
+                  />
+                </svg>
+              </a>
+            </div>
+            <div
+              class="theme-switcher"
+              role="group"
+              aria-label="Visual theme"
+              title="Themes: deliberate UI exercise—same structure, different presentation."
+            >
+              <p class="theme-switcher__hint">
+                Themes: deliberate UI exercise—same structure, different presentation.
+              </p>
+              <div class="theme-buttons" id="theme-buttons"></div>
+            </div>
+          </div>
+        </div>
+      </header>
+    <main class="project-content">
+      <p class="project-back-row">
+        <a href="/">← Back to portfolio</a>
+      </p>
+    <section class="section">
+<h1>Zap — Open Source Contributions</h1>
+<p>Contributions to <strong><a href="https://github.com/zerx-lab/zap">Zap</a></strong> — an open, local-first terminal with first-class AI and agent support (Rust, forked from Warp). Zap emphasizes privacy defaults: no mandatory cloud, bring-your-own-provider (BYOP) AI keys, and third-party CLI agents wired into Blocks.</p>
+<p>These three merged pull requests (July 2026) focus on making <strong>BYOP Agent Mode</strong> reliable on Linux with local and third-party AI providers.</p>
+<hr>
+</section>
+<section class="section">
+<h2>Overview</h2>
+<p>Zap&#39;s BYOP path lets users plug in any OpenAI-compatible endpoint plus native OpenAI, Anthropic, Gemini, DeepSeek, and Ollama protocols. Agent Mode sends tools to the model and executes shell commands when the model requests them.</p>
+<p>Before these fixes, local models (Ollama <code>llama3.1</code>, etc.) often returned tool-shaped JSON in assistant text instead of native <code>tool_calls</code> stream events — Zap displayed the JSON but did not execute commands. Provider routing also sent gpt-5.x models to the wrong API endpoint, and Linux Settings lacked paste support for configuring API keys.</p>
+<hr>
+</section>
+<section class="section">
+<h2>Merged Pull Requests</h2>
+<table>
+<thead>
+<tr>
+<th>PR</th>
+<th>Issue</th>
+<th>Title</th>
+<th>Impact</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><a href="https://github.com/zerx-lab/zap/pull/305">#305</a></td>
+<td><a href="https://github.com/zerx-lab/zap/issues/300">#300</a></td>
+<td>BYOP Agent Tool Execution Fix</td>
+<td>Parse tool-shaped JSON from assistant text when native <code>tool_calls</code> missing; execute shell tools; preserve structured tool history for multi-turn follow-ups</td>
+</tr>
+<tr>
+<td><a href="https://github.com/zerx-lab/zap/pull/306">#306</a></td>
+<td><a href="https://github.com/zerx-lab/zap/issues/302">#302</a></td>
+<td>BYOP Provider Routing Fix</td>
+<td>Auto-route OpenAI gpt-5.x to Responses API; normalize Anthropic/Ollama base URLs; fix 404 on <code>/v1/api/chat</code></td>
+</tr>
+<tr>
+<td><a href="https://github.com/zerx-lab/zap/pull/307">#307</a></td>
+<td><a href="https://github.com/zerx-lab/zap/issues/303">#303</a></td>
+<td>Linux Settings Paste Fix</td>
+<td>Ctrl+V paste and context-menu Cut/Copy/Paste in Settings text fields</td>
+</tr>
+</tbody></table>
+<hr>
+</section>
+<section class="section">
+<h2>PR #305 — BYOP Agent Tool Execution</h2>
+<p><strong>Problem:</strong> Local BYOP providers respond to agent prompts but often do not emit native <code>message.tool_calls</code> stream events. Models emit tool-shaped JSON in assistant <code>content</code> instead — displayed but not executed. Multi-turn follow-ups could not use prior command output.</p>
+<p><strong>Changes:</strong></p>
+<ul>
+<li>New <code>content_tool_calls.rs</code>: parse tool-shaped JSON from assistant text when native stream events are absent</li>
+<li>Wire extraction into <code>generate_byop_output</code> after stream end when <code>tool_bufs</code> is empty</li>
+<li>Remap common local-model mistakes to <code>run_shell_command</code></li>
+<li>Ollama outbound history: skip tool-shaped JSON blobs only when structured <code>ToolCall</code> messages already exist</li>
+<li>New <code>local.j2</code> system prompt template (~500B vs ~9k default) for Ollama via <code>pick_template</code></li>
+<li>Unit tests for Qwen/Llama/Gemma-style JSON-in-text patterns</li>
+</ul>
+<p><strong>Stats:</strong> +841 / −40 lines · 8 files · 5 commits</p>
+<hr>
+</section>
+<section class="section">
+<h2>PR #306 — BYOP Provider Routing</h2>
+<p><strong>Problem:</strong> Agent Mode requests with tools failed with HTTP 400/404 on wrong endpoints — gpt-5.x hitting <code>/v1/chat/completions</code>, Ollama hitting <code>/v1/api/chat</code>, Anthropic double <code>/messages/messages</code>.</p>
+<p><strong>Changes:</strong></p>
+<ul>
+<li><code>effective_adapter_kind_for</code>: resolve genai adapter from <code>api_type</code>, model id, and <code>base_url</code></li>
+<li>Auto-upgrade <code>OpenAi</code> + gpt-5* / codex / pro → <code>OpenAIResp</code> for <code>/v1/responses</code></li>
+<li><code>normalize_endpoint_url</code>: strip trailing <code>/messages</code> on Anthropic; strip erroneous <code>/v1/</code> on Ollama</li>
+<li>Fix Ollama default <code>base_url</code> from <code>http://localhost:11434/v1/</code> to <code>http://localhost:11434/</code></li>
+<li>Unit tests in <code>adapter_routing_tests</code></li>
+</ul>
+<p><strong>Stats:</strong> +285 / −20 lines · 3 files · stacked on #305</p>
+<hr>
+</section>
+<section class="section">
+<h2>PR #307 — Linux Settings Paste</h2>
+<p><strong>Problem:</strong> Settings view text editor on Linux did not support Ctrl+V paste or context-menu Cut/Copy/Paste — difficult to configure BYOP API keys and base URLs.</p>
+<p><strong>Changes:</strong></p>
+<ul>
+<li>Ctrl+V paste keybinding on Linux in <code>app/src/editor/view/mod.rs</code></li>
+<li>Cut, Copy, Paste context menu in <code>app/src/settings_view/mod.rs</code> (dynamic based on selection/editability)</li>
+</ul>
+<p><strong>Stats:</strong> +149 / −12 lines · 2 files</p>
+<hr>
+</section>
+<section class="section">
+<h2>Tech Stack</h2>
+<ul>
+<li><strong>Language:</strong> Rust (95% of Zap codebase)</li>
+<li><strong>Area touched:</strong> <code>app/src/ai/agent_providers/</code> (chat stream, content tool extraction, prompt renderer, adapter routing), settings editor UI</li>
+<li><strong>Testing:</strong> <code>cargo test -p warp content_tool_calls</code>, <code>adapter_routing_tests</code>, <code>./script/presubmit</code>; manual Ollama + OpenAI BYOP validation on Linux</li>
+</ul>
+<hr>
+</section>
+<section class="section">
+<h2>Highlights</h2>
+<ul>
+<li>End-to-end BYOP Agent Mode fix across three stacked PRs merged in one release cycle.</li>
+<li>Stream parsing and multi-turn tool history retention for local models that don&#39;t speak native tool_calls.</li>
+<li>Provider adapter routing hardening for OpenAI Responses API, Anthropic Messages API, and Ollama native API.</li>
+<li>Practical Linux UX fix unblocking API key configuration.</li>
+</ul>
+<hr>
+</section>
+<section class="section">
+<h2>Repository</h2>
+<p>Public: <a href="https://github.com/zerx-lab/zap">github.com/zerx-lab/zap</a></p>
+<p>Portfolio case study: <a href="https://jeremyb.dev/projects/zap-contributions/">jeremyb.dev/projects/zap-contributions/</a></p>
+<hr>
+</section>
+<section class="section">
+<h2>Skills Demonstrated</h2>
+<ul>
+<li>Rust debugging in a large production codebase (AI agent providers, stream handling)</li>
+<li>BYOP / local LLM integration patterns (JSON-in-text tool extraction vs native tool_calls)</li>
+<li>Multi-provider API routing (OpenAI Responses, Anthropic Messages, Ollama)</li>
+<li>Unit and smoke test authoring in Rust</li>
+<li>Open-source contribution workflow (issue-linked PRs, changelog entries, presubmit)</li>
+</ul>
+<hr>
+</section>
+    </main>
+  </div>
+  <script type="module" src="/assets/site-shell.js"></script>
+  <script type="module" src="/assets/project-reveal.js"></script>
+</body>
+</html>

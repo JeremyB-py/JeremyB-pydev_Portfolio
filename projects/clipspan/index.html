@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="ClipSpan — Universal Clipboard Sync · case study · jeremyb.dev portfolio" />
+  <link rel="canonical" href="https://jeremyb.dev/projects/clipspan/" />
+  <meta property="og:type" content="article" />
+  <meta property="og:locale" content="en_US" />
+  <meta property="og:url" content="https://jeremyb.dev/projects/clipspan/" />
+  <meta property="og:title" content="ClipSpan — Universal Clipboard Sync | Jeremy B." />
+  <meta property="og:description" content="ClipSpan — Universal Clipboard Sync · case study · jeremyb.dev portfolio" />
+  <meta property="og:image" content="https://jeremyb.dev/og-image.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="ClipSpan — Universal Clipboard Sync, case study preview" />
+  <!-- Open Graph: LinkedIn and others use these tags for link previews -->
+  <title>ClipSpan — Universal Clipboard Sync | Jeremy B.</title>
+  <script>(function(){try{var t=localStorage.getItem('portfolio-theme');if(t&&['nebula','matrix','terminal','paper'].indexOf(t)>=0)document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>
+  <link rel="stylesheet" href="/assets/site-shell.css" />
+  <link rel="stylesheet" href="/assets/project.css" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+</head>
+<body>
+  <canvas id="matrix-rain" aria-hidden="true"></canvas>
+  <div class="site-wrap">
+    <header class="site-header">
+        <div class="container site-header__inner">
+          <a class="site-logo" href="/#hero">JeremyB.py</a>
+          <button type="button" class="nav-toggle" id="nav-toggle" aria-expanded="false" aria-controls="site-nav">
+            Menu
+          </button>
+          <nav id="site-nav" class="site-nav" aria-label="Primary">
+            <a href="/#about">About</a>
+            <a href="/#map">Projects</a>
+            <a href="/#skills">Skills</a>
+            <a href="/#contact">Contact</a>
+          </nav>
+          <div class="site-header__actions">
+            <div class="social-links" aria-label="Social and resume">
+              <a
+                href="mailto:JeremyB.pydev@gmail.com"
+                title="Email"
+                aria-label="Email JeremyB.pydev@gmail.com"
+              >
+                <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                  <path
+                    d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"
+                  />
+                </svg>
+              </a>
+              <a
+                href="https://github.com/JeremyB-py"
+                target="_blank"
+                rel="noopener noreferrer"
+                title="GitHub"
+                aria-label="GitHub profile"
+              >
+                <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                  <path
+                    d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"
+                  />
+                </svg>
+              </a>
+              <a
+                href="https://www.linkedin.com/in/jeremyb-pydev/"
+                target="_blank"
+                rel="noopener noreferrer"
+                title="LinkedIn"
+                aria-label="LinkedIn profile"
+              >
+                <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                  <path
+                    d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"
+                  />
+                </svg>
+              </a>
+              <a
+                id="resume-link"
+                href="/docs/JeremyB_Resume.pdf"
+                target="_blank"
+                rel="noopener noreferrer"
+                title="Resume"
+                aria-label="Resume (PDF)"
+              >
+                <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                  <path
+                    d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"
+                  />
+                </svg>
+              </a>
+            </div>
+            <div
+              class="theme-switcher"
+              role="group"
+              aria-label="Visual theme"
+              title="Themes: deliberate UI exercise—same structure, different presentation."
+            >
+              <p class="theme-switcher__hint">
+                Themes: deliberate UI exercise—same structure, different presentation.
+              </p>
+              <div class="theme-buttons" id="theme-buttons"></div>
+            </div>
+          </div>
+        </div>
+      </header>
+    <main class="project-content">
+      <p class="project-back-row">
+        <a href="/">← Back to portfolio</a>
+      </p>
+    <section class="section">
+<h1>ClipSpan — Universal Clipboard Sync</h1>
+<p><strong>ClipSpan</strong> is a cross-platform clipboard history and sync system. The goal: copy or select content on Android and paste it on a Linux desktop (and vice versa), with searchable history across devices — without root access or unsafe permission workarounds.</p>
+<p><strong>Status:</strong> v0.8.x — QR pairing, offline-resilient history, ClipSpan Keyboard with toolbar send/paste. Android ↔ Ubuntu/Linux first; Windows and macOS planned.</p>
+<hr>
+</section>
+<section class="section">
+<h2>Overview</h2>
+<p>ClipSpan treats clipboard data as <strong>sensitive by default</strong> (passwords, tokens, addresses, code snippets). The first version establishes explicit, user-controlled sync before automatic behavior:</p>
+<ul>
+<li>Android <strong>Send to Desktop</strong> (selection action, share target, keyboard toolbar)</li>
+<li>Android <strong>Paste from Desktop</strong> (keyboard toolbar, history panel)</li>
+<li>Linux daemon <strong>Send to Android</strong> (tray action)</li>
+<li>Searchable cross-device history with clear delete controls</li>
+</ul>
+<p>Long-term north star: frictionless install, pair, and daily paste — but privacy and user control come first.</p>
+<hr>
+</section>
+<section class="section">
+<h2>Architecture Highlights</h2>
+<h3>Modular Layers</h3>
+<pre><code class="language-text">User interface layer
+Clipboard access layer
+Sync protocol layer
+Transport layer
+Storage/history layer
+Pairing/security layer
+Platform adapter layer
+</code></pre>
+<p>Each layer is decoupled so the Android keyboard, companion app, Linux daemon, and future Windows/macOS clients can evolve independently.</p>
+<h3>Android (Gradle Multi-Module)</h3>
+<ul>
+<li><code>sync-core/</code> — HTTP clients, protocol, Room history, sync coordinator</li>
+<li><code>sync-ime-bridge/</code> — fork-agnostic IME toolbar (push/pull/history, password guard)</li>
+<li><code>companion-app/</code> — settings UI, share targets, history, Connect screen with QR scan</li>
+<li><code>keyboard/</code> — <strong>ClipSpan Keyboard</strong> (FlorisBoard fork) with ClipSpan toolbar and embedded history grid</li>
+</ul>
+<h3>Linux Daemon (FastAPI)</h3>
+<ul>
+<li>Receives authenticated clipboard pushes; writes to system clipboard via Wayland (<code>wl-copy</code>) or X11 (<code>xclip</code>)</li>
+<li>SQLite local history; QR pairing API with per-peer sync tokens and device roster</li>
+<li>Pairing QR uses minimal token URL (<code>/p?t=…</code>); mDNS discovery optional</li>
+</ul>
+<h3>Phase 7.5 — Offline-Resilient History</h3>
+<ul>
+<li>Merge-only history sync: local Room cache never wiped when desktop is unreachable</li>
+<li>Offline paste fallback from last-pulled hash or most recent saved history</li>
+<li><code>recordLocalCapture()</code> while companion or keyboard is active</li>
+<li>Pending push flush on reconnect via <code>ConnectionHealthWorker</code></li>
+</ul>
+<hr>
+</section>
+<section class="section">
+<h2>Key Features</h2>
+<table>
+<thead>
+<tr>
+<th>Category</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>Cross-Device Sync</code></td>
+<td>Authenticated push/pull over LAN; bearer-token per paired device; cleartext HTTP acceptable for LAN MVP only.</td>
+</tr>
+<tr>
+<td><code>QR Pairing</code></td>
+<td>CameraX + ML Kit scan from companion app; manual IP/token fallback; desktop <code>/pair</code> confirm page.</td>
+</tr>
+<tr>
+<td><code>ClipSpan Keyboard</code></td>
+<td>FlorisBoard-based IME with Send Clip, Paste, and 3-column scrollable history below toolbar; connection indicator (desktop monitor icon).</td>
+</tr>
+<tr>
+<td><code>Companion App</code></td>
+<td>Connect screen, history list, share targets, desktop settings provider; ClipSpan Nebula Material3 theme.</td>
+</tr>
+<tr>
+<td><code>Linux Daemon</code></td>
+<td>FastAPI endpoints for health, status, pair session, push/pull, history; config at <code>~/.config/clipspan/daemon.json</code>.</td>
+</tr>
+<tr>
+<td><code>History Model</code></td>
+<td>Room DB with <code>syncStatus</code> (<code>local_only</code> | <code>synced</code>); display order <code>created_at DESC</code>; password-field guard on sync.</td>
+</tr>
+<tr>
+<td><code>Dev Workflow</code></td>
+<td><code>./scripts/install-android-debug.sh</code> — one-command debug build + adb install for companion + keyboard.</td>
+</tr>
+</tbody></table>
+<hr>
+</section>
+<section class="section">
+<h2>Tech Stack</h2>
+<ul>
+<li><strong>Android:</strong> Kotlin · Gradle · Room · CameraX · ML Kit · FlorisBoard fork · Rust (native keyboard lib)</li>
+<li><strong>Linux:</strong> Python 3.12+ · FastAPI · SQLite · wl-clipboard / xclip</li>
+<li><strong>Protocol:</strong> JSON message schemas (<code>pair_bootstrap</code>, <code>pair_request</code>, <code>device_credential.v1</code>, sync payloads)</li>
+<li><strong>Tooling:</strong> pytest · ADR-documented phases · <code>./scripts/run-linux-daemon.sh</code></li>
+</ul>
+<hr>
+</section>
+<section class="section">
+<h2>Highlights</h2>
+<ul>
+<li>User-visible control first — manual send/paste validates protocol before automatic sync.</li>
+<li>Modular architecture ready for Windows service and future macOS client.</li>
+<li>FlorisBoard keyboard integration with dual-clipboard policy (ClipSpan history vs Floris local panel).</li>
+<li>QR pairing + mDNS discovery reduce setup friction on the same LAN.</li>
+<li>Offline-resilient history: copies on Android while disconnected still appear locally and sync when reconnected.</li>
+</ul>
+<hr>
+</section>
+<section class="section">
+<h2>Repository</h2>
+<p>The codebase is private. This page summarizes the architecture and shipped features.</p>
+<p>Portfolio case study: <a href="https://jeremyb.dev/projects/clipspan/">jeremyb.dev/projects/clipspan/</a></p>
+<hr>
+</section>
+<section class="section">
+<h2>Skills Demonstrated</h2>
+<ul>
+<li>Cross-platform system design (Android IME + Linux daemon + shared protocol)</li>
+<li>Android multi-module Gradle project with composite keyboard build (Kotlin + Rust NDK)</li>
+<li>FastAPI service design with pairing security and device roster management</li>
+<li>Offline-first sync semantics (merge-only reconcile, pending push flush)</li>
+<li>FlorisBoard fork maintenance and IME toolbar integration</li>
+<li>ADR-driven phased delivery (Phases 0–7.5 documented)</li>
+<li>Wayland/X11 clipboard integration on Linux</li>
+</ul>
+<hr>
+</section>
+<section class="section">
+<h2>Next Steps</h2>
+<ul>
+<li>Windows desktop client/service</li>
+<li>Optional ClipSpan account for credential sync across devices</li>
+<li>Automatic sync mode (user opt-in) after manual flow is proven reliable</li>
+<li>macOS client (Phase 3)</li>
+</ul>
+<hr>
+</section>
+    </main>
+  </div>
+  <script type="module" src="/assets/site-shell.js"></script>
+  <script type="module" src="/assets/project-reveal.js"></script>
+</body>
+</html>
