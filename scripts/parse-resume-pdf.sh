@@ -1,17 +1,31 @@
 #!/usr/bin/env bash
 # Extract resume text from PDF into docs/JeremyB_Resume.md (keeps PDF out of chat context).
+# Skips overwrite when JeremyB_Resume.md is newer than the PDF unless --force is passed.
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 DOCS="$ROOT/docs"
 DEFAULT_PDF="$DOCS/JeremyB_Resume26.7.10.pdf"
 OUT="$DOCS/JeremyB_Resume.md"
+FORCE=false
+
+if [[ "${1:-}" == "--force" ]]; then
+  FORCE=true
+  shift
+fi
 
 PDF="${1:-$DEFAULT_PDF}"
 
 if [[ ! -f "$PDF" ]]; then
   echo "error: PDF not found: $PDF" >&2
   exit 1
+fi
+
+if [[ -f "$OUT" && "$FORCE" != true ]]; then
+  if [[ "$OUT" -nt "$PDF" ]]; then
+    echo "skip: $OUT is newer than $PDF (use --force to overwrite from PDF)" >&2
+    exit 0
+  fi
 fi
 
 if ! command -v pdftotext >/dev/null 2>&1; then
@@ -25,7 +39,7 @@ trap 'rm -f "$TMP"' EXIT
 pdftotext -layout "$PDF" "$TMP"
 
 {
-  printf '%s\n' "<!-- Generated from $(basename "$PDF") via scripts/parse-resume-pdf.sh; do not hand-edit without updating the PDF. -->"
+  printf '%s\n' "<!-- Generated from $(basename "$PDF") via scripts/parse-resume-pdf.sh on $(date -u +%Y-%m-%d). Edit MD or PDF; whichever is updated most recently is canonical until you sync the other. Re-run with --force to refresh MD from PDF. -->"
   printf '\n'
   sed -e 's/\f$//' -e 's/[[:space:]]*$//' "$TMP" | awk 'NF || blank++ < 2 { if (NF) blank=0; print }'
 } > "$OUT"
