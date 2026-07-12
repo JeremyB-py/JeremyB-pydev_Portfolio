@@ -1182,13 +1182,13 @@ export function initConstellation(
       const showLabel = !isArchiveMoon || isHi || showArchiveSpotlight;
 
       if (showLabel) {
+        const idleLabelAlpha =
+          s.tier === 'outer' || s.tier === 'archive' ? 0.18 : 0.22;
         const labelAlpha = isHi
           ? 1
           : isArchiveMoon
-            ? archiveSpotFade * 0.92
-            : s.tier === 'outer'
-              ? 0.18
-              : 0.22;
+            ? archiveSpotFade * idleLabelAlpha
+            : idleLabelAlpha;
         c.globalAlpha = isPaper
           ? 0.88
           : isMatrix
