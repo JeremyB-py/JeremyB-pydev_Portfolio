@@ -57,7 +57,7 @@
     "sourceMarkdown": "projects/clipspan.md",
     "title": "ClipSpan: Universal Clipboard Sync",
     "summary": "Cross-device clipboard history and sync: Android keyboard, companion app, Linux daemon, QR pairing.",
-    "tech": ["Python", "FastAPI", "Kotlin", "Android", "Rust", "SQLite"],
+    "tech": ["Python", "FastAPI", "Android", "SQLite", "Linux"],
     "writeUpUrl": "https://github.com/JeremyB-py/clipspan",
     "private": true,
     "orbitTier": "featured",
