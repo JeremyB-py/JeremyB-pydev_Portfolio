@@ -5,7 +5,7 @@ set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 DOCS="$ROOT/docs"
-DEFAULT_PDF="$DOCS/JeremyB_Resume26.7.10.pdf"
+DEFAULT_PDF="$DOCS/JeremyB_Resume26.8.2.pdf"
 OUT="$DOCS/JeremyB_Resume.md"
 FORCE=false
 

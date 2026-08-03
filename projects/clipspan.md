@@ -1,21 +1,23 @@
 # ClipSpan : Universal Clipboard Sync
 
-**ClipSpan** is a cross-platform clipboard history and sync system. The goal: copy or select content on Android and paste it on a Linux desktop (and vice versa), with searchable history across devices : without root access or unsafe permission workarounds.
+**ClipSpan** is a cross-platform clipboard history and sync system. The goal: copy or select content on Android and paste it on a Linux or Windows desktop (and vice versa), with searchable history across devices — without root access or unsafe permission workarounds.
 
-**Status:** v0.8.x : QR pairing, offline-resilient history, ClipSpan Keyboard with toolbar send/paste. Android ↔ Ubuntu/Linux first; Windows and macOS planned.
+**Status:** v0.14.x : Rust/Tauri desktop (Linux + Windows), docked history picker, ClipSpan Keyboard, image/blob sync, offline-resilient history, optional end-to-end encrypted account + relay. Early testing signup at [clipspan.com](https://clipspan.com/). macOS planned.
 
 ---
 
 ## Overview
 
-ClipSpan treats clipboard data as **sensitive by default** (passwords, tokens, addresses, code snippets). The first version establishes explicit, user-controlled sync before automatic behavior:
+ClipSpan treats clipboard data as **sensitive by default** (passwords, tokens, addresses, code snippets). Local-only LAN pairing remains the default. Explicit user-controlled send/paste validates the protocol first; opt-in automatic sync and optional account/relay paths layer on after that.
 
-- Android **Send to Desktop** (selection action, share target, keyboard toolbar)
-- Android **Paste from Desktop** (keyboard toolbar, history panel)
-- Linux daemon **Send to Android** (tray action)
-- Searchable cross-device history with clear delete controls
+Daily flows:
 
-Long-term north star: frictionless install, pair, and daily paste : but privacy and user control come first.
+- Android **Send Clip** (selection action, share target, keyboard toolbar)
+- Android **Paste** from history / desktop (keyboard toolbar, companion history)
+- Desktop tray **Send Clip**, hotkey history picker, paste-into-focused-app
+- Searchable cross-device history with hide, recycle bin, undo, and clear controls
+
+Long-term north star: frictionless install, pair, and daily paste — but privacy and user control come first.
 
 ---
 
@@ -33,27 +35,34 @@ Pairing/security layer
 Platform adapter layer
 ```
 
-Each layer is decoupled so the Android keyboard, companion app, Linux daemon, and future Windows/macOS clients can evolve independently.
+Each layer is decoupled so the Android keyboard, companion app, Linux/Windows desktop client, and future macOS client can evolve independently.
 
 ### Android (Gradle Multi-Module)
 
-- `sync-core/` : HTTP clients, protocol, Room history, sync coordinator
+- `sync-core/` : HTTP clients, protocol, Room history, sync coordinator, account client
 - `sync-ime-bridge/` : fork-agnostic IME toolbar (push/pull/history, password guard)
-- `companion-app/` : settings UI, share targets, history, Connect screen with QR scan
-- `keyboard/` : **ClipSpan Keyboard** (FlorisBoard fork) with ClipSpan toolbar and embedded history grid
+- `companion-app/` : Connect/QR pairing, history, settings, Account screen, share targets
+- `keyboard/` : **ClipSpan Keyboard** (FlorisBoard fork) with toolbar + history grid
+- Shared history via `HistoryContentProvider` so companion and keyboard use one Room DB when companion is installed
 
-### Linux Daemon (FastAPI)
+### Desktop (Rust + Tauri 2 + Svelte)
 
-- Receives authenticated clipboard pushes; writes to system clipboard via Wayland (`wl-copy`) or X11 (`xclip`)
-- SQLite local history; QR pairing API with per-peer sync tokens and device roster
-- Pairing QR uses minimal token URL (`/p?t=…`); mDNS discovery optional
+- Shared Linux/Windows client: `clipspan-core` (axum HTTP hub, SQLite, QR pairing, mDNS), `clipspan-clipboard` adapters, Tauri tray UI
+- Docked history picker (edge bar, opacity, hotkey toggle); paste selected item into the focused app
+- Native in-process X11/XWayland clipboard watching; Wayland falls back to `wl-paste` / watch; Windows clipboard adapters
+- Headless `clipspan-daemon` still available for CI or no-GUI hosts (legacy Python FastAPI daemon superseded for daily use)
 
-### Phase 7.5 : Offline-Resilient History
+### Account + Relay (optional, self-hostable)
 
-- Merge-only history sync: local Room cache never wiped when desktop is unreachable
-- Offline paste fallback from last-pulled hash or most recent saved history
-- `recordLocalCapture()` while companion or keyboard is active
-- Pending push flush on reconnect via `ConnectionHealthWorker`
+- Rust/Axum `account-api` + `relay` with PostgreSQL path; email/password MVP
+- End-to-end credential vault and opaque relay mailbox/blobs (HPKE-sealed payloads; servers store ciphertext)
+- Trusted-device sliding sessions, device rename/revoke/unrevoke, history backup/restore, soft-delete with delayed hard purge
+
+### Offline-Resilient History
+
+- Merge-only history sync: local Room / SQLite cache never wiped when peers are unreachable
+- Offline paste fallback, local image capture, pending push flush on reconnect
+- Per-device hide registry, recycle bin retention, and vault plaintext that preserves hidden state across restore
 
 ---
 
@@ -61,38 +70,41 @@ Each layer is decoupled so the Android keyboard, companion app, Linux daemon, an
 
 | Category | Description |
 |----------|-------------|
-| `Cross-Device Sync` | Authenticated push/pull over LAN; bearer-token per paired device; cleartext HTTP acceptable for LAN MVP only. |
-| `QR Pairing` | CameraX + ML Kit scan from companion app; manual IP/token fallback; desktop `/pair` confirm page. |
-| `ClipSpan Keyboard` | FlorisBoard-based IME with Send Clip, Paste, and 3-column scrollable history below toolbar; connection indicator (desktop monitor icon). |
-| `Companion App` | Connect screen, history list, share targets, desktop settings provider; ClipSpan Nebula Material3 theme. |
-| `Linux Daemon` | FastAPI endpoints for health, status, pair session, push/pull, history; config at `~/.config/clipspan/daemon.json`. |
-| `History Model` | Room DB with `syncStatus` (`local_only` \| `synced`); display order `created_at DESC`; password-field guard on sync. |
-| `Dev Workflow` | `./scripts/install-android-debug.sh` : one-command debug build + adb install for companion + keyboard. |
+| `Cross-Device Sync` | Authenticated LAN push/pull; bearer-token per paired device; image/blob transfer with size/MIME policy. |
+| `QR Pairing` | CameraX + ML Kit scan from companion; in-app Accept on desktop; manual IP/token fallback. |
+| `History Picker` | Hotkey-summoned translucent docked bar; dock edge/opacity settings; paste into focused app (SSH/terminal-friendly). |
+| `ClipSpan Keyboard` | FlorisBoard-based IME with Send Clip, Paste, scrollable history, connection indicator; sync disabled in password fields. |
+| `Companion App` | Connect, history, Hidden items, Account, share targets; ClipSpan Nebula Material3 theme. |
+| `Desktop Client` | Tray app for Linux/Windows; Status/Settings/Pairing/Account; Start at login; Wayland portal or GNOME shortcut setup. |
+| `Optional Account` | E2E vault + relay for off-LAN delivery; trusted devices; device roster; recovery key; history backup/restore. |
+| `History UX` | Hide with undo, recycle bin, clear-all policy, offline catch-up, viewer-scoped hidden state across devices. |
+| `Dev Workflow` | `./scripts/install-android-debug.sh`, `./scripts/build-desktop.sh`, `./scripts/run-server.sh` for local account-api/relay. |
 
 ---
 
 ## Tech Stack
 
-- **Android:** Kotlin · Gradle · Room · CameraX · ML Kit · FlorisBoard fork · Rust (native keyboard lib)
-- **Linux:** Python 3.12+ · FastAPI · SQLite · wl-clipboard / xclip
-- **Protocol:** JSON message schemas (`pair_bootstrap`, `pair_request`, `device_credential.v1`, sync payloads)
-- **Tooling:** pytest · ADR-documented phases · `./scripts/run-linux-daemon.sh`
+- **Android:** Kotlin · Gradle · Room · CameraX · ML Kit · FlorisBoard fork · OkHttp · Rust (native keyboard lib)
+- **Desktop:** Rust · Tauri 2 · Svelte · axum · SQLite · wl-clipboard / xclip / native X11 backend
+- **Server (optional):** Rust · Axum · PostgreSQL · HPKE / Argon2id / ChaCha20-Poly1305 vault crypto
+- **Protocol:** Versioned JSON schemas (`pair_bootstrap`, `device_credential.v1`, CLIPBOARD_PUSH / LATEST, vault plaintext v1–v3)
+- **Tooling:** pytest · cargo test · ADR-documented phases · CHANGELOG-driven version sync
 
 ---
 
 ## Highlights
 
-- User-visible control first : manual send/paste validates protocol before automatic sync.
-- Modular architecture ready for Windows service and future macOS client.
-- FlorisBoard keyboard integration with dual-clipboard policy (ClipSpan history vs Floris local panel).
-- QR pairing + mDNS discovery reduce setup friction on the same LAN.
-- Offline-resilient history: copies on Android while disconnected still appear locally and sync when reconnected.
+- User-visible control first: manual Send Clip / Paste validates the protocol before automatic sync.
+- Local-first by default; account and relay are opt-in and end-to-end encrypted on the cloud path.
+- Docked desktop history picker and ClipSpan Keyboard keep history next to where you type or paste.
+- Offline-resilient history and reconnect flush so copies made away from the hub still converge.
+- Modular clients: Android IME, companion, and Rust desktop share one protocol without a monolith UI.
 
 ---
 
 ## Repository
 
-The codebase is private. This page summarizes the architecture and shipped features.
+The application codebase is private. Public marketing site: [clipspan.com](https://clipspan.com/) (early testing waitlist).
 
 Portfolio case study: [jeremyb.dev/projects/clipspan/](https://jeremyb.dev/projects/clipspan/)
 
@@ -100,21 +112,22 @@ Portfolio case study: [jeremyb.dev/projects/clipspan/](https://jeremyb.dev/proje
 
 ## Skills Demonstrated
 
-- Cross-platform system design (Android IME + Linux daemon + shared protocol)
+- Cross-platform system design (Android IME + Rust desktop + shared sync protocol)
 - Android multi-module Gradle project with composite keyboard build (Kotlin + Rust NDK)
-- FastAPI service design with pairing security and device roster management
-- Offline-first sync semantics (merge-only reconcile, pending push flush)
+- Rust/Tauri desktop engineering (clipboard backends, Wayland shortcuts, docked overlay UX)
+- Self-hostable account/relay services with E2E vault and device-bound sessions
+- Offline-first sync semantics (merge-only reconcile, pending push flush, blob lifecycle)
 - FlorisBoard fork maintenance and IME toolbar integration
-- ADR-driven phased delivery (Phases 0–7.5 documented)
-- Wayland/X11 clipboard integration on Linux
+- ADR-driven phased delivery through account sync and history UX hardening
+- Privacy-first product defaults (local-only LAN, password-field guard, ciphertext-only relay)
 
 ---
 
 ## Next Steps
 
-- Windows desktop client/service
-- Optional ClipSpan account for credential sync across devices
-- Automatic sync mode (user opt-in) after manual flow is proven reliable
-- macOS client (Phase 3)
+- Phase 12: WebSockets / production peer push and packaging polish
+- Phase 13: frictionless install/setup, brand polish, plain-language history terms
+- macOS client
+- Broader early testing via [clipspan.com](https://clipspan.com/) waitlist
 
 ---

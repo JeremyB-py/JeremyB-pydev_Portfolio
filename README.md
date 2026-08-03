@@ -47,11 +47,11 @@ Write-up Link: [Likely Cause Showcase](https://github.com/JeremyB-py/JeremyB-pyd
 ---
 
 ### ClipSpan: Universal Clipboard Sync
-> Cross-device clipboard history and sync between Android and Linux: companion app, FlorisBoard-based keyboard, Linux daemon, QR pairing, and offline-resilient history.
+> Cross-device clipboard history and sync for Android, Linux, and Windows: companion app, ClipSpan Keyboard, Rust/Tauri desktop with docked history picker, QR pairing, and optional E2E account sync.
 
-- **Tech:** Python · FastAPI · Kotlin · Android · Rust · SQLite  
-- **Highlights:** Modular sync protocol; explicit user-controlled send/paste; QR pairing + mDNS discovery; ClipSpan Keyboard with toolbar history; Phase 7.5 offline merge-only sync (v0.8.x)  
-- *(Private repository)*  
+- **Tech:** Kotlin · Android · Rust · Tauri · Svelte · Axum · SQLite
+- **Highlights:** Modular sync protocol; explicit Send Clip / Paste; QR pairing; ClipSpan Keyboard; docked desktop history picker; image/blob sync; offline-resilient history; optional E2E account + relay (v0.14.x)
+- *(Private repository)* · Site: [clipspan.com](https://clipspan.com/)
 
 Write-up Link: [ClipSpan Showcase](https://github.com/JeremyB-py/JeremyB-pydev_Portfolio/blob/main/projects/clipspan.md)
 
