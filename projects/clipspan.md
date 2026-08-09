@@ -29,16 +29,9 @@ Desktop and Android histories staying in sync — the product story in one frame
 
 ![ClipSpan desktop syncing with Android history](../media/clipspan/hero-sync.png)
 
-<div class="media-pair">
-  <figure>
-    <img src="../media/clipspan/ubuntu-history-screenshot-left.png" alt="ClipSpan desktop app with left-docked history picker open on Linux" />
-    <figcaption>Desktop: main window and left-docked history picker</figcaption>
-  </figure>
-  <figure class="media-pair__phone">
-    <img src="../media/clipspan/android-history-screenshot-full1.png" alt="ClipSpan Android companion history screen" />
-    <figcaption>Android: companion history viewer</figcaption>
-  </figure>
-</div>
+Desktop history picker docked at the top of the screen (hotkey paste into the focused app):
+
+![ClipSpan desktop with top-docked history picker](../media/clipspan/ubuntu-history-screenshot-top.png)
 
 ---
 
