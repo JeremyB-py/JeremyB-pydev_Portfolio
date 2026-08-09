@@ -14,6 +14,9 @@ interface ProjectJson {
   summary: string;
   tech: string[];
   writeUpUrl: string;
+  /** Optional product / marketing site (shown instead of or alongside GitHub). */
+  liveUrl?: string;
+  liveUrlLabel?: string;
   private: boolean;
   orbitTier?: OrbitTier;
   orbitGroup?: string | null;
@@ -70,11 +73,16 @@ function renderProjects(projects: ProjectJson[]): void {
       const domId = safeProjectDomId(p.id, index);
       const slug = (p.slug ?? p.id).replace(/[^a-zA-Z0-9_-]/g, '') || `project-${index}`;
       const pageHref = projectPageHref(slug);
-      const writeUp = sanitizeHttpUrl(p.writeUpUrl);
+      const writeUp = sanitizeHttpUrl(p.writeUpUrl ?? '');
+      const live = sanitizeHttpUrl(p.liveUrl ?? '');
+      const liveLabel = (p.liveUrlLabel ?? 'Visit site').trim() || 'Visit site';
       const viewProject = `<a class="project-card__primary" href="${escapeHtml(pageHref)}">View project</a>`;
+      const liveLink = live
+        ? `<a href="${escapeHtml(live)}" target="_blank" rel="noopener noreferrer">${escapeHtml(liveLabel)}</a>`
+        : '';
       const writeUpLink = writeUp
         ? `<a href="${escapeHtml(writeUp)}" target="_blank" rel="noopener noreferrer">View on GitHub</a>`
-        : `<span class="project-card__invalid-url" title="Invalid or disallowed write-up URL (only http and https links allowed)">Write-up unavailable</span>`;
+        : '';
       return `
     <article class="project-card" id="project-${escapeHtml(domId)}">
       <h3 class="project-card__title">${escapeHtml(p.title)}</h3>
@@ -84,6 +92,7 @@ function renderProjects(projects: ProjectJson[]): void {
       </div>
       <div class="project-card__links">
         ${viewProject}
+        ${liveLink}
         ${writeUpLink}
         ${p.private ? '<span class="badge-private">Private repo</span>' : ''}
       </div>

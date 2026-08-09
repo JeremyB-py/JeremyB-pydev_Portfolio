@@ -2,7 +2,9 @@
 
 **ClipSpan** is a cross-platform clipboard history and sync system. The goal: copy or select content on Android and paste it on a Linux or Windows desktop (and vice versa), with searchable history across devices — without root access or unsafe permission workarounds.
 
-**Status:** v0.14.x : Rust/Tauri desktop (Linux + Windows), docked history picker, ClipSpan Keyboard, image/blob sync, offline-resilient history, optional end-to-end encrypted account + relay. Early testing signup at [clipspan.com](https://clipspan.com/). macOS planned.
+**Status:** v0.15.x — Rust/Tauri desktop (Linux + Windows early testing), docked history picker, ClipSpan Keyboard, image/blob sync, offline-resilient history, encrypted history vault backup/restore, Hidden / Recently removed with durable purge, optional end-to-end encrypted account + relay. macOS planned.
+
+> **Product site & early testing:** [clipspan.com](https://clipspan.com/) — current project state and waitlist for early builds when available.
 
 ---
 
@@ -15,9 +17,28 @@ Daily flows:
 - Android **Send Clip** (selection action, share target, keyboard toolbar)
 - Android **Paste** from history / desktop (keyboard toolbar, companion history)
 - Desktop tray **Send Clip**, hotkey history picker, paste-into-focused-app
-- Searchable cross-device history with hide, recycle bin, undo, and clear controls
+- Searchable cross-device history with hide, recently removed, undo, and clear controls
 
 Long-term north star: frictionless install, pair, and daily paste — but privacy and user control come first.
+
+---
+
+## Media
+
+Desktop and Android histories staying in sync — the product story in one frame:
+
+![ClipSpan desktop syncing with Android history](../media/clipspan/hero-sync.png)
+
+<div class="media-pair">
+  <figure>
+    <img src="../media/clipspan/ubuntu-history-screenshot-left.png" alt="ClipSpan desktop app with left-docked history picker open on Linux" />
+    <figcaption>Desktop: main window and left-docked history picker</figcaption>
+  </figure>
+  <figure class="media-pair__phone">
+    <img src="../media/clipspan/android-history-screenshot-full1.png" alt="ClipSpan Android companion history screen" />
+    <figcaption>Android: companion history viewer</figcaption>
+  </figure>
+</div>
 
 ---
 
@@ -56,13 +77,13 @@ Each layer is decoupled so the Android keyboard, companion app, Linux/Windows de
 
 - Rust/Axum `account-api` + `relay` with PostgreSQL path; email/password MVP
 - End-to-end credential vault and opaque relay mailbox/blobs (HPKE-sealed payloads; servers store ciphertext)
-- Trusted-device sliding sessions, device rename/revoke/unrevoke, history backup/restore, soft-delete with delayed hard purge
+- Trusted-device sliding sessions, device rename/revoke/unrevoke, encrypted history vault backup/restore, soft-delete with delayed hard purge
 
 ### Offline-Resilient History
 
 - Merge-only history sync: local Room / SQLite cache never wiped when peers are unreachable
 - Offline paste fallback, local image capture, pending push flush on reconnect
-- Per-device hide registry, recycle bin retention, and vault plaintext that preserves hidden state across restore
+- Per-device hide registry, recently removed retention, and vault plaintext that preserves hidden state across restore
 
 ---
 
@@ -76,8 +97,8 @@ Each layer is decoupled so the Android keyboard, companion app, Linux/Windows de
 | `ClipSpan Keyboard` | FlorisBoard-based IME with Send Clip, Paste, scrollable history, connection indicator; sync disabled in password fields. |
 | `Companion App` | Connect, history, Hidden items, Account, share targets; ClipSpan Nebula Material3 theme. |
 | `Desktop Client` | Tray app for Linux/Windows; Status/Settings/Pairing/Account; Start at login; Wayland portal or GNOME shortcut setup. |
-| `Optional Account` | E2E vault + relay for off-LAN delivery; trusted devices; device roster; recovery key; history backup/restore. |
-| `History UX` | Hide with undo, recycle bin, clear-all policy, offline catch-up, viewer-scoped hidden state across devices. |
+| `Optional Account` | E2E vault + relay for off-LAN delivery; trusted devices; device roster; recovery key; history vault backup/restore. |
+| `History UX` | Hide with undo, recently removed / durable purge, clear-all policy, offline catch-up, viewer-scoped hidden state across devices. |
 | `Dev Workflow` | `./scripts/install-android-debug.sh`, `./scripts/build-desktop.sh`, `./scripts/run-server.sh` for local account-api/relay. |
 
 ---
