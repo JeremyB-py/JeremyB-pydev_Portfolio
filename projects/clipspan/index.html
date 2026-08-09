@@ -111,7 +111,10 @@
     <section class="section">
 <h1>ClipSpan : Universal Clipboard Sync</h1>
 <p><strong>ClipSpan</strong> is a cross-platform clipboard history and sync system. The goal: copy or select content on Android and paste it on a Linux or Windows desktop (and vice versa), with searchable history across devices — without root access or unsafe permission workarounds.</p>
-<p><strong>Status:</strong> v0.14.x : Rust/Tauri desktop (Linux + Windows), docked history picker, ClipSpan Keyboard, image/blob sync, offline-resilient history, optional end-to-end encrypted account + relay. Early testing signup at <a href="https://clipspan.com/">clipspan.com</a>. macOS planned.</p>
+<p><strong>Status:</strong> v0.15.x — Rust/Tauri desktop (Linux + Windows early testing), docked history picker, ClipSpan Keyboard, image/blob sync, offline-resilient history, encrypted history vault backup/restore, Hidden / Recently removed with durable purge, optional end-to-end encrypted account + relay. macOS planned.</p>
+<blockquote>
+<p><strong>Product site &amp; early testing:</strong> <a href="https://clipspan.com/">clipspan.com</a> — current project state and waitlist for early builds when available.</p>
+</blockquote>
 <hr>
 </section>
 <section class="section">
@@ -122,9 +125,26 @@
 <li>Android <strong>Send Clip</strong> (selection action, share target, keyboard toolbar)</li>
 <li>Android <strong>Paste</strong> from history / desktop (keyboard toolbar, companion history)</li>
 <li>Desktop tray <strong>Send Clip</strong>, hotkey history picker, paste-into-focused-app</li>
-<li>Searchable cross-device history with hide, recycle bin, undo, and clear controls</li>
+<li>Searchable cross-device history with hide, recently removed, undo, and clear controls</li>
 </ul>
 <p>Long-term north star: frictionless install, pair, and daily paste — but privacy and user control come first.</p>
+<hr>
+</section>
+<section class="section">
+<h2>Media</h2>
+<p>Desktop and Android histories staying in sync — the product story in one frame:</p>
+<p><img src="/media/clipspan/hero-sync.png" alt="ClipSpan desktop syncing with Android history"></p>
+<div class="media-pair">
+  <figure>
+    <img src="/media/clipspan/ubuntu-history-screenshot-left.png" alt="ClipSpan desktop app with left-docked history picker open on Linux" />
+    <figcaption>Desktop: main window and left-docked history picker</figcaption>
+  </figure>
+  <figure class="media-pair__phone">
+    <img src="/media/clipspan/android-history-screenshot-full1.png" alt="ClipSpan Android companion history screen" />
+    <figcaption>Android: companion history viewer</figcaption>
+  </figure>
+</div>
+
 <hr>
 </section>
 <section class="section">
@@ -158,13 +178,13 @@ Platform adapter layer
 <ul>
 <li>Rust/Axum <code>account-api</code> + <code>relay</code> with PostgreSQL path; email/password MVP</li>
 <li>End-to-end credential vault and opaque relay mailbox/blobs (HPKE-sealed payloads; servers store ciphertext)</li>
-<li>Trusted-device sliding sessions, device rename/revoke/unrevoke, history backup/restore, soft-delete with delayed hard purge</li>
+<li>Trusted-device sliding sessions, device rename/revoke/unrevoke, encrypted history vault backup/restore, soft-delete with delayed hard purge</li>
 </ul>
 <h3>Offline-Resilient History</h3>
 <ul>
 <li>Merge-only history sync: local Room / SQLite cache never wiped when peers are unreachable</li>
 <li>Offline paste fallback, local image capture, pending push flush on reconnect</li>
-<li>Per-device hide registry, recycle bin retention, and vault plaintext that preserves hidden state across restore</li>
+<li>Per-device hide registry, recently removed retention, and vault plaintext that preserves hidden state across restore</li>
 </ul>
 <hr>
 </section>
@@ -203,11 +223,11 @@ Platform adapter layer
 </tr>
 <tr>
 <td><code>Optional Account</code></td>
-<td>E2E vault + relay for off-LAN delivery; trusted devices; device roster; recovery key; history backup/restore.</td>
+<td>E2E vault + relay for off-LAN delivery; trusted devices; device roster; recovery key; history vault backup/restore.</td>
 </tr>
 <tr>
 <td><code>History UX</code></td>
-<td>Hide with undo, recycle bin, clear-all policy, offline catch-up, viewer-scoped hidden state across devices.</td>
+<td>Hide with undo, recently removed / durable purge, clear-all policy, offline catch-up, viewer-scoped hidden state across devices.</td>
 </tr>
 <tr>
 <td><code>Dev Workflow</code></td>
