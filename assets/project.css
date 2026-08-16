@@ -103,6 +103,17 @@
   margin: 0.75rem 0;
 }
 
+.project-content .project-logo {
+  display: block;
+  max-width: min(16rem, 55%);
+  width: auto;
+  height: auto;
+  margin: 0.25rem auto 1.25rem;
+  border: none;
+  border-radius: 0;
+  background: transparent;
+}
+
 /* Side-by-side product screenshots (desktop + phone) */
 .project-content .media-pair {
   display: grid;
