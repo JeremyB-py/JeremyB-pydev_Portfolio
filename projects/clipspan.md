@@ -148,6 +148,5 @@ Portfolio case study: [jeremyb.dev/projects/clipspan/](https://jeremyb.dev/proje
 - Private, then public testing via the [clipspan.com](https://clipspan.com/) signup
 - Store packaging (Windows Authenticode, Play listing / Android release signing)
 - macOS client
-- Phase 14 items remain optional and gated separately
 
 ---
