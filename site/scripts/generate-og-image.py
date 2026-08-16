@@ -168,7 +168,7 @@ def main() -> None:
 
     draw.text((x_text, y0), "Jeremy Brown", fill=TEXT, font=title_font)
     y1 = y0 + TITLE_PX + gap12
-    draw.text((x_text, y1), "Full Stack Python Engineer", fill=ACCENT, font=sub_font)
+    draw.text((x_text, y1), "Full-Stack Engineer", fill=ACCENT, font=sub_font)
     y2 = y1 + SUB_PX + gap23
     draw.text((x_text, y2), "jeremyb.dev portfolio website", fill=MUTED, font=domain_font)
 
