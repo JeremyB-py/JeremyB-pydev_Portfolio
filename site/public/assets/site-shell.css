@@ -646,8 +646,18 @@ html[data-theme='paper'] body::before {
 .hero__subtitle {
   font-size: 1.1rem;
   color: var(--color-text-muted);
-  max-width: 36rem;
+  max-width: 42rem;
   margin: 0 auto 1.5rem;
+}
+
+.hero__subtitle a {
+  color: var(--color-link);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.hero__subtitle a:hover {
+  text-decoration: underline;
 }
 
 .hero__cta {
