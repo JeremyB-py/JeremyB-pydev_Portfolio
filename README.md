@@ -132,7 +132,7 @@ Most of my time is spent learning new tools and applying them directly in projec
 ## Connect With Me
 - **GitHub:** [github.com/JeremyB-py](https://github.com/JeremyB-py)  
 - **LinkedIn:** [linkedin.com/in/jeremyb-pydev](https://www.linkedin.com/in/jeremyb-pydev/)  
-- **Email:** JeremyB.pydev@gmail.com  
+- **Email:** contact@jeremyb.dev  
 
 ---
 
