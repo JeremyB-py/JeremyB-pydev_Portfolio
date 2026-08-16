@@ -80,8 +80,10 @@ function renderProjects(projects: ProjectJson[]): void {
       const liveLink = live
         ? `<a href="${escapeHtml(live)}" target="_blank" rel="noopener noreferrer">${escapeHtml(liveLabel)}</a>`
         : '';
-      const writeUpLink = writeUp
-        ? `<a href="${escapeHtml(writeUp)}" target="_blank" rel="noopener noreferrer">View on GitHub</a>`
+      const githubUrl =
+        !p.private && writeUp && new URL(writeUp).hostname === 'github.com' ? writeUp : null;
+      const writeUpLink = githubUrl
+        ? `<a href="${escapeHtml(githubUrl)}" target="_blank" rel="noopener noreferrer">View on GitHub</a>`
         : '';
       return `
     <article class="project-card" id="project-${escapeHtml(domId)}">
