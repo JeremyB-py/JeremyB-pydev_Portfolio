@@ -1,14 +1,13 @@
 # Continuous Learning AI Prototype
 
-The **Continuous Learning AI Prototype (CLAIP)** is a research-oriented experiment exploring how artificial intelligence systems could evolve their knowledge, moral rules, and decision frameworks over time while maintaining safety and stability.  
-It’s a conceptual and partially implemented project written in Python, emphasizing modular knowledge management, checkpointing, and rollback systems.
+The **Continuous Learning AI Prototype (CLAIP)** is a thought experiment in Python: JSON knowledge stores, checkpoints, and rollback, with a split between learned facts and fixed rules. It is partially implemented.
 
 ---
 
 ## Overview
 This prototype investigates how an AI might:
 - Adapt its knowledge base dynamically from new inputs.  
-- Retain core ethical “moral rules” that constrain unsafe modifications.  
+- Retain core ethical "moral rules" that constrain unsafe modifications.  
 - Separate *learned facts* from *immutable guidelines* (e.g., safety protocols).  
 - Perform regular checkpointing and rollbacks to prevent harmful drift.  
 
@@ -34,7 +33,7 @@ The project is primarily a **design and logic study**, bridging concepts from re
 ---
 
 ## Highlights
-- Designed a clear modular separation between “Knowledge,” “Moral Rules,” and “Self-Evaluation.”  
+- Designed a clear modular separation between "Knowledge," "Moral Rules," and "Self-Evaluation."  
 - Implemented a pseudocode framework for continuous learning cycles.  
 - Created a prototype for a checkpoint and rollback engine with JSON snapshots.  
 - Used the project as a thought experiment in AI safety and lifelong adaptation.
@@ -67,6 +66,6 @@ Sample blocks of early code within CLAIP.py
 ---
 
 ## Repository
-This project is released under the GPL-3.0 liscense.  
+This project is released under the GPL-3.0 license.  
 It can be viewed here:  
-[github.com/JeremyB-py-Continuous_Learning_AI_Prototype](https://github.com/JeremyB-py/Continuous_Learning_AI_Prototype)
+[github.com/JeremyB-py/Continuous_Learning_AI_Prototype](https://github.com/JeremyB-py/Continuous_Learning_AI_Prototype)

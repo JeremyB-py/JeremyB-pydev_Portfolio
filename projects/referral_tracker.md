@@ -1,24 +1,21 @@
 # Referral Tracker Module
 
-The **Referral Tracker** is a modular Streamlit application built as an extension to the **Wrinkle Witch CRM** ecosystem.  
-It focuses on automating client referral management and marketing material generation for **The Wrinkle Witch**, a local skincare business.  
+The **Referral Tracker** is a Streamlit app for **The Wrinkle Witch**, a local skincare business. It handles client referral tracking and branded referral cards.
 
-This module represents the latest evolution in the platform’s development — shifting from a single Streamlit script into a scalable, modular architecture that integrates data management, automation, and UI components seamlessly.
-
-**Platform note:** The Referral Tracker is now **fully integrated** as an internal admin app within the broader [Wrinkle Witch Website & Full-Stack Business Platform](./wrinkle_witch_website.md). This write-up highlights the referral module itself (referral logic, card/PDF generation, and Streamlit session-state control).
+It started as a standalone Streamlit script and is now an internal admin app on the [Wrinkle Witch Website & Full-Stack Business Platform](./wrinkle_witch_website.md). This write-up covers referral logic, card/PDF generation, and Streamlit session-state control.
 
 ---
 
 ## Overview
 
-The Referral Tracker extends the core CRM’s client management foundation with a specialized tool for handling **referrals, incentives, and branded referral cards**.  
-It automates a previously manual workflow, allowing the business to:
+The Referral Tracker extends the CRM client data with a tool for **referrals, incentives, and branded referral cards**.  
+It automates a previously manual workflow so the business can:
 - Track who referred whom (and when).  
 - Automatically associate clients through linked referral logic.  
-- Generate customized referral cards featuring the salon’s branding, contact details, and referrer name.  
+- Generate customized referral cards with the salon's branding, contact details, and referrer name.  
 - Export single or multi-client PDFs for in-person distribution.  
 
-The system was designed to maintain data integrity while enabling repeated runs through Streamlit without loss of session context — a key improvement over earlier prototypes.
+Streamlit reruns were wiping unsaved data in earlier prototypes. Session flags keep context across reruns.
 
 ---
 
@@ -30,7 +27,7 @@ The system was designed to maintain data integrity while enabling repeated runs 
 | **Session State Control** | Custom session management prevents Streamlit reruns from erasing unsaved data. |
 | **Dynamic Card Generator** | Uses Pillow to generate custom-branded PNG referral cards with business colors, logo, and typography. |
 | **PDF Batch Export** | Combines generated cards into printable PDFs for each client or the entire business. |
-| **Error Handling & Validation** | Input validation ensures accurate CSV syncing and duplicate detection. |
+| **Error Handling & Validation** | Input validation for CSV syncing and duplicate detection. |
 | **Persistent Storage** | All updates are written back to disk immediately through CSV synchronization and optional SQLite integration. |
 
 ---
@@ -107,13 +104,12 @@ This structure allows it to be:
 
 ## Integration with Wrinkle Witch CRM
 
-The Referral Tracker serves as the **first deployed module** in the Wrinkle Witch CRM ecosystem.  
-It connects directly to the CRM’s client database and shares common components such as `client_manager.py` and CSV sync utilities.
+The Referral Tracker is the first deployed module in the Wrinkle Witch CRM ecosystem.  
+It connects directly to the CRM's client database and shares common components such as `client_manager.py` and CSV sync utilities.
 
 **Related project:**  
 The **Wrinkle Witch CRM** core project is maintained as a separate private repository due to business sensitivity.  
-A summarized version is available here:
-[jeremyb.dev](https://jeremyb.dev/)
+CRM write-up: [Wrinkle Witch CRM](./wrinkle_witch_crm.md)
 
 ---
 
@@ -127,7 +123,7 @@ A summarized version is available here:
 
 ## Repository
 
-This module is maintained as a separate private repository due to business sensitivity.  
-A summarized version is available here:  
-[jeremyb.dev](https://jeremyb.dev/)
+This module is maintained as a separate private repository due to business sensitivity.
+
+Portfolio case study: [jeremyb.dev/projects/referral-tracker/](https://jeremyb.dev/projects/referral-tracker/)
 

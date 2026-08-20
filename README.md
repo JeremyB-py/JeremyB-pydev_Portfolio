@@ -23,7 +23,7 @@ I build practical applications that connect frontend experience, backend enginee
 ## Featured Projects
 
 ### Wrinkle Witch Website & Full-Stack Business Platform
-> A production-oriented, full-stack platform built for **The Wrinkle Witch** (local skincare studio).  
+> A full-stack platform built for **The Wrinkle Witch** (local skincare studio).  
 > Static customer site (Cloudflare Pages), FastAPI backend (Railway), Streamlit admin apps, and scheduled jobs share a monorepo with common auth, Square integrations, and PostgreSQL.  
 > Includes the fully integrated **Wrinkle Witch CRM** and **Referral Tracker Module** as internal tools.
 
@@ -36,7 +36,7 @@ Write-up Link: [Wrinkle Witch Website Showcase](https://github.com/JeremyB-py/Je
 ---
 
 ### Likely Cause: Dependency Health Dashboard
-> Mobile-first incident triage for solo developers: custom health monitors plus third-party status feeds produce a rule-based "likely cause" with evidence and suggested next checks, not just uptime dots.
+> Mobile-first incident triage for solo developers: custom health monitors plus third-party status feeds produce a rule-based "likely cause" with evidence and suggested next checks.
 
 - **Tech:** Python · FastAPI · React Native · Expo · PostgreSQL · Docker  
 - **Highlights:** Monorepo (Expo Router mobile, FastAPI API, background worker); scheduled checks + Expo push alerts; provider status adapters; rule-based diagnosis engine; native Android/iOS home-screen widgets (v0.12.x)  
@@ -69,7 +69,7 @@ Write-up Link: [Zap Contributions Showcase](https://github.com/JeremyB-py/Jeremy
 
 ### Wrinkle Witch CRM (Core Platform)
 > A modular Streamlit-based business management platform built for a real skincare business, **The Wrinkle Witch**.  
-> Originally designed as a searchable esthetician product database, the CRM evolved into a foundation for managing clients, referrals, and other salon operations.
+> Originally a searchable esthetician product database. It is now an internal app on the Wrinkle Witch platform, with the Referral Tracker as a separate admin tool.
 
 - **Tech:** Python · Streamlit · Pandas · SQLite · CSV I/O  
 - **Highlights:** Modular architecture, searchable product catalog, persistent data pipelines. Fully integrated into the Wrinkle Witch Multi-App Platform.  
@@ -111,7 +111,7 @@ Earlier experiments and learning projects (case studies still on the portfolio):
 ---
 
 #### VS Code & Git Automations
-> Custom Git integration scripts and workspace configurations to streamline development across **Streamlit**, **data-science**, and **LLM** projects.  
+> Custom Git integration scripts and workspace configurations for **Streamlit**, **data-science**, and **LLM** projects.  
 
 - **Tools:** Git · GitHub · VS Code · Jupytext · PyTest  
 

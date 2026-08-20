@@ -2,11 +2,11 @@
 
 <img class="project-logo" src="../media/clipspan/logo-lockup.png" alt="ClipSpan logo" />
 
-**ClipSpan** is a cross-platform clipboard history and sync system. The goal: copy or select content on Android and paste it on a Linux or Windows desktop (and vice versa), with searchable history across devices — without root access or unsafe permission workarounds.
+**ClipSpan** is a cross-platform clipboard history and sync system. Copy or select content on Android and paste it on a Linux or Windows desktop, and the other way around, with searchable history across devices. No root access or unsafe permission workarounds.
 
-**Status:** v0.16.0 — one Android APK (companion + ClipSpan Keyboard), Rust/Tauri desktop for Linux and Windows with first-run setup and signed auto-updates, docked history picker, multimedia sync, offline-resilient history, encrypted vault backup/restore, Hidden / Recently removed with durable purge, optional end-to-end encrypted account + relay. Approaching private/public testing. macOS planned.
+**Status:** v0.16.0. One Android APK (companion + ClipSpan Keyboard) and a Rust/Tauri desktop client for Linux and Windows, with first-run setup and signed auto-updates. Also includes a docked history picker, multimedia sync, offline-resilient history, encrypted vault backup/restore, Hidden / Recently removed with durable purge, and optional end-to-end encrypted account + relay. Approaching private/public testing. macOS planned.
 
-> **Product site & testing:** [clipspan.com](https://clipspan.com/) — current product state and signup for private/public testing when builds open.
+> **Product site & testing:** [clipspan.com](https://clipspan.com/). Current product state and signup for private/public testing when builds open.
 
 ---
 
@@ -21,13 +21,13 @@ Daily flows:
 - Desktop tray **Send Clip**, hotkey history picker, paste-into-focused-app
 - Searchable cross-device history with hide, recently removed, undo, and clear controls
 
-Long-term north star: frictionless install, pair, and daily paste — but privacy and user control come first.
+Install, pair, and daily paste should stay simple, with privacy and user control first.
 
 ---
 
 ## Media
 
-Desktop and Android histories staying in sync — the product story in one frame:
+Desktop and Android histories staying in sync:
 
 ![ClipSpan desktop syncing with Android history](../media/clipspan/hero-sync.png)
 

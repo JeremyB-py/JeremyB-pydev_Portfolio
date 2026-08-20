@@ -1,7 +1,7 @@
 # Crypto Prototype (Toy Blockchain)
 
-The **Crypto Prototype** is a lightweight Python implementation of a blockchain system built to understand decentralized consensus and transaction validation fundamentals.  
-It serves as a hands-on learning experiment in **blockchain architecture**, **proof-of-work mining**, and **node synchronization**.
+The **Crypto Prototype** is a lightweight Python implementation of a blockchain, built to learn decentralized consensus and transaction validation.  
+It is a hands-on toy covering **blockchain architecture**, **proof-of-work mining**, and **node synchronization**.
 
 ---
 
@@ -12,7 +12,7 @@ This project implements a functional toy blockchain that can:
 - Link each block cryptographically via SHA-256 hashing.  
 - Distribute updates across nodes via a simple networking layer.
 
-The prototype emphasizes **clarity over complexity**, providing an educational foundation for understanding consensus mechanisms and distributed systems.
+The prototype stays small so the consensus and sync pieces are easy to follow.
 
 ---
 
@@ -37,8 +37,7 @@ The prototype emphasizes **clarity over complexity**, providing an educational f
 ## Highlights
 - Built full blockchain loop: transaction → block → proof-of-work → validation → chain update.  
 - Debugged early transaction-pool and hash-computation issues to achieve stable mining.  
-- Added optional Flask API endpoints for peer-to-peer simulation.  
-- Serves as an educational proof of concept for decentralized ledger systems.
+- Added optional Flask API endpoints for peer-to-peer simulation.
 
 ---
 
@@ -64,6 +63,6 @@ Early example code
 ---
 
 ## Repository
-This prototype is private.  
-A summarized technical overview is available here:  
-[jeremyb.dev](https://jeremyb.dev/)
+This prototype is private.
+
+Portfolio case study: [jeremyb.dev/projects/blockchain/](https://jeremyb.dev/projects/blockchain/)

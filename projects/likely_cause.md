@@ -4,15 +4,15 @@
 
 > *Which part of the stack is probably failing, and what should I check right now?*
 
-This is **not** primarily an uptime monitor. The differentiator is **lightweight incident triage**: combining your own health checks with official third-party status data to infer the likely failure layer with evidence and suggested next steps.
+It combines your own health checks with official third-party status data to infer the likely failure layer, with evidence and suggested next steps.
 
-**Status:** v0.12.x : native home-screen widgets (Android + iOS scaffold), rule-based diagnosis engine, offline sync. Next: team accounts.
+**Status:** v0.12.x. Native home-screen widgets (Android + iOS scaffold), rule-based diagnosis engine, offline sync. Next: team accounts.
 
 ---
 
 ## Overview
 
-At a high level, Likely Cause has four main parts:
+Likely Cause has four main parts:
 
 **Mobile app (React Native + Expo)**  
 Expo Router navigation, secure auth token storage, dashboard for monitor status, push notification registration, and native home-screen widgets (Overall, Project, Monitor Grid on Android; WidgetKit scaffold on iOS).
@@ -39,7 +39,7 @@ Monorepo layout with Docker Compose for local Postgres + API + worker; `.env` te
 - `tests/` → Pytest suite
 - `infra/` → Docker Compose for local dev
 
-### Diagnosis Engine (North Star)
+### Diagnosis Engine
 
 Example output the app targets:
 
@@ -58,7 +58,7 @@ Suggested action:
 Check backend logs and database connection settings.
 ```
 
-Rules ship before AI : every label cites checks that support it.
+Rules ship before AI. Every label cites checks that support it.
 
 ### Check Types
 
@@ -100,7 +100,7 @@ URL discovery includes parallel path probing, sitemap mining, and rate-limit fal
 
 ## Highlights
 
-- Mobile-first incident triage : not just red/green uptime dots.
+- Mobile-first incident triage with evidence-backed likely-cause labels.
 - Monorepo with shared check runner code path for API manual checks and worker scheduled checks.
 - Phases 0–10 complete: auth, monitors, worker, push, providers, diagnosis, widgets, offline sync.
 - Real-world diagnosis example tied to the Wrinkle Witch API stack (dogfooding my own platform).
@@ -110,7 +110,7 @@ URL discovery includes parallel path probing, sitemap mining, and rate-limit fal
 
 ## Repository
 
-The codebase is private. This page summarizes the architecture and shipped features.
+The codebase is private.
 
 Portfolio case study: [jeremyb.dev/projects/likely-cause/](https://jeremyb.dev/projects/likely-cause/)
 
