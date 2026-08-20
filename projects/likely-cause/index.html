@@ -114,13 +114,13 @@
 <blockquote>
 <p><em>Which part of the stack is probably failing, and what should I check right now?</em></p>
 </blockquote>
-<p>This is <strong>not</strong> primarily an uptime monitor. The differentiator is <strong>lightweight incident triage</strong>: combining your own health checks with official third-party status data to infer the likely failure layer with evidence and suggested next steps.</p>
-<p><strong>Status:</strong> v0.12.x : native home-screen widgets (Android + iOS scaffold), rule-based diagnosis engine, offline sync. Next: team accounts.</p>
+<p>It combines your own health checks with official third-party status data to infer the likely failure layer, with evidence and suggested next steps.</p>
+<p><strong>Status:</strong> v0.12.x. Native home-screen widgets (Android + iOS scaffold), rule-based diagnosis engine, offline sync. Next: team accounts.</p>
 <hr>
 </section>
 <section class="section">
 <h2>Overview</h2>
-<p>At a high level, Likely Cause has four main parts:</p>
+<p>Likely Cause has four main parts:</p>
 <p><strong>Mobile app (React Native + Expo)</strong><br>Expo Router navigation, secure auth token storage, dashboard for monitor status, push notification registration, and native home-screen widgets (Overall, Project, Monitor Grid on Android; WidgetKit scaffold on iOS).</p>
 <p><strong>API service (FastAPI)</strong><br>REST API for auth, monitor CRUD, manual check triggers, check results/history, provider status, and diagnosis responses. Alembic migrations; Pydantic validation throughout.</p>
 <p><strong>Background worker (Python)</strong><br>Scheduled checks per monitor interval, state transitions (healthy / degraded / down / unknown), notification event queue, provider polling, and rule-based correlation for likely-cause labels.</p>
@@ -138,7 +138,7 @@
 <li><code>tests/</code> → Pytest suite</li>
 <li><code>infra/</code> → Docker Compose for local dev</li>
 </ul>
-<h3>Diagnosis Engine (North Star)</h3>
+<h3>Diagnosis Engine</h3>
 <p>Example output the app targets:</p>
 <pre><code class="language-text">The Wrinkle Witch API is down.
 
@@ -153,7 +153,7 @@ Evidence:
 Suggested action:
 Check backend logs and database connection settings.
 </code></pre>
-<p>Rules ship before AI : every label cites checks that support it.</p>
+<p>Rules ship before AI. Every label cites checks that support it.</p>
 <h3>Check Types</h3>
 <p>Monitors support multiple check strategies:</p>
 <ul>
@@ -220,7 +220,7 @@ Check backend logs and database connection settings.
 <section class="section">
 <h2>Highlights</h2>
 <ul>
-<li>Mobile-first incident triage : not just red/green uptime dots.</li>
+<li>Mobile-first incident triage with evidence-backed likely-cause labels.</li>
 <li>Monorepo with shared check runner code path for API manual checks and worker scheduled checks.</li>
 <li>Phases 0–10 complete: auth, monitors, worker, push, providers, diagnosis, widgets, offline sync.</li>
 <li>Real-world diagnosis example tied to the Wrinkle Witch API stack (dogfooding my own platform).</li>
@@ -230,7 +230,7 @@ Check backend logs and database connection settings.
 </section>
 <section class="section">
 <h2>Repository</h2>
-<p>The codebase is private. This page summarizes the architecture and shipped features.</p>
+<p>The codebase is private.</p>
 <p>Portfolio case study: <a href="https://jeremyb.dev/projects/likely-cause/">jeremyb.dev/projects/likely-cause/</a></p>
 <hr>
 </section>

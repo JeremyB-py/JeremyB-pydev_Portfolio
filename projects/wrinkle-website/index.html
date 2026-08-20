@@ -111,12 +111,12 @@
     <section class="section">
 <h1>Wrinkle Witch Website &amp; Full-Stack Business Platform</h1>
 <p>A modular, multi-application platform built for <strong>The Wrinkle Witch</strong>, a local esthetician business. The project combines a static customer website with a backend API service and internal admin apps, all sharing a single set of core business logic and database models inside a monorepo.</p>
-<p>This platform is designed to scale: new tools (CRM features, product systems, booking workflows, analytics, etc.) can be added without duplicating authentication, database code, or integrations.</p>
+<p>New tools (CRM features, product systems, booking workflows, analytics) can be added without duplicating authentication, database code, or integrations.</p>
 <hr>
 </section>
 <section class="section">
 <h2>Overview</h2>
-<p>At a high level, the platform has four main parts:</p>
+<p>The platform has four main parts:</p>
 <p><strong>Customer-facing website (Static HTML)</strong><br>Hosted as static pages for speed and simplicity (ideal for branding/SEO). Public pages call backend APIs when needed (referrals, unsubscribe, specials).</p>
 <p><strong>Backend API service (FastAPI)</strong><br>A dedicated API layer that performs validation, business logic execution, and database writes. Deployed independently (Railway) and reachable via a stable subdomain.</p>
 <p><strong>Internal admin apps (Streamlit)</strong><br>Admin-facing tools for managing clients, referrals, specials/packages, and internal workflows. Protected behind database-backed authentication with roles.</p>
@@ -143,7 +143,7 @@
 <li><strong>Online booking:</strong> Custom multi-step flow on <code>booking.html</code> (service, date/time, your info, secure card step, review) calling Square Bookings API and optional Square Web Payments SDK for card-on-file</li>
 <li><strong>QR codes</strong> updated to point to stable, branded URLs on the main domain (instead of Streamlit routes)</li>
 </ul>
-<p>This keeps customer experiences fast and consistent while still supporting robust server-side validation and logging.</p>
+<p>This keeps customer experiences fast and consistent while still supporting server-side validation and logging.</p>
 <hr>
 </section>
 <section class="section">
@@ -221,10 +221,10 @@
 </section>
 <section class="section">
 <h2>Media</h2>
-<p><strong>Public Website Homepage:</strong> Clean, modern design showcasing the business brand and services.<br><img src="/media/wrinkle_witch_website/Homepage.png" alt="Homepage"></p>
-<p><strong>Dark Mode Interface:</strong> Alternative color scheme for improved user experience.<br><img src="/media/wrinkle_witch_website/Darkmode.png" alt="Dark Mode"></p>
-<p><strong>FastAPI API Setup (CORS Middleware):</strong> Core API configuration showing FastAPI initialization and <code>CORSMiddleware</code> setup for the production-facing service.<br><img src="/media/wrinkle_witch_website/api_main.png" alt="FastAPI API + CORS Middleware"></p>
-<p><strong>FastAPI Docs (Specials Endpoints):</strong> ReDoc view highlighting the Specials/Packages API surface used by the static site for dynamic homepage content.<br><img src="/media/wrinkle_witch_website/fastapi_redoc_specials.png" alt="FastAPI ReDoc - Specials"></p>
+<p><strong>Homepage</strong><br><img src="/media/wrinkle_witch_website/Homepage.png" alt="Homepage"></p>
+<p><strong>Dark mode</strong><br><img src="/media/wrinkle_witch_website/Darkmode.png" alt="Dark Mode"></p>
+<p><strong>FastAPI API Setup (CORS Middleware):</strong> FastAPI initialization and <code>CORSMiddleware</code> setup for the production-facing service.<br><img src="/media/wrinkle_witch_website/api_main.png" alt="FastAPI API + CORS Middleware"></p>
+<p><strong>FastAPI Docs (Specials Endpoints):</strong> ReDoc view of the Specials/Packages endpoints used by the static site for homepage content.<br><img src="/media/wrinkle_witch_website/fastapi_redoc_specials.png" alt="FastAPI ReDoc - Specials"></p>
 <p><strong>Admin Specials Manager:</strong> Streamlit admin UI for creating and managing specials/packages content (marketing engine).<br><img src="/media/wrinkle_witch_website/app_specials_manager.png" alt="Admin Specials Manager"></p>
 <p><strong>Admin User Management:</strong> Admin-only UI for user management, supporting role-based access and bcrypt-backed authentication.<br><img src="/media/wrinkle_witch_website/app_user_management.png" alt="Admin User Management"></p>
 <p><strong>Manual Referral Entry:</strong> Customer-facing referral flow with manual code entry fallback when a QR code is unavailable.<br><img src="/media/wrinkle_witch_website/manual_referral_entry.png" alt="Manual Referral Entry"></p>
@@ -242,14 +242,13 @@
 <li>Referral program overhaul complete: event-based tracking, milestones, quarterly leaderboard/prizes, booking tokens, and fraud checks.</li>
 <li>Staging environment with Playwright E2E and structured logging for production debugging.</li>
 <li>Job dashboard and maintenance messaging keep operations visible without blocking the site.</li>
-<li>Clean, maintainable architecture; real-world use with evolving business needs.</li>
 </ul>
 <hr>
 </section>
 <section class="section">
 <h2>Repository</h2>
-<p>The codebase is private due to business content, but this page represents a comprehensive summary.
-A summarized showcase of the platform is available in the portfolio README:<br><a href="https://jeremyb.dev/">jeremyb.dev</a></p>
+<p>The repo is private.</p>
+<p>Portfolio case study: <a href="https://jeremyb.dev/projects/wrinkle-website/">jeremyb.dev/projects/wrinkle-website/</a></p>
 <hr>
 </section>
 <section class="section">

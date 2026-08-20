@@ -110,21 +110,20 @@
       </p>
     <section class="section">
 <h1>Referral Tracker Module</h1>
-<p>The <strong>Referral Tracker</strong> is a modular Streamlit application built as an extension to the <strong>Wrinkle Witch CRM</strong> ecosystem.<br>It focuses on automating client referral management and marketing material generation for <strong>The Wrinkle Witch</strong>, a local skincare business.  </p>
-<p>This module represents the latest evolution in the platform’s development — shifting from a single Streamlit script into a scalable, modular architecture that integrates data management, automation, and UI components seamlessly.</p>
-<p><strong>Platform note:</strong> The Referral Tracker is now <strong>fully integrated</strong> as an internal admin app within the broader <a href="./wrinkle_witch_website.md">Wrinkle Witch Website &amp; Full-Stack Business Platform</a>. This write-up highlights the referral module itself (referral logic, card/PDF generation, and Streamlit session-state control).</p>
+<p>The <strong>Referral Tracker</strong> is a Streamlit app for <strong>The Wrinkle Witch</strong>, a local skincare business. It handles client referral tracking and branded referral cards.</p>
+<p>It started as a standalone Streamlit script and is now an internal admin app on the <a href="./wrinkle_witch_website.md">Wrinkle Witch Website &amp; Full-Stack Business Platform</a>. This write-up covers referral logic, card/PDF generation, and Streamlit session-state control.</p>
 <hr>
 </section>
 <section class="section">
 <h2>Overview</h2>
-<p>The Referral Tracker extends the core CRM’s client management foundation with a specialized tool for handling <strong>referrals, incentives, and branded referral cards</strong>.<br>It automates a previously manual workflow, allowing the business to:</p>
+<p>The Referral Tracker extends the CRM client data with a tool for <strong>referrals, incentives, and branded referral cards</strong>.<br>It automates a previously manual workflow so the business can:</p>
 <ul>
 <li>Track who referred whom (and when).  </li>
 <li>Automatically associate clients through linked referral logic.  </li>
-<li>Generate customized referral cards featuring the salon’s branding, contact details, and referrer name.  </li>
+<li>Generate customized referral cards with the salon&#39;s branding, contact details, and referrer name.  </li>
 <li>Export single or multi-client PDFs for in-person distribution.</li>
 </ul>
-<p>The system was designed to maintain data integrity while enabling repeated runs through Streamlit without loss of session context — a key improvement over earlier prototypes.</p>
+<p>Streamlit reruns were wiping unsaved data in earlier prototypes. Session flags keep context across reruns.</p>
 <hr>
 </section>
 <section class="section">
@@ -154,7 +153,7 @@
 </tr>
 <tr>
 <td><strong>Error Handling &amp; Validation</strong></td>
-<td>Input validation ensures accurate CSV syncing and duplicate detection.</td>
+<td>Input validation for CSV syncing and duplicate detection.</td>
 </tr>
 <tr>
 <td><strong>Persistent Storage</strong></td>
@@ -249,9 +248,8 @@
 </section>
 <section class="section">
 <h2>Integration with Wrinkle Witch CRM</h2>
-<p>The Referral Tracker serves as the <strong>first deployed module</strong> in the Wrinkle Witch CRM ecosystem.<br>It connects directly to the CRM’s client database and shares common components such as <code>client_manager.py</code> and CSV sync utilities.</p>
-<p><strong>Related project:</strong><br>The <strong>Wrinkle Witch CRM</strong> core project is maintained as a separate private repository due to business sensitivity.<br>A summarized version is available here:
-<a href="https://jeremyb.dev/">jeremyb.dev</a></p>
+<p>The Referral Tracker is the first deployed module in the Wrinkle Witch CRM ecosystem.<br>It connects directly to the CRM&#39;s client database and shares common components such as <code>client_manager.py</code> and CSV sync utilities.</p>
+<p><strong>Related project:</strong><br>The <strong>Wrinkle Witch CRM</strong> core project is maintained as a separate private repository due to business sensitivity.<br>CRM write-up: <a href="./wrinkle_witch_crm.md">Wrinkle Witch CRM</a></p>
 <hr>
 </section>
 <section class="section">
@@ -265,7 +263,8 @@
 </section>
 <section class="section">
 <h2>Repository</h2>
-<p>This module is maintained as a separate private repository due to business sensitivity.<br>A summarized version is available here:<br><a href="https://jeremyb.dev/">jeremyb.dev</a></p>
+<p>This module is maintained as a separate private repository due to business sensitivity.</p>
+<p>Portfolio case study: <a href="https://jeremyb.dev/projects/referral-tracker/">jeremyb.dev/projects/referral-tracker/</a></p>
 </section>
     </main>
   </div>

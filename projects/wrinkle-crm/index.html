@@ -110,21 +110,20 @@
       </p>
     <section class="section">
 <h1>Wrinkle Witch CRM (Core Platform)</h1>
-<p>The <strong>Wrinkle Witch CRM</strong> is a modular, Streamlit-based business management platform designed for <strong>The Wrinkle Witch</strong>, a local skincare business.<br>Initially developed as a <strong>searchable product database for esthetician products</strong>, the CRM now serves as the foundation for a broader suite of connected applications — including client tracking, referral management, and future automation tools.</p>
-<p>Built with scalability and modular integration in mind, the CRM architecture supports new components like the <strong>Referral Tracker</strong>, while maintaining simple offline persistence through CSV and SQLite storage.</p>
-<p><strong>Platform note:</strong> This CRM is now <strong>fully integrated</strong> as an internal app within the broader <a href="./wrinkle_witch_website.md">Wrinkle Witch Website &amp; Full-Stack Business Platform</a>. This write-up highlights the CRM module itself (product database, data layer, and extension patterns).</p>
+<p>The <strong>Wrinkle Witch CRM</strong> is a Streamlit product database and internal admin app for <strong>The Wrinkle Witch</strong>, a local skincare business. It started as a <strong>searchable catalog of esthetician products</strong> (CSV and SQLite) and is now an internal app on the <a href="./wrinkle_witch_website.md">Wrinkle Witch Website &amp; Full-Stack Business Platform</a>. The Referral Tracker uses the same client data layer.</p>
+<p>This write-up covers the CRM module itself: product database, data layer, and how other Streamlit apps plug in.</p>
 <hr>
 </section>
 <section class="section">
 <h2>Overview</h2>
-<p>The Wrinkle Witch CRM was designed to streamline how an esthetician manages multiple facets of their business — from product organization to client engagement and marketing.<br>The initial version focuses on providing a structured product lookup and management system, with planned modules for:</p>
+<p>The CRM is a structured product lookup and management system for brands such as Circadia, GlyMed, and PCA. Product pages, search, and local persistence are in use. Referral tracking ships as a separate <a href="./referral_tracker.md">Referral Tracker</a> app on the same platform.</p>
+<p>Planned, not shipped:</p>
 <ul>
-<li><strong>Client Tracking &amp; Scheduling Integration:</strong> Future module to connect client profiles and appointments with Square API data.  </li>
-<li><strong>Referrals &amp; Rewards:</strong> Active development via the standalone <a href="./referral_tracker.md">Referral Tracker Module</a>.  </li>
-<li><strong>Routine Suggestions:</strong> Planned model-based recommendation engine for skincare routines based on client skin types and purchased products.  </li>
-<li><strong>Automatic Reminders &amp; Follow-ups:</strong> Potential future feature to automate client check-ins or reorder prompts.</li>
+<li><strong>Client Tracking &amp; Scheduling Integration:</strong> Connect client profiles and appointments with Square API data.</li>
+<li><strong>Routine Suggestions:</strong> Recommendation engine for skincare routines based on client skin types and purchased products.</li>
+<li><strong>Automatic Reminders &amp; Follow-ups:</strong> Client check-ins or reorder prompts.</li>
 </ul>
-<p>This foundation allows new tools to plug into the same ecosystem — sharing a consistent database layer, UI structure, and branding assets.</p>
+<p>New Streamlit tools can share the same database layer, UI structure, and branding assets.</p>
 <hr>
 </section>
 <section class="section">
@@ -153,12 +152,12 @@
 <td>Structured around modular imports, making it easy to integrate new Streamlit-based features.</td>
 </tr>
 <tr>
-<td><code>Referrals &amp; Rewards (in progress)</code></td>
-<td>Core support for the new Referral Tracker module, which automates client referral workflows and PDF exports.</td>
+<td><code>Referrals &amp; Rewards</code></td>
+<td>Referral Tracker module for client referral workflows and PDF exports. See <a href="./referral_tracker.md">Referral Tracker</a>.</td>
 </tr>
 <tr>
-<td><code>Future Scheduling Hooks</code></td>
-<td>Planned integration with Square API for automated scheduling, reminders, and analytics.</td>
+<td><code>Scheduling hooks</code></td>
+<td>Planned Square API integration for scheduling, reminders, and analytics.</td>
 </tr>
 </tbody></table>
 <hr>
@@ -184,7 +183,7 @@
 </thead>
 <tbody><tr>
 <td><strong>Referral Tracker</strong></td>
-<td>Latest standalone module that automates referral tracking, PDF card generation, and CSV synchronization. <em>(See detailed write-up <a href="./referral_tracker.md">here</a>)</em></td>
+<td>Referral tracking, PDF card generation, and CSV synchronization. <a href="./referral_tracker.md">Write-up</a>.</td>
 </tr>
 <tr>
 <td><strong>Product Database</strong></td>
@@ -204,11 +203,9 @@
 <section class="section">
 <h2>Highlights</h2>
 <ul>
-<li>Evolved from a simple searchable product database into a modular CRM platform.  </li>
-<li>Designed for real-world business use by <em>The Wrinkle Witch</em> (esthetician studio).  </li>
-<li>Structured for future Square API integration for automated appointment and client sync.  </li>
-<li>Provides a persistent, local-first data layer (CSV and SQLite) with future cloud scalability.  </li>
-<li>Acts as the base framework supporting the <strong>Referral Tracker</strong> module.</li>
+<li>Searchable product database in production use by <em>The Wrinkle Witch</em>.  </li>
+<li>Persistent local-first data layer (CSV and SQLite).  </li>
+<li>Referral Tracker ships as a separate internal app on the same platform.</li>
 </ul>
 <hr>
 </section>
@@ -220,7 +217,7 @@
 <hr>
 </section>
 <section class="section">
-<h2>Future Imrovements</h2>
+<h2>Future Improvements</h2>
 <ul>
 <li>Database will be searchable through recommendations and more advanced tags.</li>
 <li>Tracking client usage and success with specific products or brands.</li>
@@ -244,7 +241,8 @@
 </section>
 <section class="section">
 <h2>Repository</h2>
-<p>This project is private due to business use.<br>A summarized showcase of the CRM platform is available here:<br><a href="https://jeremyb.dev/">jeremyb.dev</a></p>
+<p>This project is private due to business use.</p>
+<p>Portfolio case study: <a href="https://jeremyb.dev/projects/wrinkle-crm/">jeremyb.dev/projects/wrinkle-crm/</a></p>
 </section>
     </main>
   </div>
