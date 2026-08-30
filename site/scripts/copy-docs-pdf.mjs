@@ -1,9 +1,8 @@
 /**
- * Copies resume PDFs from repo root docs/ into site/public/docs/ with stable names
- * so Vite serves them at predictable URLs.
+ * Copies the resume PDF from repo root docs/ into site/public/docs/ with a
+ * stable name so Vite serves it at a predictable URL.
  *
- * Primary:  docs/JeremyB_Resume26.8.2.pdf → public/docs/JeremyB_Resume.pdf
- * Secondary: docs/JeremyB_AI_Systems_Engineer_Resume.pdf → same basename under public/docs/
+ * docs/JeremyB_Full-Stack_Engineer_Resume.pdf → public/docs/JeremyB_Resume.pdf
  */
 import fs from 'node:fs';
 import path from 'node:path';
@@ -17,10 +16,9 @@ const destDir = path.join(siteDir, 'public', 'docs');
 
 /** Explicit source → public filename (avoids lex-sort accidentally promoting a variant). */
 const COPIES = [
-  { src: 'JeremyB_Resume26.8.2.pdf', dest: 'JeremyB_Resume.pdf' },
   {
-    src: 'JeremyB_AI_Systems_Engineer_Resume.pdf',
-    dest: 'JeremyB_AI_Systems_Engineer_Resume.pdf',
+    src: 'JeremyB_Full-Stack_Engineer_Resume.pdf',
+    dest: 'JeremyB_Resume.pdf',
   },
 ];
 

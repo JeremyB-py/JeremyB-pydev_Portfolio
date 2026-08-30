@@ -2,7 +2,7 @@
 
 The current portfolio is on **[jeremyb.dev](https://jeremyb.dev)**. This README is a snapshot for GitHub.
 
-I build web and mobile apps, automation, and LLM-enabled tools. I'm currently building [ClipSpan](https://jeremyb.dev/projects/clipspan/), a local-first clipboard product for Android, Linux, and Windows.
+I build cross-platform systems, websites, apps, and LLM tooling. I'm currently building [ClipSpan](https://jeremyb.dev/projects/clipspan/), a local-first clipboard product for Android, Linux, and Windows.
 
 ![Python](https://img.shields.io/badge/Python-3776AB?logo=python&logoColor=white)
 ![FastAPI](https://img.shields.io/badge/FastAPI-009688?logo=fastapi&logoColor=white)
@@ -19,9 +19,9 @@ I build web and mobile apps, automation, and LLM-enabled tools. I'm currently bu
 
 ## About
 
-I'm a full-stack Python-native engineer building production web and mobile applications, automation, LLM tooling, and cross-platform systems. After ten years in logistics, I bring a practical, process-driven approach to reliability and problem-solving.
+I'm a full-stack Python-first engineer building cross-platform systems, websites, apps, and LLM tooling. After ten years in logistics, I bring a practical, process-driven approach to reliability and problem-solving.
 
-Most recently, I've been building [ClipSpan](https://jeremyb.dev/projects/clipspan/), a local-first clipboard history and sync product for Android, Linux, and Windows. My other work includes the Wrinkle Witch business platform, Likely Cause, and open-source contributions to the Zap terminal. I use AI-assisted workflows to accelerate development while retaining ownership of architecture, validation, security, and release decisions.
+Most recently, I've been building [ClipSpan](https://jeremyb.dev/projects/clipspan/), a local-first clipboard history and sync product for Android, Linux, and Windows. My other work includes the Wrinkle Witch business platform, Likely Cause, and open-source contributions to the Zap terminal.
 
 **Location:** St. Louis, MO (open to remote)
 
@@ -122,8 +122,7 @@ Reach out for opportunities, collaborations, or questions about my work.
 - **Email:** [contact@jeremyb.dev](mailto:contact@jeremyb.dev)
 - **LinkedIn:** [linkedin.com/in/jeremyb-pydev](https://www.linkedin.com/in/jeremyb-pydev/)
 - **GitHub:** [github.com/JeremyB-py](https://github.com/JeremyB-py)
-- **Full-Stack Python resume:** [View resume (PDF)](https://jeremyb.dev/docs/JeremyB_Resume.pdf)
-- **AI Systems Engineer resume:** [View AI-focused resume (PDF)](https://jeremyb.dev/docs/JeremyB_AI_Systems_Engineer_Resume.pdf)
+- **Resume:** [View resume (PDF)](https://jeremyb.dev/docs/JeremyB_Resume.pdf)
 - **Portfolio:** [jeremyb.dev](https://jeremyb.dev)
 
 jeremyb.dev is the current portfolio. This README is a snapshot for GitHub.
