@@ -1,139 +1,129 @@
-# Hello, I’m Jeremy B. - *JeremyB.py*
+# Jeremy Brown · Full-Stack Engineer
+
+The current portfolio is on **[jeremyb.dev](https://jeremyb.dev)**. This README is a snapshot for GitHub.
+
+I build web and mobile apps, automation, and LLM-enabled tools. I'm currently building [ClipSpan](https://jeremyb.dev/projects/clipspan/), a local-first clipboard product for Android, Linux, and Windows.
 
 ![Python](https://img.shields.io/badge/Python-3776AB?logo=python&logoColor=white)
-![Pandas](https://img.shields.io/badge/Pandas-150458?logo=pandas&logoColor=white)
-![Streamlit](https://img.shields.io/badge/Streamlit-FF4B4B?logo=streamlit&logoColor=white)
-![SQLite](https://img.shields.io/badge/SQLite-003B57?logo=sqlite&logoColor=white)
-![HTML5](https://img.shields.io/badge/HTML5-E34F26?logo=html5&logoColor=white)
-![CSS3](https://img.shields.io/badge/CSS3-1572B6?logo=css3&logoColor=white)
-![Ubuntu](https://img.shields.io/badge/Ubuntu-E95420?logo=ubuntu&logoColor=white)
-![VS Code](https://img.shields.io/badge/VS%20Code-007ACC?logo=visual-studio-code&logoColor=white)
+![FastAPI](https://img.shields.io/badge/FastAPI-009688?logo=fastapi&logoColor=white)
+![React%20Native](https://img.shields.io/badge/React%20Native-61DAFB?logo=react&logoColor=black)
+![Kotlin](https://img.shields.io/badge/Kotlin-7F52FF?logo=kotlin&logoColor=white)
+![Rust](https://img.shields.io/badge/Rust-000000?logo=rust&logoColor=white)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-4169E1?logo=postgresql&logoColor=white)
+![Docker](https://img.shields.io/badge/Docker-2496ED?logo=docker&logoColor=white)
 ![Git](https://img.shields.io/badge/Git-F05032?logo=git&logoColor=white)
 
-
-**Full Stack Python Developer | Web Apps, Mobile Tools & Automation**
-
-I build practical applications that connect frontend experience, backend engineering, and automation.  
-
-### Portfolio website
-**Live site:** [JeremyB.dev](https://jeremyb.dev) · **Repository:** [github.com/JeremyB-py/JeremyB-pydev_Portfolio](https://github.com/JeremyB-py/JeremyB-pydev_Portfolio)
+**Live site:** [jeremyb.dev](https://jeremyb.dev) · **ClipSpan:** [clipspan.com](https://clipspan.com/)
 
 ---
 
-## Featured Projects
+## About
 
-### Wrinkle Witch Website & Full-Stack Business Platform
-> A full-stack platform built for **The Wrinkle Witch** (local skincare studio).  
-> Static customer site (Cloudflare Pages), FastAPI backend (Railway), Streamlit admin apps, and scheduled jobs share a monorepo with common auth, Square integrations, and PostgreSQL.  
-> Includes the fully integrated **Wrinkle Witch CRM** and **Referral Tracker Module** as internal tools.
+I'm a full-stack Python-native engineer building production web and mobile applications, automation, LLM tooling, and cross-platform systems. After ten years in logistics, I bring a practical, process-driven approach to reliability and problem-solving.
 
-- **Tech:** Python · FastAPI · Streamlit · PostgreSQL · HTML/CSS/JS · Railway · Cloudflare Pages  
-- **Highlights:** Static site + FastAPI (validation, CORS); shared modules (auth, Square OAuth); specials engine + analytics; Square Bookings (multi-step booking, card-on-file via Web Payments SDK); scheduled jobs + job dashboard; referral overhaul with milestones; staging + Playwright E2E; bcrypt/roles; SEO + security  
-- *(Private repository, code available upon request)*  
+Most recently, I've been building [ClipSpan](https://jeremyb.dev/projects/clipspan/), a local-first clipboard history and sync product for Android, Linux, and Windows. My other work includes the Wrinkle Witch business platform, Likely Cause, and open-source contributions to the Zap terminal. I use AI-assisted workflows to accelerate development while retaining ownership of architecture, validation, security, and release decisions.
 
-Write-up Link: [Wrinkle Witch Website Showcase](https://github.com/JeremyB-py/JeremyB-pydev_Portfolio/blob/main/projects/wrinkle_witch_website.md)
+**Location:** St. Louis, MO (open to remote)
 
 ---
 
-### Likely Cause: Dependency Health Dashboard
-> Mobile-first incident triage for solo developers: custom health monitors plus third-party status feeds produce a rule-based "likely cause" with evidence and suggested next checks.
+## Featured projects
 
-- **Tech:** Python · FastAPI · React Native · Expo · PostgreSQL · Docker  
-- **Highlights:** Monorepo (Expo Router mobile, FastAPI API, background worker); scheduled checks + Expo push alerts; provider status adapters; rule-based diagnosis engine; native Android/iOS home-screen widgets (v0.12.x)  
-- *(Private repository)*  
-
-Write-up Link: [Likely Cause Showcase](https://github.com/JeremyB-py/JeremyB-pydev_Portfolio/blob/main/projects/likely_cause.md)
-
----
+Open a project on [jeremyb.dev](https://jeremyb.dev) for the full case study. Markdown sources also live in [`/projects`](./projects).
 
 ### ClipSpan: Universal Clipboard Sync
-> One Android app plus Rust/Tauri desktop: clipboard history and sync for Android, Linux, and Windows, with first-run setup, signed updates, QR pairing, and optional E2E account sync.
 
-- **Tech:** Kotlin · Android · Rust · Tauri · Svelte · Axum · SQLite
+One Android app plus Rust/Tauri desktop: clipboard history and sync for Android, Linux, and Windows, with first-run setup, signed updates, and optional E2E account.
+
+- **Tech:** Kotlin · Rust · Tauri · Android · SQLite
 - **Highlights:** One APK (companion + ClipSpan Keyboard); first-run wizards; signed desktop auto-updates; docked history picker; multimedia sync; offline-resilient history; optional E2E account + relay (v0.16.0)
-- *(Private repository)* · Site: [clipspan.com](https://clipspan.com/)
+- Private repository · Product site: [clipspan.com](https://clipspan.com/)
 
-Write-up Link: [ClipSpan Showcase](https://github.com/JeremyB-py/JeremyB-pydev_Portfolio/blob/main/projects/clipspan.md)
+[View on jeremyb.dev](https://jeremyb.dev/projects/clipspan/)
 
----
+### Wrinkle Witch Website & Multi-App Platform
 
-### Zap: Open Source Contributions
-> Three merged PRs to [zerx-lab/zap](https://github.com/zerx-lab/zap), an open local-first Rust terminal with BYOP AI and agent support.
+Static site, FastAPI backend, Streamlit admin, scheduled jobs; Square Bookings, referrals, specials.
 
-- **Tech:** Rust · BYOP AI · Open Source  
-- **Highlights:** BYOP agent tool execution from JSON-in-text (#305); provider routing for OpenAI gpt-5.x, Anthropic, Ollama (#306); Linux Settings paste UX (#307)  
+- **Tech:** Python · FastAPI · Streamlit · PostgreSQL · Railway · Cloudflare · HTML · CSS · JavaScript
+- **Highlights:** Static customer site (Cloudflare Pages) + FastAPI (Railway); shared monorepo modules (auth, Square OAuth); Square Bookings; scheduled jobs and job dashboard; referral and specials flows
+- Private repository
 
-Write-up Link: [Zap Contributions Showcase](https://github.com/JeremyB-py/JeremyB-pydev_Portfolio/blob/main/projects/zap_contributions.md)
+[View on jeremyb.dev](https://jeremyb.dev/projects/wrinkle-website/)
 
----
+### Wrinkle Witch CRM
 
-### Wrinkle Witch CRM (Core Platform)
-> A modular Streamlit-based business management platform built for a real skincare business, **The Wrinkle Witch**.  
-> Originally a searchable esthetician product database. It is now an internal app on the Wrinkle Witch platform, with the Referral Tracker as a separate admin tool.
+Streamlit CRM: product database and data pipelines; internal app on the Wrinkle Witch platform.
 
-- **Tech:** Python · Streamlit · Pandas · SQLite · CSV I/O  
-- **Highlights:** Modular architecture, searchable product catalog, persistent data pipelines. Fully integrated into the Wrinkle Witch Multi-App Platform.  
-- *(Private repository, code available upon request)*  
+- **Tech:** Python · Streamlit · Pandas · SQLite
+- Private repository
 
-Write-up Link: [Wrinkle Witch CRM Showcase](https://github.com/JeremyB-py/JeremyB-pydev_Portfolio/blob/main/projects/wrinkle_witch_crm.md)
-
----
+[View on jeremyb.dev](https://jeremyb.dev/projects/wrinkle-crm/)
 
 ### Referral Tracker Module
-> Streamlit app that automates referral tracking, rewards, PDF card creation, and batch exports, fully integrated in the Wrinkle Witch platform.
 
-- **Tech:** Python · Streamlit · Pandas · Pillow · FPDF  
-- **Highlights:** Modular codebase, automated PDF generation, referral logic, session-state control, and CSV synchronization.  
-- *(Private repository, code available upon request)*  
+Referral tracking, PDF cards, session-state control, CSV sync; internal admin app on the Wrinkle Witch platform.
 
-Write-up link: [Wrinkle Witch Referral Tracker Showcase](https://github.com/JeremyB-py/JeremyB-pydev_Portfolio/blob/main/projects/referral_tracker.md)
+- **Tech:** Python · Streamlit · Pillow · FPDF
+- Private repository
 
----
+[View on jeremyb.dev](https://jeremyb.dev/projects/referral-tracker/)
 
-## Archive Projects
+### Likely Cause: Dependency Health Dashboard
 
-Earlier experiments and learning projects (case studies still on the portfolio):
+Mobile-first incident triage: custom health monitors, provider status, rule-based likely cause.
 
-- [Agricultural Forecasting Dashboard](projects/agricultural_forecasting.md): Python, Pandas, ARIMA
-- [Power BI Non-Profit Dashboard](projects/powerbi_nonprofit_dashboard.md): Power BI, DAX
-- [Continuous Learning AI Prototype](projects/continuous_learning_ai_prototype.md): Python, modular AI experiment
-- [Toy Blockchain](projects/crypto_prototype.md): Python, Flask, proof-of-work
+- **Tech:** Python · FastAPI · React Native · Expo · PostgreSQL · Docker
+- **Highlights:** Monorepo (Expo Router mobile, FastAPI API, background worker); scheduled checks; provider status adapters; rule-based diagnosis engine; native Android/iOS home-screen widgets (v0.12.x)
+- Private repository
 
----
+[View on jeremyb.dev](https://jeremyb.dev/projects/likely-cause/)
 
-## Supporting Projects
+### Zap: Open Source Contributions
 
-#### Local LLM Testing & Fine-Tuning
-> Ongoing experimentation with running and fine-tuning local language models such as **Phi-2** (8-bit quantization) and **Mistral-7B (4-bit)** using **LoRA/QLoRA** parameter-efficient methods.  
+Merged PRs to [zerx-lab/zap](https://github.com/zerx-lab/zap): BYOP agent tool execution, provider routing, Linux Settings paste.
 
-- **Tools:** PyTorch · BitsAndBytes · PEFT · Transformers  
+- **Tech:** Rust · Open Source · BYOP AI
+- **Highlights:** BYOP agent tool execution from JSON-in-text (#305); provider routing for OpenAI gpt-5.x, Anthropic, Ollama (#306); Linux Settings paste UX (#307)
 
----
-
-#### VS Code & Git Automations
-> Custom Git integration scripts and workspace configurations for **Streamlit**, **data-science**, and **LLM** projects.  
-
-- **Tools:** Git · GitHub · VS Code · Jupytext · PyTest  
+[View on jeremyb.dev](https://jeremyb.dev/projects/zap-contributions/) · [zerx-lab/zap](https://github.com/zerx-lab/zap)
 
 ---
 
-#### Ubuntu
-> Working primarily in **Ubuntu 24 LTS** with custom terminal configurations, including **fish** and **Starship**.
+## Archive
+
+Earlier experiments. Case studies are on the site.
+
+- [Continuous Learning AI Prototype](https://jeremyb.dev/projects/claip/): Python experiment with JSON knowledge bases, checkpoints, and rollback
+- [Toy Blockchain](https://jeremyb.dev/projects/blockchain/): Proof-of-work, transaction pool, and node sync in Python
+- [Agricultural Forecasting Dashboard](https://jeremyb.dev/projects/agricultural/): Crop yield forecasting with regression, ARIMA, EDA, and Matplotlib
+- [Power BI Non-Profit Dashboard](https://jeremyb.dev/projects/powerbi/): Multi-page dashboard for donor, event, and volunteer metrics
 
 ---
 
-## About Me
-I am a full stack Python developer focused on building web applications, mobile tools, and automation. After nine years in logistics, I bring a process driven mindset to designing systems that are reliable and practical for real businesses.
+## Supporting work
 
-Most of my time is spent learning new tools and applying them directly in projects, from the Wrinkle Witch platform to Likely Cause, ClipSpan, and open-source work on the Zap terminal.
-
----
-
-## Connect With Me
-- **GitHub:** [github.com/JeremyB-py](https://github.com/JeremyB-py)  
-- **LinkedIn:** [linkedin.com/in/jeremyb-pydev](https://www.linkedin.com/in/jeremyb-pydev/)  
-- **Email:** contact@jeremyb.dev  
+I also run local-LLM experiments (Phi-2 and Mistral-7B with LoRA/QLoRA), editor and Git automation, and a daily Ubuntu/Linux workstation.
 
 ---
 
-*Detailed case studies are on the* [**live portfolio**](https://jeremyb.dev/) *under each project; markdown sources also live in the* [`/projects`](./projects) *folder in this repository.*
+## Technical skills
+
+Languages, frameworks, and platforms I use regularly.
+
+Python · FastAPI · Streamlit · React Native · Expo · HTML / CSS / JavaScript · Kotlin · Rust · SQL · PostgreSQL / SQLite · Pydantic · Pytest · REST APIs · Git · GitHub Actions · Railway · Cloudflare Pages · Playwright · Docker · Ubuntu · Linux · Cursor · VS Code
+
+---
+
+## Contact
+
+Reach out for opportunities, collaborations, or questions about my work.
+
+- **Email:** [contact@jeremyb.dev](mailto:contact@jeremyb.dev)
+- **LinkedIn:** [linkedin.com/in/jeremyb-pydev](https://www.linkedin.com/in/jeremyb-pydev/)
+- **GitHub:** [github.com/JeremyB-py](https://github.com/JeremyB-py)
+- **Full-Stack Python resume:** [View resume (PDF)](https://jeremyb.dev/docs/JeremyB_Resume.pdf)
+- **AI Systems Engineer resume:** [View AI-focused resume (PDF)](https://jeremyb.dev/docs/JeremyB_AI_Systems_Engineer_Resume.pdf)
+- **Portfolio:** [jeremyb.dev](https://jeremyb.dev)
+
+jeremyb.dev is the current portfolio. This README is a snapshot for GitHub.
