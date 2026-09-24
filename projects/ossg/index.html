@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Office Supply Stealth Game · case study · jeremyb.dev portfolio" />
+  <link rel="canonical" href="https://jeremyb.dev/projects/ossg/" />
+  <meta property="og:type" content="article" />
+  <meta property="og:locale" content="en_US" />
+  <meta property="og:url" content="https://jeremyb.dev/projects/ossg/" />
+  <meta property="og:title" content="Office Supply Stealth Game | Jeremy B." />
+  <meta property="og:description" content="Office Supply Stealth Game · case study · jeremyb.dev portfolio" />
+  <meta property="og:image" content="https://jeremyb.dev/og-image.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="Office Supply Stealth Game, case study preview" />
+  <!-- Open Graph: LinkedIn and others use these tags for link previews -->
+  <title>Office Supply Stealth Game | Jeremy B.</title>
+  <script>(function(){try{var t=localStorage.getItem('portfolio-theme');if(t&&['nebula','matrix','terminal','paper'].indexOf(t)>=0)document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>
+  <link rel="stylesheet" href="/assets/site-shell.css" />
+  <link rel="stylesheet" href="/assets/project.css" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+</head>
+<body>
+  <canvas id="matrix-rain" aria-hidden="true"></canvas>
+  <div class="site-wrap">
+    <header class="site-header">
+        <div class="container site-header__inner">
+          <a class="site-logo" href="/#hero">JeremyB.py</a>
+          <button type="button" class="nav-toggle" id="nav-toggle" aria-expanded="false" aria-controls="site-nav">
+            Menu
+          </button>
+          <nav id="site-nav" class="site-nav" aria-label="Primary">
+            <a href="/#about">About</a>
+            <a href="/#map">Projects</a>
+            <a href="/#skills">Skills</a>
+            <a href="/#contact">Contact</a>
+          </nav>
+          <div class="site-header__actions">
+            <div class="social-links" aria-label="Social and resume">
+              <a
+                href="mailto:contact@jeremyb.dev"
+                title="Email"
+                aria-label="Email contact@jeremyb.dev"
+              >
+                <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                  <path
+                    d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"
+                  />
+                </svg>
+              </a>
+              <a
+                href="https://github.com/JeremyB-py"
+                target="_blank"
+                rel="noopener noreferrer"
+                title="GitHub"
+                aria-label="GitHub profile"
+              >
+                <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                  <path
+                    d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"
+                  />
+                </svg>
+              </a>
+              <a
+                href="https://www.linkedin.com/in/jeremyb-pydev/"
+                target="_blank"
+                rel="noopener noreferrer"
+                title="LinkedIn"
+                aria-label="LinkedIn profile"
+              >
+                <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                  <path
+                    d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"
+                  />
+                </svg>
+              </a>
+              <a
+                id="resume-link"
+                href="/docs/JeremyB_Resume.pdf"
+                target="_blank"
+                rel="noopener noreferrer"
+                title="Resume"
+                aria-label="Resume (PDF)"
+              >
+                <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                  <path
+                    d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"
+                  />
+                </svg>
+              </a>
+            </div>
+            <div
+              class="theme-switcher"
+              role="group"
+              aria-label="Visual theme"
+              title="Themes: deliberate UI exercise—same structure, different presentation."
+            >
+              <p class="theme-switcher__hint">
+                Themes: deliberate UI exercise—same structure, different presentation.
+              </p>
+              <div class="theme-buttons" id="theme-buttons"></div>
+            </div>
+          </div>
+        </div>
+      </header>
+    <main class="project-content">
+      <p class="project-back-row">
+        <a href="/">← Back to portfolio</a>
+      </p>
+    <section class="section">
+<h1>Office Supply Stealth Game</h1>
+<img class="project-logo project-logo--mascot" src="/media/ossg/tape.png" alt="The tape dispenser hero" />
+
+<p><strong>Office Supply Stealth Game</strong> is a 2D stealth platformer. You play a tape dispenser who sneaks around an office at night, avoids the patrolling staplers and hauls office supplies home to get fired as fast as possible.</p>
+<p>It started in 2018 as an indie game built in Unity and C#, and stopped at beta v0.7b. In 2026 it came to the browser in two versions: the <strong>2018 original</strong>, preserved with its bugs, and a <strong>modernized</strong> version updated with an AI coding agent (Claude Code) on a separate branch. Both are playable below.</p>
+<div class="game-player" data-game-player>
+  <div class="game-player__switch" role="group" aria-label="Game version">
+    <button type="button" class="game-player__edition" aria-pressed="false" data-edition="archival" data-src="/games/ossg/archival/" data-poster="/media/ossg/archival.jpg" data-poster-alt="Level 1 in the 2018 build" data-caption="2018 original · v0.7b, keyboard only, original bugs kept" data-note="Loads about 15 MB. Keyboard only." data-touch-note="Opens the full-page player. Keyboard only: the 2018 build has no touch controls.">2018 original</button>
+    <button type="button" class="game-player__edition" aria-pressed="true" data-edition="modernized" data-src="/games/ossg/modernized/" data-poster="/media/ossg/modernized.jpg" data-poster-alt="Level 1 in the modernized build, with the on-screen touch controls" data-caption="Modernized · Unity 6, gamepad and touch support" data-note="Loads about 16 MB. Keyboard, gamepad or touch." data-touch-note="Opens the full-page player with on-screen controls.">Modernized (2026)</button>
+  </div>
+  <div class="game-player__device">
+    <div class="game-player__screen">
+      <div class="game-player__poster">
+        <img src="/media/ossg/modernized.jpg" alt="Level 1 in the modernized build, with the on-screen touch controls" width="1280" height="720" />
+        <div class="game-player__cta">
+          <a class="game-player__play" href="/games/ossg/modernized/">Play</a>
+          <p class="game-player__note">Loads about 16 MB. Keyboard, gamepad or touch.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="game-player__bar">
+    <p class="game-player__caption">Modernized · Unity 6, gamepad and touch support</p>
+    <div class="game-player__actions">
+      <button type="button" class="game-player__fullscreen" hidden>Fullscreen</button>
+      <a class="game-player__open" href="/games/ossg/modernized/">Full-page player ↗</a>
+    </div>
+  </div>
+</div>
+
+<p>Full-page players: <a href="/games/ossg/modernized/">Modernized</a> · <a href="/games/ossg/archival/">2018 original</a></p>
+<hr>
+</section>
+<section class="section">
+<h2>Overview</h2>
+<p>Office Supply Stealth Game was co-developed as an indie game in <strong>Unity 2017.3</strong> with <strong>C#</strong> from August to October 2018. It was one of my early programming projects, covering game state, events, debugging and version control. It stopped at beta <strong>v0.7b</strong> and was never finished commercially.</p>
+<p>Each night you sneak around the office, grab what you can carry and haul it home. The fewer nights it takes to get fired, the better.</p>
+<ul>
+<li><strong>Skill-point progression</strong></li>
+<li><strong>Four unlockable levels</strong></li>
+<li><strong>Three power-ups:</strong> pizza, granola bar and takeout</li>
+<li><strong>Day-based par scoring</strong></li>
+<li><strong>Audio</strong> with volume settings</li>
+</ul>
+<hr>
+</section>
+<section class="section">
+<h2>Media</h2>
+<div class="media-pair media-pair--even">
+  <figure>
+    <img src="/media/ossg/archival.jpg" alt="Level 1 in the 2018 build" width="1280" height="720" loading="lazy" />
+    <figcaption>2018 original: the start of Level 1, keyboard only.</figcaption>
+  </figure>
+  <figure>
+    <img src="/media/ossg/modernized.jpg" alt="Level 1 in the modernized build, with the on-screen touch controls" width="1280" height="720" loading="lazy" />
+    <figcaption>Modernized: the same spot, with the on-screen touch controls.</figcaption>
+  </figure>
+</div>
+
+<hr>
+</section>
+<section class="section">
+<h2>Archival (2018 original)</h2>
+<p>In 2026 the 2018 project was ported to <strong>Unity 6000.4.6f1</strong> so it could run in a browser. The gameplay is unchanged: only the engine APIs that Unity 6 removed were renamed.</p>
+<p>It keeps its original bugs on purpose. The reset key does nothing, arrow-key players can&#39;t jump, and there are no touch controls. It is built from its own branch through a temporary worktree, so that branch never gets a commit or a changed file.</p>
+<hr>
+</section>
+<section class="section">
+<h2>Modernized (2026)</h2>
+<p>An AI-agent-assisted modernization with <strong>Claude Code</strong>, on a separate branch so the archival version stays untouched.</p>
+<h3>Input</h3>
+<ul>
+<li>Input moved to Unity&#39;s <strong>Input System</strong>, with <strong>gamepad</strong> support. Actions are bound in code, so there is no <code>.inputactions</code> asset to keep in sync.</li>
+<li><strong>Space</strong> and <strong>↑</strong> now jump. Before, the game moved on the arrow keys but only jumped on W, so arrow-key players couldn&#39;t jump at all.</li>
+</ul>
+<h3>Touch Controls</h3>
+<ul>
+<li>On-screen <strong>multi-touch controls</strong> for phones, built in code with no scene or prefab edits.</li>
+<li>They only appear on touch-first devices (the CSS <code>pointer: coarse</code> query, or after the first real touch) and hide themselves during menus, pause and the end of a night. <code>?touch=1</code> and <code>?touch=0</code> force them on or off.</li>
+</ul>
+<h3>Bug Fixes</h3>
+<p>Eleven 2018 bugs fixed. The most notable:</p>
+<table>
+<thead>
+<tr>
+<th>Bug</th>
+<th>Cause</th>
+<th>Fix</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>The reset key never worked</td>
+<td><code>ResetPosition()</code> is a coroutine, but it was called like a method and never started</td>
+<td>Started properly; it costs the same time as falling, so it can&#39;t teleport you home with loot</td>
+</tr>
+<tr>
+<td>No skill points for finishing on exactly night 12</td>
+<td><code>CheckPar</code> used <code>&lt; par + 7</code> and <code>&gt; par + 7</code>, so the boundary matched neither</td>
+<td>Moved to <code>GameRules.RewardForNights</code>, which covers every night count</td>
+</tr>
+<tr>
+<td>The end-of-night count-up never ended if the score beat the target</td>
+<td>The loop clamped its counter back below its own exit condition</td>
+<td>Counts to <code>min(score, target)</code></td>
+</tr>
+<tr>
+<td>Power-ups stayed disabled after leaving a level mid-power-up</td>
+<td>A static <code>isPowerActive</code> flag was never cleared</td>
+<td>The owning power-up clears it in <code>OnDestroy</code></td>
+</tr>
+</tbody></table>
+<p>The other seven: a null reference in the enemies&#39; line-of-sight check, pick-up and drop working while paused, pausing zeroing <code>fixedDeltaTime</code>, <strong>Q</strong> dropping only some items, a power-up spawn chance that was always 0 (<code>1 / 25</code> integer division), a duplicate <code>AudioManager</code> subscribing to events before destroying itself, and a field initializer that ran before <code>AudioManager.Awake</code>.</p>
+<h3>Browser Behaviour</h3>
+<ul>
+<li><strong>Saves persist:</strong> <code>PlayerPrefs.Save()</code> runs after every progress write, because a browser tab never quits.</li>
+<li><strong>Pause on focus loss:</strong> switching tabs mid-night opens the pause menu instead of leaving the timer running.</li>
+<li><strong>No dead Exit button:</strong> <code>Application.Quit</code> does nothing in a tab, so the button is hidden.</li>
+<li><strong>A responsive web player page</strong> that fills the screen from 4:3 to a phone held sideways. The release build went from a <strong>78 MB</strong> development build to about <strong>15.7 MB</strong>. It uses gzip with Unity&#39;s JavaScript decompression fallback and hashed file names, so it runs on static hosting like GitHub Pages with no special headers.</li>
+</ul>
+<h3>Tests and Verification</h3>
+<ul>
+<li>Scoring and skill rules pulled into a pure <code>GameRules</code> class with <strong>22 unit tests</strong> (Unity EditMode), including one proving the new stat formula matches the 2018 formula exactly.</li>
+<li>An automated <strong>screenshot tour</strong> loads every scene, plays part of Level 1 through the virtual input layer and checks that the reset key returns the player to spawn.</li>
+<li>A <strong>headless-Chrome playtest script</strong> runs a scripted playthrough of a web build: menus by mouse, Level 1 by keyboard, and an emulated phone using the on-screen buttons.</li>
+</ul>
+<p>The browser test caught a real bug the desktop tests missed: after the input upgrade, <strong>WebGL menus stopped registering mouse clicks</strong>. The 2018 <code>StandaloneInputModule</code> still saw pointer movement but never clicks, so the fix swaps each scene&#39;s UI to the Input System&#39;s UI module at load time.</p>
+<hr>
+</section>
+<section class="section">
+<h2>Comparison</h2>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Archival (2018)</th>
+<th>Modernized (2026)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Game code</td>
+<td>v0.7b as left in October 2018</td>
+<td>v0.7b plus the changes above</td>
+</tr>
+<tr>
+<td>Engine</td>
+<td>Unity 2017.3, ported to Unity 6000.4.6f1</td>
+<td>Unity 6000.4.6f1</td>
+</tr>
+<tr>
+<td>Input</td>
+<td>Keyboard (legacy Input Manager)</td>
+<td>Keyboard, gamepad and touch (Input System)</td>
+</tr>
+<tr>
+<td>Jump</td>
+<td>W</td>
+<td>W, Space or ↑</td>
+</tr>
+<tr>
+<td>Phones and tablets</td>
+<td>No touch controls</td>
+<td>On-screen multi-touch controls</td>
+</tr>
+<tr>
+<td>2018 bugs</td>
+<td>Kept on purpose</td>
+<td>Eleven fixed</td>
+</tr>
+<tr>
+<td>Tab loses focus</td>
+<td>Timer keeps running</td>
+<td>Game pauses</td>
+</tr>
+<tr>
+<td>Tests</td>
+<td>None</td>
+<td>22 unit tests, screenshot tour, browser playtest</td>
+</tr>
+<tr>
+<td>Download</td>
+<td>About 15.1 MB</td>
+<td>About 15.7 MB</td>
+</tr>
+</tbody></table>
+<hr>
+</section>
+<section class="section">
+<h2>Controls</h2>
+<table>
+<thead>
+<tr>
+<th>Action</th>
+<th>Archival (keyboard)</th>
+<th>Modernized (keyboard)</th>
+<th>Modernized (gamepad)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Move</td>
+<td><code>A</code> <code>D</code> or <code>←</code> <code>→</code></td>
+<td><code>A</code> <code>D</code> or <code>←</code> <code>→</code></td>
+<td>Left stick or D-pad</td>
+</tr>
+<tr>
+<td>Jump</td>
+<td><code>W</code></td>
+<td><code>W</code>, <code>Space</code> or <code>↑</code></td>
+<td>A</td>
+</tr>
+<tr>
+<td>Drop through a shelf</td>
+<td><code>S</code></td>
+<td><code>S</code> or <code>↓</code></td>
+<td>Down</td>
+</tr>
+<tr>
+<td>Pick up</td>
+<td><code>E</code></td>
+<td><code>E</code></td>
+<td>X</td>
+</tr>
+<tr>
+<td>Drop carried items</td>
+<td><code>Q</code></td>
+<td><code>Q</code></td>
+<td>Y</td>
+</tr>
+<tr>
+<td>Reel items in (hold)</td>
+<td><code>R</code></td>
+<td><code>R</code></td>
+<td>RT or RB</td>
+</tr>
+<tr>
+<td>Reset to spawn</td>
+<td><code>`</code> (does nothing, a 2018 bug)</td>
+<td><code>`</code> (costs time)</td>
+<td>View or Select</td>
+</tr>
+<tr>
+<td>Pause</td>
+<td><code>Esc</code></td>
+<td><code>Esc</code> or <code>P</code></td>
+<td>Menu or Start</td>
+</tr>
+</tbody></table>
+<p>On phones and tablets, the modernized version shows on-screen buttons during a level. The 2018 original is keyboard only.</p>
+<hr>
+</section>
+<section class="section">
+<h2>Tech Stack</h2>
+<ul>
+<li><strong>Engine:</strong> Unity 2017.3 (2018), Unity 6000.4.6f1 (2026)</li>
+<li><strong>Language:</strong> C#</li>
+<li><strong>Input:</strong> Legacy Input Manager, then the Unity Input System and its UI module</li>
+<li><strong>Web:</strong> WebGL 2, custom responsive player page (HTML, CSS, JavaScript)</li>
+<li><strong>Testing:</strong> Unity Test Framework (EditMode), headless Chrome playtest script (Node.js), automated screenshot tour</li>
+<li><strong>Tooling:</strong> Claude Code, Git branches and worktrees, shell build scripts</li>
+</ul>
+<hr>
+</section>
+<section class="section">
+<h2>Repository</h2>
+<p>The Unity source is private. The 2018 version and the modernization live on separate branches, and a draft pull request shows the full diff between them.</p>
+<p>Portfolio case study: <a href="https://jeremyb.dev/projects/ossg/">jeremyb.dev/projects/ossg/</a></p>
+<hr>
+</section>
+<section class="section">
+<h2>Skills Demonstrated</h2>
+<ul>
+<li>Game programming in C#: game state, events, scoring and progression (2018)</li>
+<li>Modernizing legacy code without touching the original: separate branches, archival builds from a throwaway worktree</li>
+<li>Root-causing old bugs: a coroutine that never started, an off-by-one boundary, static state leaking across scenes, integer division</li>
+<li>Extracting rules into a pure, testable class and proving it matches the old behaviour</li>
+<li>Input System migration, gamepad support and multi-touch controls built in code</li>
+<li>WebGL delivery: a 78 MB to 15.7 MB build cut, static hosting with no server config, browser lifecycle (focus, saves)</li>
+<li>End-to-end verification in a real browser, which caught a WebGL-only bug the desktop tests missed</li>
+<li>Directing an AI coding agent on a real codebase and reviewing its changes</li>
+</ul>
+<hr>
+</section>
+<section class="section">
+<h2>Next Steps</h2>
+<ul>
+<li>Full gamepad navigation in menus (no menu sets a first-selected button yet)</li>
+<li>Velocity-based movement, which would fix falling through desks but changes how the game feels, so it needs playtesting first</li>
+<li>Re-saving the scenes out of Unity 2017 serialization once there is a reason to touch them</li>
+</ul>
+</section>
+    </main>
+  </div>
+  <script type="module" src="/assets/site-shell.js"></script>
+  <script type="module" src="/assets/project-reveal.js"></script>
+</body>
+</html>
