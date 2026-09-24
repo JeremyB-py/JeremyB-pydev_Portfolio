@@ -79,6 +79,16 @@ Mobile-first incident triage: custom health monitors, provider status, rule-base
 
 [View on jeremyb.dev](https://jeremyb.dev/projects/likely-cause/)
 
+### Office Supply Stealth Game
+
+2018 Unity stealth platformer, playable in the browser as the original and as a 2026 AI-assisted modernization with gamepad, touch controls, bug fixes and tests.
+
+- **Tech:** Unity · C# · WebGL · Input System · Claude Code
+- **Highlights:** 2018 build preserved as is; Input System with gamepad and on-screen touch controls; eleven 2018 bugs fixed; scoring rules extracted with 22 unit tests; headless-browser playtest caught a WebGL-only bug; release build cut from 78 MB to 15.7 MB
+- Private repository
+
+[View on jeremyb.dev](https://jeremyb.dev/projects/ossg/) · [Play in browser](https://jeremyb.dev/games/ossg/modernized/)
+
 ### Zap: Open Source Contributions
 
 Merged PRs to [zerx-lab/zap](https://github.com/zerx-lab/zap): BYOP agent tool execution, provider routing, Linux Settings paste.

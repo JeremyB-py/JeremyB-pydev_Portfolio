@@ -1,0 +1,336 @@
+/* Page chrome for the WebGL player. Colours follow the game's own menus. */
+:root {
+  --bg: #1b2531;
+  --panel: #233040;
+  --panel-raised: #2c3b4e;
+  --line: rgba(255, 255, 255, 0.14);
+  --text: #f4f6f8;
+  --muted: #a9b4c0;
+  --accent: #3fa66b;      /* the tape's green */
+  --accent-strong: #52c283;
+  --danger: #e2685a;
+  --bar-height: 44px;
+  --radius: 10px;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  color: var(--text);
+  background: var(--bg);
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  height: 100%;
+  overflow: hidden;
+  background: var(--bg);
+  overscroll-behavior: none;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  height: 100dvh;
+}
+
+body.embed #bar { display: none; }
+
+#stage {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  display: grid;
+  place-items: center;
+  background: #000;
+}
+
+/* page.js sizes the canvas to fill the stage, letterboxed outside 4:3 to 2.17:1. */
+#unity-canvas {
+  display: block;
+  background: var(--panel);
+  outline: none;
+  touch-action: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 24px 16px;
+  text-align: center;
+  background: var(--panel);
+}
+
+.overlay[hidden], .dialog[hidden], .toast[hidden], [hidden] { display: none !important; }
+
+.overlay h1 {
+  margin: 0;
+  font-size: clamp(22px, 4vw, 40px);
+  font-weight: 600;
+  letter-spacing: 0.01em;
+}
+
+.mascot {
+  width: clamp(96px, 16vw, 158px);
+  height: auto;
+  animation: bob 1.6s ease-in-out infinite;
+}
+
+#start .mascot { animation: none; }
+
+@keyframes bob {
+  0%, 100% { transform: translateY(0) rotate(-2deg); }
+  50% { transform: translateY(-8px) rotate(2deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mascot { animation: none; }
+}
+
+.edition-line {
+  margin: 0;
+  color: var(--muted);
+  font-size: 15px;
+}
+
+.progress {
+  width: min(320px, 70vw);
+  height: 8px;
+  margin-top: 8px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.1);
+  overflow: hidden;
+}
+
+.progress-fill {
+  width: 0;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--accent);
+  transition: width 0.2s ease-out;
+}
+
+.progress-label {
+  margin: 0;
+  color: var(--muted);
+  font-size: 13px;
+  font-variant-numeric: tabular-nums;
+}
+
+.hint {
+  margin: 0;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+#error h1 { color: var(--danger); }
+.error-message { margin: 0; max-width: 520px; font-size: 14px; color: var(--text); }
+
+button, #bar a {
+  font: inherit;
+  color: var(--text);
+}
+
+button.primary {
+  margin-top: 8px;
+  min-width: 160px;
+  padding: 12px 28px;
+  border: 0;
+  border-radius: 999px;
+  background: var(--accent);
+  font-size: 18px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s, transform 0.1s;
+}
+
+button.primary:hover { background: var(--accent-strong); }
+button.primary:active { transform: scale(0.97); }
+
+button:focus-visible, a:focus-visible {
+  outline: 2px solid var(--accent-strong);
+  outline-offset: 2px;
+}
+
+/* Footer bar */
+#bar {
+  flex: 0 0 auto;
+  height: var(--bar-height);
+  padding: 0 12px;
+  padding-bottom: env(safe-area-inset-bottom);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  background: var(--panel);
+  border-top: 1px solid var(--line);
+  font-size: 14px;
+}
+
+.bar-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  white-space: nowrap;
+}
+
+.bar-title span:first-of-type {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.badge {
+  flex: 0 0 auto;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+  background: rgba(63, 166, 107, 0.18);
+  color: var(--accent-strong);
+}
+
+body[data-edition="archival"] .badge {
+  background: rgba(214, 170, 92, 0.18);
+  color: #e5bf7a;
+}
+
+.bar-actions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex: 0 0 auto;
+}
+
+.bar-actions button, .bar-actions a {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 32px;
+  padding: 0 10px;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  text-decoration: none;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.bar-actions button:hover, .bar-actions a:hover { background: var(--panel-raised); }
+
+@media (max-width: 560px) {
+  .bar-title span:first-of-type { display: none; }
+}
+
+/* Phones held sideways: give the game as much height as possible. */
+@media (max-height: 480px) {
+  :root { --bar-height: 34px; }
+  #bar { font-size: 13px; }
+  .bar-actions button, .bar-actions a { height: 28px; }
+  .bar-title span:first-of-type { display: none; }
+}
+
+/* Controls dialog */
+.dialog {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 16px;
+  background: rgba(10, 15, 22, 0.72);
+  z-index: 10;
+}
+
+.dialog-card {
+  width: min(560px, 100%);
+  max-height: 100%;
+  overflow: auto;
+  padding: 18px 20px 20px;
+  border-radius: var(--radius);
+  background: var(--panel);
+  border: 1px solid var(--line);
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.45);
+}
+
+.dialog-card header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.dialog-card h2 { margin: 0; font-size: 18px; }
+
+button.icon {
+  width: 32px;
+  height: 32px;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  font-size: 22px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+button.icon:hover { background: var(--panel-raised); }
+
+.controls-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 12px;
+  font-size: 14px;
+}
+
+.controls-table th {
+  text-align: left;
+  font-weight: 600;
+  color: var(--muted);
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 6px 8px 6px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.controls-table td {
+  padding: 7px 8px 7px 0;
+  border-bottom: 1px solid var(--line);
+  vertical-align: top;
+}
+
+kbd {
+  display: inline-block;
+  min-width: 22px;
+  padding: 1px 6px;
+  margin: 1px 2px 1px 0;
+  border-radius: 4px;
+  border: 1px solid var(--line);
+  border-bottom-width: 2px;
+  background: var(--panel-raised);
+  font: 12px/1.6 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  text-align: center;
+}
+
+body[data-edition="archival"] .modern-only,
+body[data-edition="modernized"] .archival-only { display: none; }
+
+/* Portrait hint on phones */
+.toast {
+  position: absolute;
+  left: 50%;
+  bottom: 16px;
+  transform: translateX(-50%);
+  max-width: calc(100% - 32px);
+  padding: 10px 14px;
+  border-radius: 999px;
+  background: rgba(10, 15, 22, 0.85);
+  color: var(--text);
+  font-size: 13px;
+  z-index: 5;
+  pointer-events: none;
+}

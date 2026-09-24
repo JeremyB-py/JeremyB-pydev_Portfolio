@@ -17,6 +17,9 @@ interface ProjectJson {
   /** Optional product / marketing site (shown instead of or alongside GitHub). */
   liveUrl?: string;
   liveUrlLabel?: string;
+  /** Optional site-relative path to something playable on this site (e.g. games/ossg/modernized/). */
+  playPath?: string;
+  playLabel?: string;
   private: boolean;
   orbitTier?: OrbitTier;
   orbitGroup?: string | null;
@@ -32,6 +35,13 @@ function sortProjects(projects: ProjectJson[]): ProjectJson[] {
 function projectPageHref(slug: string): string {
   const s = slug.replace(/[^a-zA-Z0-9_-]/g, '') || 'project';
   return `${import.meta.env.BASE_URL}projects/${s}/`;
+}
+
+/** Site-relative path under BASE_URL; only plain path segments (no scheme, `..` or query). */
+function sitePathHref(raw: string): string | null {
+  const t = raw.trim().replace(/^\/+/, '');
+  if (!t || !/^[a-zA-Z0-9_-]+(\/[a-zA-Z0-9_-]+)*\/?$/.test(t)) return null;
+  return `${import.meta.env.BASE_URL}${t}`;
 }
 
 async function loadProjects(): Promise<ProjectJson[]> {
@@ -76,7 +86,10 @@ function renderProjects(projects: ProjectJson[]): void {
       const writeUp = sanitizeHttpUrl(p.writeUpUrl ?? '');
       const live = sanitizeHttpUrl(p.liveUrl ?? '');
       const liveLabel = (p.liveUrlLabel ?? 'Visit site').trim() || 'Visit site';
+      const play = sitePathHref(p.playPath ?? '');
+      const playLabel = (p.playLabel ?? 'Play').trim() || 'Play';
       const viewProject = `<a class="project-card__primary" href="${escapeHtml(pageHref)}">View project</a>`;
+      const playLink = play ? `<a href="${escapeHtml(play)}">${escapeHtml(playLabel)}</a>` : '';
       const liveLink = live
         ? `<a href="${escapeHtml(live)}" target="_blank" rel="noopener noreferrer">${escapeHtml(liveLabel)}</a>`
         : '';
@@ -94,6 +107,7 @@ function renderProjects(projects: ProjectJson[]): void {
       </div>
       <div class="project-card__links">
         ${viewProject}
+        ${playLink}
         ${liveLink}
         ${writeUpLink}
         ${p.private ? '<span class="badge-private">Private repo</span>' : ''}

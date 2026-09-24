@@ -43,6 +43,7 @@ function mapLabel(project: ProjectForMap): string {
     'likely-cause': 'Likely Cause',
     clipspan: 'ClipSpan',
     'zap-contributions': 'Zap: Open Source',
+    ossg: 'Office Supply Stealth',
   };
   return bySlug[project.slug] ?? project.title;
 }

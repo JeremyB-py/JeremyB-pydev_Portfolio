@@ -67,6 +67,21 @@
     "sortOrder": 5
   },
   {
+    "id": "ossg",
+    "slug": "ossg",
+    "sourceMarkdown": "projects/office_supply_stealth_game.md",
+    "title": "Office Supply Stealth Game",
+    "summary": "2018 Unity stealth platformer, playable in the browser as the original and as a 2026 AI-assisted modernization with gamepad, touch controls, bug fixes and tests.",
+    "tech": ["Unity", "C#", "WebGL", "Input System", "Claude Code"],
+    "writeUpUrl": "",
+    "playPath": "games/ossg/modernized/",
+    "playLabel": "Play in browser",
+    "private": true,
+    "orbitTier": "outer",
+    "orbitGroup": null,
+    "sortOrder": 50
+  },
+  {
     "id": "zap-contributions",
     "slug": "zap-contributions",
     "sourceMarkdown": "projects/zap_contributions.md",

@@ -21,11 +21,12 @@ const siteOrigin =
     ? `https://jeremyb-py.github.io/${repo}`
     : 'https://jeremyb.dev';
 
+/** `../media/` and `../games/` (src, href, or data-* such as the game player's) -> site base. */
 function rewriteMediaUrls(html) {
-  let out = html;
-  out = out.replace(/src="\.\.\/media\//g, `src="${base}media/`);
-  out = out.replace(/href="\.\.\/media\//g, `href="${base}media/`);
-  return out;
+  return html.replace(
+    /(\s(?:src|href|data-[\w-]+))="\.\.\/(media|games)\//g,
+    (_, attr, dir) => `${attr}="${base}${dir}/`
+  );
 }
 
 /** Split marked HTML on `<h2` boundaries; each block becomes a scroll-reveal section. */
