@@ -71,7 +71,7 @@
     "slug": "ossg",
     "sourceMarkdown": "projects/office_supply_stealth_game.md",
     "title": "Office Supply Stealth Game",
-    "summary": "2018 Unity stealth platformer, playable in the browser as the original and as a 2026 AI-assisted modernization with gamepad, touch controls, bug fixes and tests.",
+    "summary": "2018 Unity platformer: a discarded tape dispenser frames its ex-owner by piling office supplies on his desk. Playable in the browser as the original and as a 2026 AI-assisted modernization with gamepad, touch controls, bug fixes and tests.",
     "tech": ["Unity", "C#", "WebGL", "Input System", "Claude Code"],
     "writeUpUrl": "",
     "playPath": "games/ossg/modernized/",

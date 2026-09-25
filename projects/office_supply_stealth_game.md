@@ -2,7 +2,7 @@
 
 <img class="project-logo project-logo--mascot" src="../media/ossg/tape.png" alt="The tape dispenser hero" />
 
-**Office Supply Stealth Game** is a 2D stealth platformer. You play a tape dispenser who sneaks around an office at night, avoids the patrolling staplers and hauls office supplies home to get fired as fast as possible.
+**Office Supply Stealth Game** is a 2D platformer about revenge. You play a tape dispenser who was thrown away. To get back at your ex-owner, you spend each night moving his coworkers' office supplies to his desk to frame him. The goal is to get him fired in as few days as possible.
 
 It started in 2018 as an indie game built in Unity and C#, and stopped at beta v0.7b. In 2026 it came to the browser in two versions: the **2018 original**, preserved with its bugs, and a **modernized** version updated with an AI coding agent (Claude Code) on a separate branch. Both are playable below.
 
@@ -39,13 +39,25 @@ Full-page players: [Modernized](../games/ossg/modernized/) · [2018 original](..
 
 Office Supply Stealth Game was co-developed as an indie game in **Unity 2017.3** with **C#** from August to October 2018. It was one of my early programming projects, covering game state, events, debugging and version control. It stopped at beta **v0.7b** and was never finished commercially.
 
-Each night you sneak around the office, grab what you can carry and haul it home. The fewer nights it takes to get fired, the better.
+It was meant to be a 2D stealth platformer. It never got far enough to feel like a stealth game, but the name stuck. A short opening cutscene to set up the story was also planned and never made.
 
-- **Skill-point progression**
-- **Four unlockable levels**
-- **Three power-ups:** pizza, granola bar and takeout
-- **Day-based par scoring**
-- **Audio** with volume settings
+### How It Works
+
+- **Nights:** each night runs on a timer. You start at your ex-owner's desk, grab whatever you can carry from around the office and bring it back. Anything left on his desk counts toward getting him fired.
+- **Staplers:** they patrol the office. If one catches you, it knocks your items loose one at a time; if your hands are empty, it sends you back to the desk and costs you time.
+- **Be back by morning:** if you are away from the desk when the timer runs out, that night's haul is halved.
+- **Par:** once enough has piled up, he's fired. Par is five nights, and beating or matching it earns more skill points.
+- **Skills:** spend skill points on carry capacity, movement speed, jump height, power-up duration, power-up boost and protection from time penalties. Points come from finishing a level, and new levels unlock as you beat the previous one (four in total).
+- **Power-ups:** *pizza* lets you see items through walls, a *granola bar* adds time to the clock and *takeout* makes you invincible. There is no indicator yet for when they wear off.
+
+The title screen explains the basics, and there is sound for most things, with volume settings in the options menu.
+
+---
+
+## Credits
+
+- **Jeremy Brown:** programming and music
+- **Brody Aubry:** artwork
 
 ---
 
