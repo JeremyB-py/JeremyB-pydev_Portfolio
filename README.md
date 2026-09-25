@@ -84,7 +84,7 @@ Mobile-first incident triage: custom health monitors, provider status, rule-base
 2018 Unity platformer: a discarded tape dispenser frames its ex-owner by piling office supplies on his desk. Playable in the browser as the original and as a 2026 AI-assisted modernization with gamepad, touch controls, bug fixes and tests.
 
 - **Tech:** Unity · C# · WebGL · Input System · Claude Code
-- **Highlights:** 2018 build preserved as is; Input System with gamepad and on-screen touch controls; eleven 2018 bugs fixed; scoring rules extracted with 22 unit tests; headless-browser playtest caught a WebGL-only bug; release build cut from 78 MB to 15.7 MB
+- **Highlights:** 2018 build preserved as is; Input System with gamepad and on-screen touch controls; eleven 2018 bugs fixed; scoring rules extracted with 22 unit tests; headless-browser playtest caught a WebGL-only bug; release build cut from 78 MB to 15.9 MB
 - Private repository
 
 [View on jeremyb.dev](https://jeremyb.dev/projects/ossg/) · [Play in browser](https://jeremyb.dev/games/ossg/modernized/)

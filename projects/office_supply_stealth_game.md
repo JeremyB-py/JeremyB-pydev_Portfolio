@@ -116,7 +116,7 @@ The other seven: a null reference in the enemies' line-of-sight check, pick-up a
 - **Saves persist:** `PlayerPrefs.Save()` runs after every progress write, because a browser tab never quits.
 - **Pause on focus loss:** switching tabs mid-night opens the pause menu instead of leaving the timer running.
 - **No dead Exit button:** `Application.Quit` does nothing in a tab, so the button is hidden.
-- **A responsive web player page** that fills the screen from 4:3 to a phone held sideways. The release build went from a **78 MB** development build to about **15.7 MB**. It uses gzip with Unity's JavaScript decompression fallback and hashed file names, so it runs on static hosting like GitHub Pages with no special headers.
+- **A responsive web player page** that fills the screen from 4:3 to a phone held sideways. The release build went from a **78 MB** development build to about **15.9 MB**. It uses gzip with Unity's JavaScript decompression fallback and hashed file names, so it runs on static hosting like GitHub Pages with no special headers.
 
 ### Tests and Verification
 
@@ -140,7 +140,7 @@ The browser test caught a real bug the desktop tests missed: after the input upg
 | 2018 bugs | Kept on purpose | Eleven fixed |
 | Tab loses focus | Timer keeps running | Game pauses |
 | Tests | None | 22 unit tests, screenshot tour, browser playtest |
-| Download | About 15.1 MB | About 15.7 MB |
+| Download | About 15.1 MB | About 15.9 MB |
 
 ---
 
@@ -187,7 +187,7 @@ Portfolio case study: [jeremyb.dev/projects/ossg/](https://jeremyb.dev/projects/
 - Root-causing old bugs: a coroutine that never started, an off-by-one boundary, static state leaking across scenes, integer division
 - Extracting rules into a pure, testable class and proving it matches the old behaviour
 - Input System migration, gamepad support and multi-touch controls built in code
-- WebGL delivery: a 78 MB to 15.7 MB build cut, static hosting with no server config, browser lifecycle (focus, saves)
+- WebGL delivery: a 78 MB to 15.9 MB build cut, static hosting with no server config, browser lifecycle (focus, saves)
 - End-to-end verification in a real browser, which caught a WebGL-only bug the desktop tests missed
 - Directing an AI coding agent on a real codebase and reviewing its changes
 
