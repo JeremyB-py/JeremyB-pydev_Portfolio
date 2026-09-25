@@ -57,7 +57,7 @@ The title screen explains the basics, and there is sound for most things, with v
 ## Credits
 
 - **Jeremy Brown:** programming and music
-- **Brody Aubry:** artwork
+- **<a href="https://www.linkedin.com/in/brody-aubry" target="_blank" rel="noopener noreferrer">Brody Aubry</a>:** artwork
 
 ---
 
