@@ -95,7 +95,8 @@
   color: var(--color-text);
 }
 
-.project-content img {
+.project-content img,
+.project-content video {
   max-width: 100%;
   height: auto;
   border-radius: 8px;

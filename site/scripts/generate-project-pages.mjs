@@ -21,10 +21,10 @@ const siteOrigin =
     ? `https://jeremyb-py.github.io/${repo}`
     : 'https://jeremyb.dev';
 
-/** `../media/` and `../games/` (src, href, or data-* such as the game player's) -> site base. */
+/** `../media/` and `../games/` (src, href, poster, or data-* such as the game player's) -> site base. */
 function rewriteMediaUrls(html) {
   return html.replace(
-    /(\s(?:src|href|data-[\w-]+))="\.\.\/(media|games)\//g,
+    /(\s(?:src|href|poster|data-[\w-]+))="\.\.\/(media|games)\//g,
     (_, attr, dir) => `${attr}="${base}${dir}/`
   );
 }
