@@ -5,6 +5,12 @@ export function initProjectScrollReveal(): void {
 
   if (reduced) {
     sections.forEach((el) => el.classList.add('is-visible'));
+    // Autoplaying demo loops show their poster with controls instead.
+    document.querySelectorAll<HTMLVideoElement>('.project-content video[autoplay]').forEach((video) => {
+      video.removeAttribute('autoplay');
+      video.pause();
+      video.controls = true;
+    });
     return;
   }
 

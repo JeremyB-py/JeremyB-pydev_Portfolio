@@ -27,9 +27,16 @@ Install, pair, and daily paste should stay simple, with privacy and user control
 
 ## Media
 
-Desktop and Android histories staying in sync:
+A photo copied on the Linux desktop shows up in ClipSpan Keyboard's history on Android, then an address copied on the phone is pasted on the desktop from the history picker. Every screen is a real capture. Only the clip's trip between devices is animated.
 
-![ClipSpan desktop syncing with Android history](../media/clipspan/hero-sync.png)
+<video autoplay muted loop playsinline preload="metadata" width="1600" height="900" poster="../media/clipspan/demo-loop-poster.jpg" aria-label="ClipSpan demo: copy a photo on Linux, it appears on Android; copy an address on Android, paste it on Linux from the history picker">
+  <source src="../media/clipspan/demo-loop.webm" type="video/webm" />
+  <source src="../media/clipspan/demo-loop.mp4" type="video/mp4" />
+</video>
+
+Both histories end with the same clips in the same order:
+
+![ClipSpan on Android and Linux showing the same clipboard history, linked by the orbit](../media/clipspan/hero-sync.png)
 
 Desktop history picker docked at the top of the screen (hotkey paste into the focused app):
 
