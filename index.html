@@ -2,8 +2,10 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+    <script>(function(){try{var t=localStorage.getItem('portfolio-theme');var a={"terminal":"ember"};if(t&&a[t])t=a[t];if(t&&["nebula","matrix","ember","paper"].indexOf(t)>=0)document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#04070f" />
     <meta
       name="description"
       content="Jeremy B. - full-stack engineer. Cross-platform systems, websites, apps, and LLM tooling."
@@ -35,24 +37,24 @@
     <!-- Encourage browsers to revalidate the HTML shell; hashed JS/CSS from Vite already bust cache -->
     <meta http-equiv="Cache-Control" content="max-age=0, must-revalidate" />
     <title>Jeremy B. | Full-Stack Engineer</title>
-    <script type="module" crossorigin src="/assets/main-CvI7I2qj.js"></script>
-    <link rel="modulepreload" crossorigin href="/assets/matrixRain-lhNTr1vU.js">
-    <link rel="stylesheet" crossorigin href="/assets/main-Dd1Kr0CT.css">
+    <script type="module" crossorigin src="/assets/main-CSfjWhRA.js"></script>
+    <link rel="modulepreload" crossorigin href="/assets/themeFx-CsKmKH-Z.js">
+    <link rel="stylesheet" crossorigin href="/assets/main-IpWOgy0x.css">
   </head>
   <body>
-    <canvas id="matrix-rain" aria-hidden="true"></canvas>
+    <canvas id="theme-fx" aria-hidden="true"></canvas>
     <div class="site-wrap">
       <header class="site-header">
         <div class="container site-header__inner">
-          <a class="site-logo" href="#hero">JeremyB.dev</a>
+          <a class="site-logo" href="/#hero">JeremyB.dev</a>
           <button type="button" class="nav-toggle" id="nav-toggle" aria-expanded="false" aria-controls="site-nav">
             Menu
           </button>
           <nav id="site-nav" class="site-nav" aria-label="Primary">
-            <a href="#about">About</a>
-            <a href="#map">Projects</a>
-            <a href="#skills">Skills</a>
-            <a href="#contact">Contact</a>
+            <a href="/#about">About</a>
+            <a href="/#map">Projects</a>
+            <a href="/#skills">Skills</a>
+            <a href="/#contact">Contact</a>
           </nav>
           <div class="site-header__actions">
             <div class="social-links" aria-label="Social and resume">
@@ -95,7 +97,7 @@
               </a>
               <a
                 id="resume-link"
-                href="docs/JeremyB_Resume.pdf"
+                href="/docs/JeremyB_Resume.pdf"
                 target="_blank"
                 rel="noopener noreferrer"
                 title="Resume"
@@ -175,7 +177,16 @@
             </p>
             <div class="constellation-wrap">
               <div class="constellation-canvas-wrap">
-                <canvas id="constellation-canvas" width="800" height="672" role="img" aria-label="Interactive project map; project links are in the Featured projects section below"></canvas>
+                <canvas
+                  id="constellation-canvas"
+                  width="800"
+                  height="672"
+                  tabindex="0"
+                  role="group"
+                  aria-roledescription="project map"
+                  aria-label="Interactive project map. Use the left and right arrow keys to move between projects and Enter to open one. Project links are also in the Featured projects section below."
+                ></canvas>
+                <span id="constellation-status" class="sr-only" aria-live="polite"></span>
               </div>
             </div>
           </div>
@@ -213,6 +224,7 @@
               >
                 <img
                   src="https://ghchart.rshah.org/JeremyB-py"
+                  data-gh-user="JeremyB-py"
                   alt="JeremyB-py contribution graph (GitHub)"
                   width="728"
                   height="110"

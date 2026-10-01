@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#04070f" />
   <meta name="description" content="Referral Tracker Module · case study · jeremyb.dev portfolio" />
   <link rel="canonical" href="https://jeremyb.dev/projects/referral-tracker/" />
   <meta property="og:type" content="article" />
@@ -16,17 +17,17 @@
   <meta property="og:image:alt" content="Referral Tracker Module, case study preview" />
   <!-- Open Graph: LinkedIn and others use these tags for link previews -->
   <title>Referral Tracker Module | Jeremy B.</title>
-  <script>(function(){try{var t=localStorage.getItem('portfolio-theme');if(t&&['nebula','matrix','terminal','paper'].indexOf(t)>=0)document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>
-  <link rel="stylesheet" href="/assets/site-shell.css" />
-  <link rel="stylesheet" href="/assets/project.css" />
+  <script>(function(){try{var t=localStorage.getItem('portfolio-theme');var a={"terminal":"ember"};if(t&&a[t])t=a[t];if(t&&["nebula","matrix","ember","paper"].indexOf(t)>=0)document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>
+  <link rel="stylesheet" href="/assets/site-shell.css?v=e8e27cc9" />
+  <link rel="stylesheet" href="/assets/project.css?v=8848449a" />
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 </head>
 <body>
-  <canvas id="matrix-rain" aria-hidden="true"></canvas>
+  <canvas id="theme-fx" aria-hidden="true"></canvas>
   <div class="site-wrap">
-    <header class="site-header">
+          <header class="site-header">
         <div class="container site-header__inner">
-          <a class="site-logo" href="/#hero">JeremyB.py</a>
+          <a class="site-logo" href="/#hero">JeremyB.dev</a>
           <button type="button" class="nav-toggle" id="nav-toggle" aria-expanded="false" aria-controls="site-nav">
             Menu
           </button>
@@ -94,10 +95,10 @@
               class="theme-switcher"
               role="group"
               aria-label="Visual theme"
-              title="Themes: deliberate UI exercise—same structure, different presentation."
+              title="Themes: versatile and adaptable UI."
             >
               <p class="theme-switcher__hint">
-                Themes: deliberate UI exercise—same structure, different presentation.
+                Themes: versatile and adaptable UI.
               </p>
               <div class="theme-buttons" id="theme-buttons"></div>
             </div>
@@ -268,7 +269,7 @@
 </section>
     </main>
   </div>
-  <script type="module" src="/assets/site-shell.js"></script>
-  <script type="module" src="/assets/project-reveal.js"></script>
+  <script type="module" src="/assets/site-shell.js?v=79462660"></script>
+  <script type="module" src="/assets/project-reveal.js?v=52bf9732"></script>
 </body>
 </html>
