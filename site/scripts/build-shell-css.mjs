@@ -11,7 +11,10 @@ const stylesDir = path.join(__dirname, '../src/styles');
 const outPath = path.join(__dirname, '../public/assets/site-shell.css');
 
 const parts = ['base.css', 'themes.css', 'sections.css'].map((f) =>
-  fs.readFileSync(path.join(stylesDir, f), 'utf8')
+  fs
+    .readFileSync(path.join(stylesDir, f), 'utf8')
+    // Root-relative public URLs (e.g. /fonts/…) -> relative to public/assets/, so any base path works.
+    .replace(/url\((['"]?)\//g, 'url($1../')
 );
 fs.writeFileSync(outPath, `/* Auto-generated: do not edit. Source: src/styles/{base,themes,sections}.css */\n${parts.join('\n')}\n`);
 console.log('Wrote public/assets/site-shell.css');

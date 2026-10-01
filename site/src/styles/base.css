@@ -36,7 +36,8 @@ body {
     background 0.35s ease;
 }
 
-#matrix-rain {
+/* Background effect canvas: Matrix rain / Ember sparks (see src/themeFx.ts) */
+#theme-fx {
   position: fixed;
   inset: 0;
   z-index: 0;
@@ -45,12 +46,22 @@ body {
   transition: opacity 0.5s ease;
 }
 
-[data-theme='matrix'] #matrix-rain {
+[data-theme='matrix'] #theme-fx {
   opacity: 0.12;
 }
 
+[data-theme='ember'] #theme-fx {
+  opacity: 0.85;
+}
+
+[data-theme='nebula'] #theme-fx {
+  opacity: 1;
+}
+
 @media (prefers-reduced-motion: reduce) {
-  [data-theme='matrix'] #matrix-rain {
+  [data-theme='matrix'] #theme-fx,
+  [data-theme='ember'] #theme-fx,
+  [data-theme='nebula'] #theme-fx {
     opacity: 0;
     display: none;
   }

@@ -1,3 +1,16 @@
+/**
+ * Full-viewport background effect canvas (#theme-fx): digital rain for Matrix, rising sparks
+ * for Ember, shooting stars for Nebula, nothing for Paper. Disabled under reduced motion.
+ */
+import { startEmberSparks } from './emberSparks';
+import { startNebulaMeteors } from './nebulaMeteors';
+
+const EFFECTS: Record<string, (canvas: HTMLCanvasElement) => (() => void) | void> = {
+  matrix: startMatrixRain,
+  ember: startEmberSparks,
+  nebula: startNebulaMeteors,
+};
+
 let rafId: number | null = null;
 let active = false;
 
@@ -60,8 +73,8 @@ export function startMatrixRain(canvas: HTMLCanvasElement): (() => void) | void 
 
 let cleanup: (() => void) | undefined;
 
-export function syncMatrixRain(theme: string): void {
-  const canvas = document.getElementById('matrix-rain') as HTMLCanvasElement | null;
+export function syncThemeFx(theme: string): void {
+  const canvas = document.getElementById('theme-fx') as HTMLCanvasElement | null;
   if (!canvas) return;
 
   if (cleanup) {
@@ -69,8 +82,9 @@ export function syncMatrixRain(theme: string): void {
     cleanup = undefined;
   }
 
-  if (theme === 'matrix') {
-    const out = startMatrixRain(canvas);
+  const start = EFFECTS[theme];
+  if (start) {
+    const out = start(canvas);
     if (typeof out === 'function') cleanup = out;
   } else {
     const ctx = canvas.getContext('2d');

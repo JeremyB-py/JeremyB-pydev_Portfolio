@@ -1,0 +1,9 @@
+{
+  "themes": [
+    { "id": "nebula", "label": "Nebula" },
+    { "id": "matrix", "label": "Matrix" },
+    { "id": "ember", "label": "Ember" },
+    { "id": "paper", "label": "Paper" }
+  ],
+  "aliases": { "terminal": "ember" }
+}

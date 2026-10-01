@@ -4,7 +4,7 @@ import './styles/sections.css';
 
 import { getCurrentTheme, initTheme } from './themes';
 import { initScrollReveal } from './scrollReveal';
-import { syncMatrixRain } from './matrixRain';
+import { syncThemeFx } from './themeFx';
 import { initConstellation, type OrbitTier, type ProjectForMap } from './constellation';
 
 interface ProjectJson {
@@ -140,9 +140,30 @@ function initNav(): void {
   });
 }
 
-function observeThemeForMatrix(): void {
-  syncMatrixRain(getCurrentTheme());
-  const obs = new MutationObserver(() => syncMatrixRain(getCurrentTheme()));
+/**
+ * Recolor the contribution chart per theme. ghchart.rshah.org builds its level scale from an
+ * optional base color in the URL; themes set it with --github-chart-color (default: GitHub green).
+ */
+function syncGithubChart(): void {
+  const img = document.querySelector<HTMLImageElement>('img[data-gh-user]');
+  const user = img?.dataset.ghUser;
+  if (!img || !user) return;
+  const color = getComputedStyle(document.documentElement)
+    .getPropertyValue('--github-chart-color')
+    .trim()
+    .replace(/^#/, '');
+  const prefix = /^[0-9a-f]{6}$/i.test(color) ? `${color}/` : '';
+  const src = `https://ghchart.rshah.org/${prefix}${encodeURIComponent(user)}`;
+  if (img.src !== src) img.src = src;
+}
+
+function observeThemeEffects(): void {
+  const sync = () => {
+    syncThemeFx(getCurrentTheme());
+    syncGithubChart();
+  };
+  sync();
+  const obs = new MutationObserver(sync);
   obs.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
 }
 
@@ -150,7 +171,7 @@ async function main(): Promise<void> {
   document.getElementById('year')!.textContent = String(new Date().getFullYear());
 
   initTheme();
-  observeThemeForMatrix();
+  observeThemeEffects();
   initScrollReveal();
   initNav();
 

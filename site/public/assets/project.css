@@ -215,9 +215,9 @@
 
 [data-theme='paper'] .game-player {
   --game-frame-shadow:
-    0 0 0 1px rgba(15, 23, 42, 0.2),
-    0 2px 6px rgba(15, 23, 42, 0.12),
-    0 26px 44px -24px rgba(15, 23, 42, 0.55);
+    0 0 0 1px rgba(31, 41, 55, 0.2),
+    0 2px 6px rgba(31, 41, 55, 0.12),
+    0 26px 44px -24px rgba(31, 41, 55, 0.5);
   --game-play-text: #ffffff;
 }
 
