@@ -9,9 +9,11 @@
     "prebuild": "node scripts/build-shell-css.mjs && node scripts/copy-docs-pdf.mjs && node scripts/generate-project-pages.mjs",
     "dev": "node scripts/build-shell-css.mjs && node scripts/copy-docs-pdf.mjs && node scripts/generate-project-pages.mjs && vite",
     "build": "tsc --noEmit && vite build",
+    "postbuild": "node scripts/stamp-project-assets.mjs",
     "preview": "vite preview"
   },
   "devDependencies": {
+    "esbuild": "^0.25.12",
     "marked": "^15.0.4",
     "typescript": "~5.6.3",
     "vite": "^6.0.3"

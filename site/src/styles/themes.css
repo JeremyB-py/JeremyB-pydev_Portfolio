@@ -1,9 +1,30 @@
+/* Kalam (SIL OFL, self-hosted in public/fonts). Only downloaded when something renders with it,
+   i.e. the paper theme (and the small "Paper" theme button preview). */
+@font-face {
+  font-family: 'Kalam';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/fonts/kalam-400-latin.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Kalam';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('/fonts/kalam-700-latin.woff2') format('woff2');
+}
+
 :root {
   --font-sans: system-ui, 'Segoe UI', Roboto, Ubuntu, Cantarell, sans-serif;
+  --font-hand: 'Kalam', 'Segoe Print', 'Bradley Hand', 'Comic Sans MS', cursive;
   --font-mono: ui-monospace, 'Cascadia Code', 'Fira Code', 'SF Mono', monospace;
   --radius-sm: 6px;
   --radius-md: 10px;
   --shadow-soft: 0 8px 32px rgba(0, 0, 0, 0.35);
+  /* Native scrollbars / form controls follow the theme (paper overrides to light) */
+  color-scheme: dark;
 }
 
 /* Nebula (default) — deep space + soft gas clouds (professional, not loud) */
@@ -47,37 +68,69 @@
   --github-chart-border: rgba(34, 197, 94, 0.38);
 }
 
-[data-theme='terminal'] {
-  --color-bg: #0c0a06;
-  --color-bg-gradient: radial-gradient(ellipse 90% 50% at 50% 0%, rgba(251, 191, 36, 0.06), transparent 50%),
-    linear-gradient(180deg, #0c0a06 0%, #1a1510 100%);
-  --color-surface: rgba(28, 25, 20, 0.9);
-  --color-surface-border: rgba(251, 191, 36, 0.28);
-  --color-text: #fef3c7;
-  --color-text-muted: #d6d3d1;
-  --color-accent: #fbbf24;
-  --color-accent-dim: rgba(251, 191, 36, 0.12);
-  --color-link: #fcd34d;
-  --color-header-bg: rgba(12, 10, 6, 0.92);
-  --font-ui: var(--font-mono);
-  --github-chart-surface: #12100c;
-  --github-chart-border: rgba(251, 191, 36, 0.32);
+/* Ember — warm charcoal + copper glow */
+[data-theme='ember'] {
+  --color-bg: #120d0a;
+  --color-bg-gradient:
+    radial-gradient(ellipse 100% 55% at 50% 0%, rgba(255, 138, 61, 0.1), transparent 60%),
+    radial-gradient(ellipse 70% 45% at 10% 92%, rgba(234, 88, 12, 0.1), transparent 60%),
+    radial-gradient(ellipse 60% 40% at 90% 70%, rgba(190, 18, 60, 0.06), transparent 60%),
+    linear-gradient(180deg, #120d0a 0%, #1d1410 100%);
+  --color-surface: rgba(32, 22, 16, 0.82);
+  --color-surface-border: rgba(255, 138, 61, 0.24);
+  --color-text: #fdeee0;
+  --color-text-muted: #c9b3a3;
+  --color-accent: #ff8a3d;
+  --color-accent-dim: rgba(255, 138, 61, 0.14);
+  --color-link: #ffb38a;
+  --color-header-bg: rgba(18, 13, 10, 0.88);
+  --font-ui: var(--font-sans);
+  --github-chart-surface: #1a120d;
+  --github-chart-border: rgba(255, 138, 61, 0.3);
 }
 
+/* Paper — refined notebook: warm ruled paper, ballpoint-blue ink, graphite pencil */
 [data-theme='paper'] {
-  --color-bg: #f8fafc;
-  --color-bg-gradient: linear-gradient(180deg, #f8fafc 0%, #e2e8f0 100%);
-  --color-surface: #ffffff;
-  --color-surface-border: rgba(15, 23, 42, 0.12);
-  --color-text: #0f172a;
-  --color-text-muted: #475569;
-  --color-accent: #0369a1;
-  --color-accent-dim: rgba(3, 105, 161, 0.08);
-  --color-link: #0284c7;
-  --color-header-bg: rgba(248, 250, 252, 0.95);
-  --font-ui: var(--font-sans);
-  --github-chart-surface: #ffffff;
-  --github-chart-border: rgba(15, 23, 42, 0.12);
+  --paper-rules: repeating-linear-gradient(
+    transparent 0,
+    transparent calc(1.6rem - 1px),
+    rgba(30, 64, 175, 0.09) calc(1.6rem - 1px),
+    rgba(30, 64, 175, 0.09) 1.6rem
+  );
+  --paper-margin: linear-gradient(
+    90deg,
+    transparent 0,
+    transparent calc(2.25rem - 2px),
+    rgba(185, 28, 28, 0.3) calc(2.25rem - 2px),
+    rgba(185, 28, 28, 0.3) calc(2.25rem - 1px),
+    transparent calc(2.25rem - 1px)
+  );
+  --paper-base: linear-gradient(180deg, #fbf9f3 0%, #f3efe4 100%);
+  --color-bg: #fbf9f3;
+  /* On body's background, so the rules scroll with the page; spacing = body line-height */
+  --color-bg-gradient: var(--paper-margin), var(--paper-rules), var(--paper-base);
+  --color-surface: #fffdf8;
+  --color-surface-border: rgba(31, 41, 55, 0.14);
+  --color-text: #1f2937;
+  --color-text-muted: #4b5563;
+  --color-accent: #1e40af;
+  --color-accent-dim: rgba(30, 64, 175, 0.08);
+  --color-link: #1d4ed8;
+  --color-header-bg: rgba(251, 249, 243, 0.94);
+  --font-ui: var(--font-hand);
+  --github-chart-surface: #fffdf8;
+  --github-chart-border: rgba(31, 41, 55, 0.14);
+  /* Base color for the contribution chart's own scale (see syncGithubChart in main.ts) */
+  --github-chart-color: #1e40af;
+  --shadow-soft: 0 1px 0 rgba(31, 41, 55, 0.04), 0 2px 10px rgba(31, 41, 55, 0.08);
+  color-scheme: light;
+}
+
+/* The margin rule collides with content on narrow screens */
+@media (max-width: 52rem) {
+  [data-theme='paper'] {
+    --color-bg-gradient: var(--paper-rules), var(--paper-base);
+  }
 }
 
 body {
@@ -143,7 +196,35 @@ html:not([data-theme]) body::after {
   background-repeat: no-repeat;
 }
 
+/* Ember: low horizon glow + a few rising sparks (static) */
+html[data-theme='ember'] body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.6;
+  background-image:
+    radial-gradient(ellipse 85% 38% at 50% 115%, rgba(255, 106, 0, 0.24), transparent 72%),
+    radial-gradient(1.5px 1.5px at 14% 82%, rgba(255, 179, 138, 0.75) 50%, transparent 50%),
+    radial-gradient(1px 1px at 22% 64%, rgba(253, 186, 116, 0.55) 50%, transparent 50%),
+    radial-gradient(1.5px 1.5px at 37% 88%, rgba(255, 138, 61, 0.7) 50%, transparent 50%),
+    radial-gradient(1px 1px at 46% 71%, rgba(254, 215, 170, 0.45) 50%, transparent 50%),
+    radial-gradient(1px 1px at 58% 92%, rgba(255, 179, 138, 0.6) 50%, transparent 50%),
+    radial-gradient(1.5px 1.5px at 66% 76%, rgba(251, 146, 60, 0.6) 50%, transparent 50%),
+    radial-gradient(1px 1px at 79% 86%, rgba(254, 215, 170, 0.5) 50%, transparent 50%),
+    radial-gradient(1px 1px at 88% 61%, rgba(255, 138, 61, 0.4) 50%, transparent 50%),
+    radial-gradient(1px 1px at 8% 48%, rgba(253, 186, 116, 0.3) 50%, transparent 50%),
+    radial-gradient(1px 1px at 93% 38%, rgba(254, 215, 170, 0.25) 50%, transparent 50%);
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+}
+
 @media (prefers-reduced-motion: reduce) {
+  html[data-theme='ember'] body::before {
+    opacity: 0.4;
+  }
+
   html[data-theme='nebula'] body::before,
   html:not([data-theme]) body::before {
     opacity: 0.28;
@@ -155,27 +236,11 @@ html:not([data-theme]) body::after {
   }
 }
 
-/* Paper: lined notebook + margin rule */
-html[data-theme='paper'] body::before {
-  content: '';
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  z-index: 0;
-  background-image:
-    repeating-linear-gradient(
-      transparent 0,
-      transparent calc(1.5rem - 1px),
-      rgba(15, 23, 42, 0.07) calc(1.5rem - 1px),
-      rgba(15, 23, 42, 0.07) 1.5rem
-    ),
-    linear-gradient(
-      90deg,
-      transparent 0,
-      transparent calc(2.25rem - 2px),
-      rgba(185, 28, 28, 0.32) calc(2.25rem - 2px),
-      rgba(185, 28, 28, 0.32) calc(2.25rem - 1px),
-      transparent calc(2.25rem - 1px)
-    );
-  background-repeat: repeat, no-repeat;
+/* Paper: hand-drawn blue-ink underline (two loose strokes) under section headings */
+[data-theme='paper'] .section__title,
+[data-theme='paper'] .project-content h2 {
+  width: fit-content;
+  padding-bottom: 0.35em;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 14' preserveAspectRatio='none'%3E%3Cpath d='M3 8.5C55 5 105 10.5 160 7.5S250 5 297 7' fill='none' stroke='%231e40af' stroke-width='2.6' stroke-linecap='round' opacity='.75'/%3E%3Cpath d='M12 11.5C80 9 170 12.5 290 9.5' fill='none' stroke='%231e40af' stroke-width='1.4' stroke-linecap='round' opacity='.45'/%3E%3C/svg%3E")
+    left bottom / 100% 0.5em no-repeat;
 }

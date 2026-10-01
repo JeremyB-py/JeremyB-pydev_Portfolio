@@ -46,8 +46,7 @@
     white-space: nowrap;
   }
 
-  [data-theme='matrix'] .site-nav a,
-  [data-theme='terminal'] .site-nav a {
+  [data-theme='matrix'] .site-nav a {
     font-size: 0.74rem;
     letter-spacing: -0.03em;
     padding: 0.1em 0;
@@ -167,7 +166,9 @@
   padding: 0.35rem 0.5rem;
   border-radius: var(--radius-sm);
   border: 1px solid var(--color-surface-border);
-  background: var(--color-surface);
+  /* Each button previews its own theme (the theme vars match its data-theme), so back the
+     translucent surface with that theme's own bg; otherwise it tints with the page behind it. */
+  background: linear-gradient(var(--color-surface), var(--color-surface)), var(--color-bg);
   color: var(--color-text-muted);
   cursor: pointer;
   transition:
@@ -178,8 +179,7 @@
   flex-shrink: 1;
 }
 
-[data-theme='matrix'] .theme-btn,
-[data-theme='terminal'] .theme-btn {
+[data-theme='matrix'] .theme-btn {
   font-size: 0.65rem;
   padding: 0.3rem 0.4rem;
   letter-spacing: -0.02em;
@@ -341,26 +341,26 @@
   background-clip: text;
 }
 
-[data-theme='terminal'] .hero__name {
-  background: linear-gradient(135deg, #fffbeb 0%, #fde68a 40%, #fbbf24 100%);
+[data-theme='ember'] .hero__name {
+  background: linear-gradient(135deg, #fff7ed 0%, #fdba74 45%, #fb923c 100%);
   -webkit-background-clip: text;
   background-clip: text;
 }
 
-[data-theme='terminal'] .hero__title {
-  background: linear-gradient(135deg, #fef3c7 0%, #f59e0b 50%, #b45309 100%);
+[data-theme='ember'] .hero__title {
+  background: linear-gradient(135deg, #fed7aa 0%, #f97316 50%, #c2410c 100%);
   -webkit-background-clip: text;
   background-clip: text;
 }
 
 [data-theme='paper'] .hero__name {
-  background: linear-gradient(135deg, #020617 0%, #0c4a6e 55%, #0369a1 100%);
+  background: linear-gradient(135deg, #111827 0%, #1f2937 45%, #1e3a8a 100%);
   -webkit-background-clip: text;
   background-clip: text;
 }
 
 [data-theme='paper'] .hero__title {
-  background: linear-gradient(135deg, #1e293b 0%, #0ea5e9 50%, #0284c7 100%);
+  background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 50%, #2563eb 100%);
   -webkit-background-clip: text;
   background-clip: text;
 }
@@ -560,7 +560,7 @@
   color: var(--color-link);
 }
 
-/* Paper: native light palette from the service */
+/* Paper: the chart is requested in ballpoint blue (--github-chart-color), shown as served */
 [data-theme='paper'] .github-chart-wrap img {
   filter: none;
 }
@@ -576,8 +576,9 @@
   filter: invert(1) hue-rotate(168deg) brightness(1.05) contrast(1.06) saturate(1.05);
 }
 
-[data-theme='terminal'] .github-chart-wrap img {
-  filter: invert(1) hue-rotate(188deg) brightness(1.04) contrast(1.05);
+/* Inverted green lands on magenta; +70° turns it copper */
+[data-theme='ember'] .github-chart-wrap img {
+  filter: invert(1) hue-rotate(70deg) brightness(1.04) contrast(1.05) saturate(1.1);
 }
 
 /* Constellation — full-width map (no side list) */
@@ -604,6 +605,11 @@
   height: auto;
   vertical-align: middle;
   cursor: crosshair;
+}
+
+#constellation-canvas:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: -2px;
 }
 
 /* Contact */

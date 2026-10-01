@@ -88,6 +88,9 @@ interface Star {
   moonAngle?: number;
   /** Index among archive moons for rotating label spotlight */
   archiveIndex?: number;
+  /** World position for the current frame (written once per frame by updateStarPositions) */
+  wx: number;
+  wy: number;
 }
 
 function tierOf(p: ProjectForMap): OrbitTier {
@@ -114,6 +117,8 @@ function buildStars(projects: ProjectForMap[], wCss: number, hCss: number): {
       project,
       r: NODE_R,
       tier: 'featured',
+      wx: 0,
+      wy: 0,
     });
   });
 
@@ -128,6 +133,8 @@ function buildStars(projects: ProjectForMap[], wCss: number, hCss: number): {
       project,
       r: NODE_R * OUTER_NODE_SCALE,
       tier: 'outer',
+      wx: 0,
+      wy: 0,
     });
   });
 
@@ -152,6 +159,8 @@ function buildStars(projects: ProjectForMap[], wCss: number, hCss: number): {
         orbitsArchiveHub: true,
         moonAngle,
         archiveIndex: i,
+        wx: 0,
+        wy: 0,
       });
     });
   }
@@ -287,6 +296,27 @@ const MATRIX_MID_GLYPH_SCALE = 2;
 
 /** Golden-angle hue step so neighboring projects read as distinct in any theme */
 const GOLDEN_HUE = 137.508;
+/** Ember: project hues stay within a warm band around the accent (degrees below / above). */
+const WARM_HUE_BELOW = 35;
+const WARM_HUE_SPAN = 75;
+/** Paper: real ink colors (ballpoint blue, red, green, graphite, violet), cycled per project. */
+const PAPER_INKS = ['#1e40af', '#b91c1c', '#15803d', '#374151', '#6d28d9'];
+
+/** spread = golden-angle rainbow; warm = Ember band; ink = Paper pen colors */
+type PaletteMode = 'spread' | 'warm' | 'ink';
+
+/** Small deterministic PRNG so the backdrop is identical after every rebuild (resize). */
+function mulberry32(seed: number): () => number {
+  let a = seed >>> 0;
+  return () => {
+    a = (a + 0x6d2b79f5) >>> 0;
+    let t = a;
+    t = Math.imul(t ^ (t >>> 15), t | 1);
+    t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+const LAYOUT_SEED = 0x6a62; // "jb"
 
 interface RGB {
   r: number;
@@ -417,8 +447,22 @@ function paletteForProjectNodes(
   count: number,
   accentStr: string,
   linkStr: string,
-  bgStr: string
+  bgStr: string,
+  mode: PaletteMode = 'spread'
 ): NodePaletteEntry[] {
+  if (mode === 'ink') {
+    return Array.from({ length: count }, (_, i) => {
+      const ink = PAPER_INKS[i % PAPER_INKS.length];
+      const rgb = parseCssColor(ink)!;
+      return {
+        fill: ink,
+        fillDim: ink,
+        glow: `rgba(${rgb.r},${rgb.g},${rgb.b},0.82)`,
+        shadowDim: `rgba(${rgb.r},${rgb.g},${rgb.b},0.4)`,
+        hubLineMuted: `rgba(${rgb.r},${rgb.g},${rgb.b},0.13)`,
+      };
+    });
+  }
   const accent = parseCssColor(accentStr);
   const link = parseCssColor(linkStr);
   const bg = parseCssColor(bgStr);
@@ -439,7 +483,10 @@ function paletteForProjectNodes(
   const out: NodePaletteEntry[] = [];
   for (let i = 0; i < count; i++) {
     const linkPull = shortestHueDelta(aH.h, lH.h) * (0.06 + (i % 4) * 0.035);
-    let h = (aH.h + i * GOLDEN_HUE + linkPull) % 360;
+    let h =
+      mode === 'warm'
+        ? (aH.h - WARM_HUE_BELOW + ((i * 0.618034) % 1) * WARM_HUE_SPAN) % 360
+        : (aH.h + i * GOLDEN_HUE + linkPull) % 360;
     if (h < 0) h += 360;
 
     let s = Math.min(0.92, Math.max(0.36, aH.s * (0.86 + 0.05 * (i % 5))));
@@ -466,6 +513,154 @@ function paletteForProjectNodes(
   return out;
 }
 
+/** Paper labels: handwriting face (Kalam is self-hosted and loaded by the paper theme CSS). */
+const HAND_FONT = "Kalam, 'Segoe Print', 'Bradley Hand', 'Comic Sans MS', cursive";
+
+/** Stable pseudo-random in [0, 1) for (seed, k), so pencil strokes keep their shape frame to frame. */
+function hash01(seed: number, k: number): number {
+  const x = Math.sin(seed * 127.1 + k * 311.7) * 43758.5453;
+  return x - Math.floor(x);
+}
+
+/**
+ * Paper: colored-pencil outline. Two passes around the circle (one overshooting, one short),
+ * a gentle low-frequency wobble, and a few gaps where the pencil lifted.
+ */
+function pencilCircle(
+  c: CanvasRenderingContext2D,
+  x: number,
+  y: number,
+  r: number,
+  color: string,
+  width: number,
+  seed: number,
+  passes = 2
+): void {
+  const base = c.globalAlpha;
+  const segs = Math.max(12, Math.round(r * 1.4));
+  c.strokeStyle = color;
+  c.lineCap = 'round';
+  for (let pass = 0; pass < passes; pass++) {
+    const ps = seed * 7 + pass * 101;
+    const start = hash01(ps, 0) * Math.PI * 2;
+    const sweep = Math.PI * 2 * (pass === 0 ? 1.06 : 0.9);
+    const ph1 = hash01(ps, 1) * 6.28;
+    const ph2 = hash01(ps, 2) * 6.28;
+    const px = (i: number) => {
+      const a = start + (i / segs) * sweep;
+      const rr = r * (1 + 0.035 * Math.sin(a * 2 + ph1) + 0.02 * Math.sin(a * 5 + ph2)) + pass * 0.6;
+      return { x: x + Math.cos(a) * rr, y: y + Math.sin(a) * rr };
+    };
+    c.globalAlpha = base * (pass === 0 ? 1 : 0.5);
+    c.lineWidth = width * (pass === 0 ? 1 : 0.65);
+    c.beginPath();
+    let drawing = false;
+    for (let i = 0; i < segs; i++) {
+      if (hash01(ps + 53, i) < 0.08) {
+        drawing = false;
+        continue;
+      }
+      if (!drawing) {
+        const p0 = px(i);
+        c.moveTo(p0.x, p0.y);
+        drawing = true;
+      }
+      const p1 = px(i + 1);
+      c.lineTo(p1.x, p1.y);
+    }
+    c.stroke();
+  }
+  c.globalAlpha = base;
+  c.lineCap = 'butt';
+}
+
+/** Paper: crayon shading. Diagonal hatch strokes clipped to the circle, some skipped or short. */
+function pencilFill(
+  c: CanvasRenderingContext2D,
+  x: number,
+  y: number,
+  r: number,
+  color: string,
+  seed: number
+): void {
+  c.save();
+  c.beginPath();
+  c.arc(x, y, r * 0.96, 0, Math.PI * 2);
+  c.clip();
+  c.strokeStyle = color;
+  c.lineWidth = Math.max(0.9, r * 0.1);
+  c.lineCap = 'round';
+  const ang = -0.85 + (hash01(seed, 0) - 0.5) * 0.3;
+  const dx = Math.cos(ang);
+  const dy = Math.sin(ang);
+  const step = Math.max(2, r / 4.5);
+  c.beginPath();
+  let k = 0;
+  for (let d = -r; d <= r; d += step, k++) {
+    if (hash01(seed + 7, k) < 0.15) continue;
+    const off = d + (hash01(seed + 13, k) - 0.5) * step * 0.5;
+    const cx0 = x - dy * off;
+    const cy0 = y + dx * off;
+    const back = r * 1.1;
+    const fwd = r * (0.8 + hash01(seed + 19, k) * 0.35);
+    c.moveTo(cx0 - dx * back, cy0 - dy * back);
+    c.lineTo(cx0 + dx * fwd, cy0 + dy * fwd);
+  }
+  c.stroke();
+  c.restore();
+}
+
+/** Paper: freehand line. A slight bow, a fainter second pass, and occasional breaks. */
+function pencilLine(
+  c: CanvasRenderingContext2D,
+  x1: number,
+  y1: number,
+  x2: number,
+  y2: number,
+  color: string,
+  width: number,
+  seed: number
+): void {
+  const len = Math.hypot(x2 - x1, y2 - y1);
+  if (len < 1) return;
+  const nx = -(y2 - y1) / len;
+  const ny = (x2 - x1) / len;
+  const segs = Math.max(3, Math.round(len / 12));
+  const base = c.globalAlpha;
+  c.strokeStyle = color;
+  c.lineCap = 'round';
+  for (let pass = 0; pass < 2; pass++) {
+    const ps = seed * 11 + pass * 97;
+    const bow = (hash01(ps, 0) - 0.5) * Math.min(6, len * 0.03);
+    const off = pass * 0.8;
+    const pt = (i: number) => {
+      const t = i / segs;
+      const w = bow * Math.sin(Math.PI * t) + (hash01(ps, i + 1) - 0.5) * 0.8 + off;
+      return { x: x1 + (x2 - x1) * t + nx * w, y: y1 + (y2 - y1) * t + ny * w };
+    };
+    c.globalAlpha = base * (pass === 0 ? 1 : 0.45);
+    c.lineWidth = width * (pass === 0 ? 1 : 0.6);
+    c.beginPath();
+    let drawing = false;
+    for (let i = 0; i < segs; i++) {
+      if (hash01(ps + 29, i) < 0.1) {
+        drawing = false;
+        continue;
+      }
+      if (!drawing) {
+        const p0 = pt(i);
+        c.moveTo(p0.x, p0.y);
+        drawing = true;
+      }
+      const p1 = pt(i + 1);
+      c.lineTo(p1.x, p1.y);
+    }
+    c.stroke();
+  }
+  c.globalAlpha = base;
+  c.lineCap = 'butt';
+}
+
 function galaxyPos(
   s: Star,
   cx: number,
@@ -479,16 +674,15 @@ function galaxyPos(
   };
 }
 
+/** Satellite position around its parent's cached world position (parent.wx / parent.wy). */
 function skillWorldPos(
   parent: Star,
   sat: SkillSat,
   cx: number,
   cy: number,
-  spin: number,
-  animT: number,
-  archiveHub: ArchiveHubState | null
+  animT: number
 ): { x: number; y: number } {
-  const posP = starWorldPos(parent, cx, cy, spin, animT, archiveHub);
+  const posP = { x: parent.wx, y: parent.wy };
   const dx = posP.x - cx;
   const dy = posP.y - cy;
   const len = Math.hypot(dx, dy) || 1;
@@ -506,7 +700,7 @@ function skillWorldPos(
   };
 }
 
-function buildSkillSats(stars: Star[]): SkillSat[] {
+function buildSkillSats(stars: Star[], rand: () => number): SkillSat[] {
   const out: SkillSat[] = [];
   stars.forEach((s, si) => {
     if (s.tier === 'archive') return;
@@ -518,15 +712,15 @@ function buildSkillSats(stars: Star[]): SkillSat[] {
       const phi =
         n <= 1 ? basePhase : basePhase + (2 * Math.PI * k) / n;
       const orbitSpread = SKILL_ORBIT_MAX - SKILL_ORBIT_MIN;
-      const orbitRadius = SKILL_ORBIT_MIN + Math.random() * orbitSpread;
-      const moonPhase = Math.random() * Math.PI * 2;
+      const orbitRadius = SKILL_ORBIT_MIN + rand() * orbitSpread;
+      const moonPhase = rand() * Math.PI * 2;
       const radialT =
         orbitSpread > 0 ? (orbitRadius - SKILL_ORBIT_MIN) / orbitSpread : 0;
       // Closer to the project node → faster orbit; farther out → slower (inverse to radius).
       const moonOmega =
         (MOON_OMEGA_OUTER +
           (MOON_OMEGA_INNER - MOON_OMEGA_OUTER) * (1 - radialT)) *
-        (0.94 + 0.12 * Math.random());
+        (0.94 + 0.12 * rand());
       out.push({
         parentIndex: si,
         label,
@@ -540,58 +734,90 @@ function buildSkillSats(stars: Star[]): SkillSat[] {
   return out;
 }
 
-function makeBgDots(count: number, wCss: number, hCss: number): BgDot[] {
+function makeBgDots(count: number, wCss: number, hCss: number, rand: () => number): BgDot[] {
   const out: BgDot[] = [];
   for (let i = 0; i < count; i++) {
     out.push({
-      ang: Math.random() * Math.PI * 2,
-      rx: wCss * (0.22 + Math.random() * 0.48),
-      ry: hCss * (0.16 + Math.random() * 0.42),
+      ang: rand() * Math.PI * 2,
+      rx: wCss * (0.22 + rand() * 0.48),
+      ry: hCss * (0.16 + rand() * 0.42),
       /** Smaller specks; extra dozens read as distant stars */
-      r: 0.22 + Math.random() * 0.55,
-      twinklePhase: Math.random() * Math.PI * 2,
-      twinkleSpeed: 0.65 + Math.random() * 1.15,
+      r: 0.22 + rand() * 0.55,
+      twinklePhase: rand() * Math.PI * 2,
+      twinkleSpeed: 0.65 + rand() * 1.15,
     });
   }
   return out;
 }
 
 /** ~1–2.8px radius: between mini dust and ~4px skill satellites */
-function makeMidOrbiters(count: number, wCss: number, hCss: number): MidOrbiter[] {
+function makeMidOrbiters(
+  count: number,
+  wCss: number,
+  hCss: number,
+  rand: () => number
+): MidOrbiter[] {
   const out: MidOrbiter[] = [];
   for (let i = 0; i < count; i++) {
     out.push({
-      ang: Math.random() * Math.PI * 2,
+      ang: rand() * Math.PI * 2,
       /* Inner–mid annulus so they read between distant dust and project ring */
-      rx: wCss * (0.14 + Math.random() * 0.38),
-      ry: hCss * (0.12 + Math.random() * 0.36),
-      r: 1.0 + Math.random() * 1.8,
-      twinklePhase: Math.random() * Math.PI * 2,
-      twinkleSpeed: 0.5 + Math.random() * 0.95,
-      spinRate: 0.72 + Math.random() * 0.55,
+      rx: wCss * (0.14 + rand() * 0.38),
+      ry: hCss * (0.12 + rand() * 0.36),
+      r: 1.0 + rand() * 1.8,
+      twinklePhase: rand() * Math.PI * 2,
+      twinkleSpeed: 0.5 + rand() * 0.95,
+      spinRate: 0.72 + rand() * 0.55,
     });
   }
   return out;
 }
 
+type CanvasStyle = 'nebula' | 'matrix' | 'paper' | 'ember';
+
+interface ThemeCache {
+  style: CanvasStyle;
+  accent: string;
+  text: string;
+  muted: string;
+  link: string;
+  bg: string;
+  nodePalette: NodePaletteEntry[];
+}
+
+/**
+ * Draws the animated project map into `canvas`. Returns a teardown function that stops the
+ * loop and removes every listener/observer.
+ */
 export function initConstellation(
   canvas: HTMLCanvasElement,
   projects: ProjectForMap[],
   baseUrl: string
-): void {
+): () => void {
   const ctx = canvas.getContext('2d');
-  if (!ctx || projects.length === 0) return;
+  if (!ctx || projects.length === 0) return () => {};
   const c = ctx;
 
   const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const statusEl = document.getElementById('constellation-status');
 
   let stars: Star[] = [];
   let archiveHubState: ArchiveHubState | null = null;
+  let archiveMoonCount = 0;
+  /** Star indices in manifest (sortOrder) order, for keyboard navigation */
+  let keyOrder: number[] = [];
   let skillSats: SkillSat[] = [];
   let bgDots: BgDot[] = [];
   let midOrbiters: MidOrbiter[] = [];
-  let hovered: Star | null = null;
+  /** Star under the mouse (-1 = none) */
+  let pointerHoverIdx = -1;
+  /** Star chosen by keyboard or a first touch tap (-1 = none) */
+  let selectedIdx = -1;
   let hoveredArchiveHub = false;
+  /** Last mouse position (canvas CSS px) while the mouse is over the canvas; re-picked every frame */
+  let pointer: { x: number; y: number } | null = null;
+  let lastPointerType = 'mouse';
+  let keyboardFocus = false;
   let skillFade = 0;
   let dpr = Math.min(window.devicePixelRatio || 1, 2);
   let spin = 0;
@@ -599,12 +825,14 @@ export function initConstellation(
   let animT = 0;
   /** Time-based animation: last rAF timestamp (ms) for stable spin under tab throttle */
   let lastFrameTime = performance.now();
-  let wCss = 800;
+  let wCss = 0;
   let hCss = 400;
   let galaxyCx = 0;
   let galaxyCy = 0;
   const hub = { x: 0, y: 0 };
+  let theme: ThemeCache;
 
+  /** Rebuild layout for the current width. Seeded, so the same width gives the same sky. */
   function syncSize(): void {
     const wrap = canvas.parentElement;
     const w = wrap?.clientWidth ?? 800;
@@ -623,104 +851,129 @@ export function initConstellation(
     hub.x = galaxyCx;
     hub.y = galaxyCy;
 
+    const rand = mulberry32(LAYOUT_SEED);
     const built = buildStars(projects, wCss, hCss);
     stars = built.stars;
     archiveHubState = built.archiveHub;
-    skillSats = buildSkillSats(stars);
+    archiveMoonCount = stars.filter((s) => s.tier === 'archive').length;
+    keyOrder = stars
+      .map((s, i) => ({ i, order: projects.indexOf(s.project) }))
+      .sort((x, y) => x.order - y.order)
+      .map((x) => x.i);
+    skillSats = buildSkillSats(stars, rand);
     /* 100+ more mini-stars than prior pass; still tiny specks */
     const bgCount = reducedMotion ? 180 : 280;
-    bgDots = makeBgDots(bgCount, wCss, hCss);
+    bgDots = makeBgDots(bgCount, wCss, hCss, rand);
     const midCount = reducedMotion ? 85 : 115;
-    midOrbiters = makeMidOrbiters(midCount, wCss, hCss);
+    midOrbiters = makeMidOrbiters(midCount, wCss, hCss, rand);
+    updateStarPositions();
   }
 
-  function pickStar(clientX: number, clientY: number): Star | null {
-    const rect = canvas.getBoundingClientRect();
-    let best: Star | null = null;
-    let bestD = Infinity;
-    for (const s of stars) {
-      const pos = starWorldPos(s, galaxyCx, galaxyCy, spin, animT, archiveHubState);
-      const dx = clientX - rect.left - pos.x;
-      const dy = clientY - rect.top - pos.y;
-      const d = Math.sqrt(dx * dx + dy * dy);
-      if (d <= s.r + 22 && d < bestD) {
-        bestD = d;
-        best = s;
-      }
-    }
-    return best;
-  }
-
-  function pickArchiveHub(clientX: number, clientY: number): boolean {
-    if (!archiveHubState) return false;
-    const ahPos = archiveHubPos(archiveHubState, galaxyCx, galaxyCy, spin);
-    const rect = canvas.getBoundingClientRect();
-    const dx = clientX - rect.left - ahPos.x;
-    const dy = clientY - rect.top - ahPos.y;
-    return dx * dx + dy * dy <= ARCHIVE_HUB_HIT_R * ARCHIVE_HUB_HIT_R;
-  }
-
-  function readColors(): {
-    accent: string;
-    text: string;
-    muted: string;
-    link: string;
-    bg: string;
-  } {
+  /** Read theme colors once per theme change instead of every frame. */
+  function refreshTheme(): void {
     const cs = getComputedStyle(document.documentElement);
     const accent = cs.getPropertyValue('--color-accent').trim() || '#38bdf8';
-    return {
+    const attr = document.documentElement.getAttribute('data-theme');
+    const style: CanvasStyle =
+      attr === 'matrix' || attr === 'paper' || attr === 'ember' ? attr : 'nebula';
+    const link = cs.getPropertyValue('--color-link').trim() || accent;
+    const bg = cs.getPropertyValue('--color-bg').trim() || '#070b14';
+    const mode: PaletteMode = style === 'paper' ? 'ink' : style === 'ember' ? 'warm' : 'spread';
+    theme = {
+      style,
       accent,
       text: cs.getPropertyValue('--color-text').trim() || '#e8f4fc',
       muted: cs.getPropertyValue('--color-text-muted').trim() || '#94a3b8',
-      link: cs.getPropertyValue('--color-link').trim() || accent,
-      bg: cs.getPropertyValue('--color-bg').trim() || '#070b14',
+      link,
+      bg,
+      nodePalette: paletteForProjectNodes(stars.length, accent, link, bg, mode),
     };
+  }
+
+  function updateStarPositions(): void {
+    for (const s of stars) {
+      const pos = starWorldPos(s, galaxyCx, galaxyCy, spin, animT, archiveHubState);
+      s.wx = pos.x;
+      s.wy = pos.y;
+    }
+  }
+
+  /** Nearest star within its hit radius of (x, y) in canvas CSS px, using this frame's positions. */
+  function pickStar(x: number, y: number): number {
+    let best = -1;
+    let bestD = Infinity;
+    stars.forEach((s, i) => {
+      const d = Math.hypot(x - s.wx, y - s.wy);
+      if (d <= s.r + 22 && d < bestD) {
+        bestD = d;
+        best = i;
+      }
+    });
+    return best;
+  }
+
+  function pickArchiveHub(x: number, y: number): boolean {
+    if (!archiveHubState) return false;
+    const ahPos = archiveHubPos(archiveHubState, galaxyCx, galaxyCy, spin);
+    const dx = x - ahPos.x;
+    const dy = y - ahPos.y;
+    return dx * dx + dy * dy <= ARCHIVE_HUB_HIT_R * ARCHIVE_HUB_HIT_R;
+  }
+
+  /** Re-evaluate mouse hover against current positions (nodes drift under a still cursor). */
+  function updatePointerHover(): void {
+    const prevHub = hoveredArchiveHub;
+    const prevIdx = pointerHoverIdx;
+    if (pointer) {
+      pointerHoverIdx = pickStar(pointer.x, pointer.y);
+      hoveredArchiveHub = pointerHoverIdx < 0 && pickArchiveHub(pointer.x, pointer.y);
+    } else {
+      pointerHoverIdx = -1;
+      hoveredArchiveHub = false;
+    }
+    if (prevIdx !== pointerHoverIdx || prevHub !== hoveredArchiveHub) {
+      canvas.style.cursor =
+        pointerHoverIdx >= 0 ? 'pointer' : hoveredArchiveHub ? 'help' : 'crosshair';
+    }
   }
 
   function drawFrame(time?: number): void {
     const now = time ?? performance.now();
     const w = canvas.width / dpr;
     const h = canvas.height / dpr;
-    const colors = readColors();
-    const { accent, text, muted } = colors;
-    const nodePalette = paletteForProjectNodes(
-      stars.length,
-      colors.accent,
-      colors.link,
-      colors.bg
-    );
-    const themeAttr = document.documentElement.getAttribute('data-theme') ?? '';
-    const isPaper = themeAttr === 'paper';
-    const isMatrix = themeAttr === 'matrix';
+    const { accent, text, muted, nodePalette } = theme;
+    const isPaper = theme.style === 'paper';
+    const isMatrix = theme.style === 'matrix';
+    const isEmber = theme.style === 'ember';
     const monoFont = "ui-monospace, 'Cascadia Code', 'Fira Code', monospace";
+    const uiFont = isPaper ? HAND_FONT : 'system-ui, sans-serif';
 
     c.clearRect(0, 0, w, h);
 
+    let dt = 0;
     if (!reducedMotion) {
-      if (!document.hidden) {
-        const rawDt = (now - lastFrameTime) / 1000;
-        lastFrameTime = now;
-        /** Cap dt so a long background pause doesn’t apply many seconds of spin in one frame (streaks).
-         *  Low-FPS / throttled rAF (mobile) can legitimately see rawDt ≈ 1s — allow up to 1s per frame. */
-        const dt = Math.min(Math.max(rawDt, 0), 1);
-        spin += SPIN_PER_SEC * dt;
-        animT += ANIM_PER_SEC * dt;
-      } else {
-        lastFrameTime = now;
-      }
+      /** Cap dt so a long stall doesn’t apply many seconds of spin in one frame (streaks).
+       *  Low-FPS / throttled rAF (mobile) can legitimately see dt ≈ 1s — allow up to 1s per frame. */
+      dt = Math.min(Math.max((now - lastFrameTime) / 1000, 0), 1);
+      spin += SPIN_PER_SEC * dt;
+      animT += ANIM_PER_SEC * dt;
     }
+    lastFrameTime = now;
+    updateStarPositions();
+    updatePointerHover();
 
+    const hoveredIndex = pointerHoverIdx >= 0 ? pointerHoverIdx : selectedIdx;
+    const hovered: Star | null = hoveredIndex >= 0 ? stars[hoveredIndex] : null;
+
+    /* Exponential ease toward the target; k = 9/s matches the old 0.14-per-frame at 60 Hz. */
     const targetFade = hovered ? 1 : 0;
-    skillFade += (targetFade - skillFade) * 0.14;
+    skillFade = reducedMotion ? targetFade : skillFade + (targetFade - skillFade) * (1 - Math.exp(-9 * dt));
     if (Math.abs(targetFade - skillFade) < 0.004) {
       skillFade = targetFade;
     }
 
-    const hoveredIndex = hovered ? stars.indexOf(hovered) : -1;
-    const archiveMoonStars = stars.filter((s) => s.tier === 'archive');
     const archiveHubHovered = hovered?.tier === 'archive';
-    const archiveSpot = archiveLabelSpotlight(animT, archiveMoonStars.length);
+    const archiveSpot = archiveLabelSpotlight(animT, archiveMoonCount);
     const archiveSpotIdx = archiveSpot.idx;
     const archiveSpotFade = archiveSpot.alpha;
 
@@ -737,13 +990,10 @@ export function initConstellation(
       c.beginPath();
       c.arc(bx, by, rr, 0, Math.PI * 2);
       if (isPaper) {
-        /* Ink dots: solid black, full outlines, still slightly “alive” via twinkle */
-        c.globalAlpha = (0.88 + 0.12 * twinkle) * (reducedMotion ? 0.92 : 1);
-        c.fillStyle = '#0a0a0a';
+        /* Graphite specks: soft pencil dots, still slightly “alive” via twinkle */
+        c.globalAlpha = (0.42 + 0.18 * twinkle) * (reducedMotion ? 0.9 : 1);
+        c.fillStyle = muted;
         c.fill();
-        c.strokeStyle = '#000000';
-        c.lineWidth = Math.max(1.15, rr * 0.35);
-        c.stroke();
       } else {
         c.globalAlpha = bgBaseAlpha * twinkle;
         c.fillStyle = muted;
@@ -775,16 +1025,9 @@ export function initConstellation(
         c.globalAlpha = midBaseAlpha * twinkle * midPaperMul;
         c.fillText(ch, bx, by);
       } else if (isPaper) {
+        /* Little hollow pencil loops */
         c.globalAlpha = 1;
-        c.fillStyle = withAlpha(muted, 0.18);
-        c.beginPath();
-        c.arc(bx, by, rr, 0, Math.PI * 2);
-        c.fill();
-        c.strokeStyle = withAlpha(muted, 0.92);
-        c.lineWidth = 2.4;
-        c.beginPath();
-        c.arc(bx, by, rr, 0, Math.PI * 2);
-        c.stroke();
+        pencilCircle(c, bx, by, rr + 0.4, withAlpha(muted, 0.5 * twinkle), 1, 500 + midIdx, 1);
       } else {
         c.fillStyle = muted;
         c.beginPath();
@@ -796,7 +1039,7 @@ export function initConstellation(
 
     // Hub aura — radial glow + rings (drawn behind core disk); softer “pencil” on paper
     const accentRgb = parseCssColor(accent);
-    const auraMul = isPaper ? 0.78 : isMatrix ? 0.4 : 1;
+    const auraMul = isPaper ? 0.78 : isMatrix ? 0.4 : isEmber ? 1.25 : 1;
     if (accentRgb) {
       const pulse = reducedMotion ? 0 : 7 * Math.sin(animT * 0.72);
       const breathe = reducedMotion ? 1 : 1 + 0.035 * Math.sin(animT * 0.48);
@@ -816,10 +1059,12 @@ export function initConstellation(
       grad.addColorStop(0.22, `rgba(${ar},${ag},${ab},${ga(0.14)})`);
       grad.addColorStop(0.5, `rgba(${ar},${ag},${ab},${ga(0.07)})`);
       grad.addColorStop(1, `rgba(${ar},${ag},${ab},0)`);
-      c.fillStyle = grad;
-      c.beginPath();
-      c.arc(hub.x, hub.y, rOuter, 0, Math.PI * 2);
-      c.fill();
+      if (!isPaper) {
+        c.fillStyle = grad;
+        c.beginPath();
+        c.arc(hub.x, hub.y, rOuter, 0, Math.PI * 2);
+        c.fill();
+      }
 
       const ringCount = reducedMotion ? 2 : isPaper ? 3 : 4;
       for (let ring = 0; ring < ringCount; ring++) {
@@ -827,8 +1072,12 @@ export function initConstellation(
         const alpha = reducedMotion
           ? (0.065 + ring * 0.015) * auraMul
           : (0.07 + 0.06 * Math.sin(animT * 0.88 + ring * 0.9)) * auraMul;
+        if (isPaper) {
+          pencilCircle(c, hub.x, hub.y, baseR, `rgba(${ar},${ag},${ab},${alpha * 2.2})`, 1.2, 900 + ring, 1);
+          continue;
+        }
         c.strokeStyle = `rgba(${ar},${ag},${ab},${alpha})`;
-        c.lineWidth = reducedMotion ? 1 : isPaper ? 1.35 : 1.2 + (ring % 2) * 0.35;
+        c.lineWidth = reducedMotion ? 1 : 1.2 + (ring % 2) * 0.35;
         c.beginPath();
         c.arc(hub.x, hub.y, baseR, 0, Math.PI * 2);
         c.stroke();
@@ -869,20 +1118,23 @@ export function initConstellation(
       c.fillText('[JB.py]', hub.x, hub.y);
       c.shadowBlur = 0;
     } else if (isPaper) {
-      c.fillStyle = withAlpha(accent, 0.14);
+      c.globalAlpha = 1;
+      pencilFill(c, hub.x, hub.y, hubR, withAlpha(accent, 0.4), 700);
+      pencilCircle(c, hub.x, hub.y, hubR, withAlpha(muted, 0.85), 2.2, 701);
+      pencilCircle(c, hub.x, hub.y, hubR - 3, withAlpha(accent, 0.75), 1.6, 702);
+    } else if (isEmber) {
+      /* Sun core: white-hot center fading to the copper accent */
+      const sun = c.createRadialGradient(hub.x, hub.y, 0, hub.x, hub.y, hubR);
+      sun.addColorStop(0, 'rgba(255, 247, 237, 0.95)');
+      sun.addColorStop(0.45, withAlpha(accent, 0.75));
+      sun.addColorStop(1, withAlpha(accent, 0.18));
+      c.fillStyle = sun;
       c.beginPath();
       c.arc(hub.x, hub.y, hubR, 0, Math.PI * 2);
       c.fill();
-      c.strokeStyle = withAlpha(muted, 0.88);
-      c.lineWidth = 2.75;
-      c.globalAlpha = 1;
-      c.beginPath();
-      c.arc(hub.x, hub.y, hubR, 0, Math.PI * 2);
-      c.stroke();
-      c.strokeStyle = withAlpha(accent, 0.72);
-      c.lineWidth = 2;
-      c.beginPath();
-      c.arc(hub.x, hub.y, hubR - 2.5, 0, Math.PI * 2);
+      c.strokeStyle = accent;
+      c.lineWidth = 1.5;
+      c.globalAlpha = reducedMotion ? 0.85 : 0.7 + 0.15 * Math.sin(animT * 0.55 + 0.3);
       c.stroke();
     } else {
       c.fillStyle = `${accent}38`;
@@ -898,7 +1150,7 @@ export function initConstellation(
 
     if (!isMatrix) {
       c.fillStyle = isPaper ? withAlpha(muted, 0.92) : muted;
-      c.font = '14px system-ui, sans-serif';
+      c.font = `14px ${uiFont}`;
       c.textAlign = 'center';
       c.textBaseline = 'alphabetic';
       if (!reducedMotion && !isPaper) {
@@ -910,7 +1162,7 @@ export function initConstellation(
     }
 
     // Archives sub-hub: orbit ring + label (moons orbit this point, not Jeremy B.)
-    if (archiveHubState && archiveMoonStars.length > 0) {
+    if (archiveHubState && archiveMoonCount > 0) {
       const ahPos = archiveHubPos(archiveHubState, galaxyCx, galaxyCy, spin);
       const ringR = archiveHubState.ringRadius;
       const hubNodeR = 8;
@@ -940,30 +1192,34 @@ export function initConstellation(
         c.font = `12px ${monoFont}`;
         c.textBaseline = 'alphabetic';
         c.fillText('Archives', ahPos.x, ahPos.y + hubFs * 0.45 + 12);
+      } else if (isPaper) {
+        c.globalAlpha = 1;
+        pencilCircle(c, ahPos.x, ahPos.y, ringR, withAlpha(muted, hubHi ? 0.6 : 0.45), 1.4, 800);
+        pencilFill(c, ahPos.x, ahPos.y, hubNodeR, withAlpha(muted, hubHi ? 0.55 : 0.4), 801);
+        pencilCircle(c, ahPos.x, ahPos.y, hubNodeR, withAlpha(muted, hubHi ? 0.9 : 0.75), 1.8, 802);
+        c.fillStyle = withAlpha(text, 0.9);
+        c.font = `14px ${uiFont}`;
+        c.textAlign = 'center';
+        c.textBaseline = 'alphabetic';
+        c.fillText('Archives', ahPos.x, ahPos.y + hubNodeR + 15);
       } else {
-        c.strokeStyle = isPaper
-          ? withAlpha(muted, hubHi ? 0.55 : 0.42)
-          : withAlpha(muted, hubHi ? 0.38 : 0.28);
-        c.lineWidth = isPaper ? 1.6 : 1.15;
+        c.strokeStyle = withAlpha(muted, hubHi ? 0.38 : 0.28);
+        c.lineWidth = 1.15;
         c.globalAlpha = 1;
         c.beginPath();
         c.arc(ahPos.x, ahPos.y, ringR, 0, Math.PI * 2);
         c.stroke();
 
-        c.fillStyle = isPaper
-          ? withAlpha(muted, hubHi ? 0.32 : 0.2)
-          : withAlpha(accent, hubHi ? 0.32 : 0.22);
+        c.fillStyle = withAlpha(accent, hubHi ? 0.32 : 0.22);
         c.beginPath();
         c.arc(ahPos.x, ahPos.y, hubNodeR, 0, Math.PI * 2);
         c.fill();
-        c.strokeStyle = isPaper
-          ? withAlpha(muted, hubHi ? 0.9 : 0.75)
-          : withAlpha(accent, hubHi ? 0.72 : 0.55);
-        c.lineWidth = isPaper ? 2 : 1.25;
+        c.strokeStyle = withAlpha(accent, hubHi ? 0.72 : 0.55);
+        c.lineWidth = 1.25;
         c.stroke();
 
-        c.fillStyle = isPaper ? withAlpha(text, 0.9) : withAlpha(text, hubHi ? 0.92 : 0.78);
-        c.font = isPaper ? '13px system-ui, sans-serif' : '12px system-ui, sans-serif';
+        c.fillStyle = withAlpha(text, hubHi ? 0.92 : 0.78);
+        c.font = `12px ${uiFont}`;
         c.textAlign = 'center';
         c.textBaseline = 'alphabetic';
         c.fillText('Archives', ahPos.x, ahPos.y + hubNodeR + 14);
@@ -971,7 +1227,7 @@ export function initConstellation(
 
       if (hubHi) {
         c.fillStyle = isPaper ? withAlpha(muted, 0.88) : withAlpha(muted, 0.82);
-        c.font = isMatrix ? `11px ${monoFont}` : '11px system-ui, sans-serif';
+        c.font = isMatrix ? `11px ${monoFont}` : `11px ${uiFont}`;
         c.textAlign = 'center';
         c.textBaseline = 'alphabetic';
         c.globalAlpha = 1;
@@ -980,26 +1236,26 @@ export function initConstellation(
     }
 
     // Hub → featured/outer lines; single line to Archives sub-hub
-    c.lineWidth = isPaper ? 2 : 1;
+    c.lineWidth = isPaper ? 1.4 : 1;
     stars.forEach((s, si) => {
       if (s.orbitsArchiveHub) return;
-      const pos = starWorldPos(s, galaxyCx, galaxyCy, spin, animT, archiveHubState);
+      const pos = { x: s.wx, y: s.wy };
       const isHi = hovered === s;
       const np = nodePalette[si];
       if (isPaper) {
-        c.strokeStyle = isHi ? withAlpha(np.fill, 0.96) : withAlpha(muted, 0.72);
         c.globalAlpha = 1;
-      } else {
-        c.strokeStyle = isHi ? 'rgba(255, 255, 255, 0.88)' : np.hubLineMuted;
-        c.globalAlpha = isHi ? 0.95 : 1;
+        pencilLine(c, hub.x, hub.y, pos.x, pos.y, isHi ? withAlpha(np.fill, 0.9) : withAlpha(muted, 0.4), isHi ? 1.8 : 1.3, 100 + si);
+        return;
       }
+      c.strokeStyle = isHi ? 'rgba(255, 255, 255, 0.88)' : np.hubLineMuted;
+      c.globalAlpha = isHi ? 0.95 : 1;
       c.beginPath();
       c.moveTo(hub.x, hub.y);
       c.lineTo(pos.x, pos.y);
       c.stroke();
     });
 
-    if (archiveHubState && archiveMoonStars.length > 0) {
+    if (archiveHubState && archiveMoonCount > 0) {
       const ahPos = archiveHubPos(archiveHubState, galaxyCx, galaxyCy, spin);
       const isArchiveSystemHi = archiveHubHovered;
       c.strokeStyle = isPaper
@@ -1008,14 +1264,18 @@ export function initConstellation(
           ? 'rgba(255, 255, 255, 0.72)'
           : withAlpha(muted, 0.35);
       c.globalAlpha = 1;
-      c.beginPath();
-      c.moveTo(hub.x, hub.y);
-      c.lineTo(ahPos.x, ahPos.y);
-      c.stroke();
+      if (isPaper) {
+        pencilLine(c, hub.x, hub.y, ahPos.x, ahPos.y, c.strokeStyle as string, 1.3, 199);
+      } else {
+        c.beginPath();
+        c.moveTo(hub.x, hub.y);
+        c.lineTo(ahPos.x, ahPos.y);
+        c.stroke();
+      }
 
-      archiveMoonStars.forEach((s) => {
-        const si = stars.indexOf(s);
-        const pos = starWorldPos(s, galaxyCx, galaxyCy, spin, animT, archiveHubState);
+      stars.forEach((s, si) => {
+        if (s.tier !== 'archive') return;
+        const pos = { x: s.wx, y: s.wy };
         const isHi = hovered === s;
         const np = nodePalette[si];
         c.strokeStyle = isPaper
@@ -1024,7 +1284,11 @@ export function initConstellation(
             ? np.fill
             : np.hubLineMuted;
         c.globalAlpha = isHi ? 0.85 : 0.55;
-        c.lineWidth = isPaper ? (isHi ? 1.8 : 1.2) : isHi ? 1.1 : 0.85;
+        if (isPaper) {
+          pencilLine(c, ahPos.x, ahPos.y, pos.x, pos.y, c.strokeStyle as string, isHi ? 1.6 : 1.1, 200 + si);
+          return;
+        }
+        c.lineWidth = isHi ? 1.1 : 0.85;
         c.beginPath();
         c.moveTo(ahPos.x, ahPos.y);
         c.lineTo(pos.x, pos.y);
@@ -1037,29 +1301,22 @@ export function initConstellation(
     skillSats.forEach((sat, satIdx) => {
       const parent = stars[sat.parentIndex];
       if (!parent || parent.tier === 'archive') return;
-      const posP = starWorldPos(parent, galaxyCx, galaxyCy, spin, animT, archiveHubState);
-      const posS = skillWorldPos(
-        parent,
-        sat,
-        galaxyCx,
-        galaxyCy,
-        spin,
-        animT,
-        archiveHubState
-      );
+      const posP = { x: parent.wx, y: parent.wy };
+      const posS = skillWorldPos(parent, sat, galaxyCx, galaxyCy, animT);
       const isParentHi = hoveredIndex === sat.parentIndex;
       const pCol = nodePalette[sat.parentIndex];
       if (isPaper) {
-        c.strokeStyle = isParentHi ? withAlpha(pCol.fill, 0.94) : withAlpha(muted, 0.68);
+        c.globalAlpha = 1;
+        pencilLine(c, posP.x, posP.y, posS.x, posS.y, withAlpha(isParentHi ? pCol.fill : muted, isParentHi ? 0.75 : 0.35), isParentHi ? 1.5 : 1.1, 300 + satIdx);
       } else {
         c.strokeStyle = isParentHi ? pCol.fill : pCol.hubLineMuted;
+        c.globalAlpha = isParentHi ? 0.62 : 1;
+        c.lineWidth = isParentHi ? 1.35 : 1;
+        c.beginPath();
+        c.moveTo(posP.x, posP.y);
+        c.lineTo(posS.x, posS.y);
+        c.stroke();
       }
-      c.globalAlpha = isParentHi ? 0.62 : 1;
-      c.lineWidth = isPaper ? (isParentHi ? 2.1 : 1.75) : isParentHi ? 1.35 : 1;
-      c.beginPath();
-      c.moveTo(posP.x, posP.y);
-      c.lineTo(posS.x, posS.y);
-      c.stroke();
       c.globalAlpha = 1;
 
       const satTw =
@@ -1085,16 +1342,11 @@ export function initConstellation(
         c.textBaseline = 'middle';
         c.fillText(ch, posS.x, posS.y);
       } else if (isPaper) {
-        c.fillStyle = withAlpha(isParentHi ? pCol.fill : pCol.fillDim, isParentHi ? 0.38 : 0.26);
+        /* Moons: crayon-shaded, pencil-outlined */
+        const col = isParentHi ? pCol.fill : pCol.fillDim;
         c.globalAlpha = 1;
-        c.beginPath();
-        c.arc(posS.x, posS.y, sr, 0, Math.PI * 2);
-        c.fill();
-        c.strokeStyle = withAlpha(isParentHi ? pCol.fill : pCol.fillDim, isParentHi ? 0.95 : 0.82);
-        c.lineWidth = 2.5;
-        c.beginPath();
-        c.arc(posS.x, posS.y, sr, 0, Math.PI * 2);
-        c.stroke();
+        pencilFill(c, posS.x, posS.y, sr + 0.5, withAlpha(col, isParentHi ? 0.7 : 0.5), 400 + satIdx);
+        pencilCircle(c, posS.x, posS.y, sr + 0.5, withAlpha(col, isParentHi ? 0.95 : 0.8), 1.5, 400 + satIdx);
       } else {
         c.fillStyle = isParentHi ? pCol.fill : pCol.fillDim;
         c.globalAlpha = isParentHi ? 0.92 : 0.38 * satTw;
@@ -1110,7 +1362,7 @@ export function initConstellation(
         c.globalAlpha = skillFade;
         c.fillStyle = text;
         const labelLift = isMatrix ? matrixSatGlyphFs * 0.52 + 10 : 8;
-        c.font = isMatrix ? `13px ${monoFont}` : '14px system-ui, sans-serif';
+        c.font = isMatrix ? `13px ${monoFont}` : `14px ${uiFont}`;
         c.textAlign = 'center';
         c.textBaseline = 'alphabetic';
         c.fillText(short, posS.x, posS.y - sr - labelLift);
@@ -1120,7 +1372,7 @@ export function initConstellation(
 
     // Project nodes + titles (per-theme palette + soft breathe)
     stars.forEach((s, si) => {
-      const pos = starWorldPos(s, galaxyCx, galaxyCy, spin, animT, archiveHubState);
+      const pos = { x: s.wx, y: s.wy };
       const isHi = hovered === s;
       const np = nodePalette[si];
       const breathe = reducedMotion
@@ -1145,17 +1397,11 @@ export function initConstellation(
         c.fillText(ch, pos.x, pos.y);
         c.globalAlpha = 1;
       } else if (isPaper) {
+        /* Planets: crayon shading inside a double-pass colored-pencil outline */
         c.globalAlpha = 1;
-        c.fillStyle = withAlpha(isHi ? np.fill : np.fillDim, isHi ? 0.34 : 0.22);
         c.shadowBlur = 0;
-        c.beginPath();
-        c.arc(pos.x, pos.y, radius, 0, Math.PI * 2);
-        c.fill();
-        c.strokeStyle = withAlpha(isHi ? np.fill : np.fillDim, isHi ? 0.96 : 0.88);
-        c.lineWidth = isHi ? 3 : 2.6;
-        c.beginPath();
-        c.arc(pos.x, pos.y, radius, 0, Math.PI * 2);
-        c.stroke();
+        pencilFill(c, pos.x, pos.y, radius, withAlpha(np.fill, isHi ? 0.6 : 0.42), 600 + si);
+        pencilCircle(c, pos.x, pos.y, radius, withAlpha(np.fill, isHi ? 0.95 : 0.85), isHi ? 2.6 : 2.2, 600 + si);
       } else {
         const tierDim =
           s.tier === 'archive' ? 0.32 : s.tier === 'outer' ? 0.38 : 0.46;
@@ -1169,12 +1415,21 @@ export function initConstellation(
         c.shadowBlur = 0;
       }
 
+      if (keyboardFocus && si === selectedIdx) {
+        c.globalAlpha = 1;
+        c.strokeStyle = accent;
+        c.lineWidth = 2;
+        c.setLineDash([4, 3]);
+        c.beginPath();
+        c.arc(pos.x, pos.y, (isMatrix ? matrixNodeGlyphFs * 0.6 : radius) + 7, 0, Math.PI * 2);
+        c.stroke();
+        c.setLineDash([]);
+      }
+
       const label = mapLabel(s.project);
       const shortLabel = label.length > 26 ? `${label.slice(0, 24)}…` : label;
       const isArchiveMoon = s.tier === 'archive';
-      const archiveMoonIdx = isArchiveMoon
-        ? archiveMoonStars.indexOf(s)
-        : -1;
+      const archiveMoonIdx = isArchiveMoon ? (s.archiveIndex ?? -1) : -1;
       const showArchiveSpotlight =
         isArchiveMoon &&
         !archiveHubHovered &&
@@ -1198,7 +1453,7 @@ export function initConstellation(
               : 0.52
             : labelAlpha;
         c.fillStyle = isPaper ? withAlpha(text, 0.94) : text;
-        c.font = isMatrix ? `15px ${monoFont}` : '16px system-ui, sans-serif';
+        c.font = isMatrix ? `15px ${monoFont}` : `16px ${uiFont}`;
         c.textAlign = 'center';
         c.textBaseline = 'alphabetic';
         const labelY = isMatrix
@@ -1209,53 +1464,176 @@ export function initConstellation(
       }
     });
 
-    if (!reducedMotion) {
-      requestAnimationFrame((t) => drawFrame(t));
-    }
   }
 
-  function onMove(e: MouseEvent): void {
-    hovered = pickStar(e.clientX, e.clientY);
-    hoveredArchiveHub = !hovered && pickArchiveHub(e.clientX, e.clientY);
-    canvas.style.cursor = hovered ? 'pointer' : hoveredArchiveHub ? 'help' : 'crosshair';
+  // ---- Loop control: run only while visible on screen and the tab is shown ----
+  let rafId = 0;
+  let inView = true;
+  const shouldRun = () => !reducedMotion && inView && !document.hidden;
+
+  function tick(t: number): void {
+    rafId = 0;
+    drawFrame(t);
+    if (shouldRun()) rafId = requestAnimationFrame(tick);
+  }
+
+  function start(): void {
+    if (rafId || !shouldRun()) return;
+    lastFrameTime = performance.now();
+    rafId = requestAnimationFrame(tick);
+  }
+
+  function stop(): void {
+    if (rafId) cancelAnimationFrame(rafId);
+    rafId = 0;
+  }
+
+  /** Reduced motion has no loop: redraw a still frame when something changes. */
+  function redrawStatic(): void {
     if (reducedMotion) drawFrame();
   }
 
-  function onLeave(): void {
-    hovered = null;
-    hoveredArchiveHub = false;
+  // ---- Input: mouse hover/click, touch tap-to-select then tap-to-open, keyboard ----
+  function openProject(idx: number): void {
+    const s = stars[idx];
+    if (!s) return;
+    window.location.assign(`${baseUrl}projects/${encodeURIComponent(s.project.slug)}/`);
+  }
+
+  function announce(idx: number): void {
+    if (!statusEl) return;
+    statusEl.textContent = idx >= 0 ? `${stars[idx].project.title}. Press Enter to open.` : '';
+  }
+
+  function onPointerMove(e: PointerEvent): void {
+    lastPointerType = e.pointerType;
+    if (e.pointerType !== 'mouse') return;
+    pointer = { x: e.offsetX, y: e.offsetY };
     if (reducedMotion) drawFrame();
+  }
+
+  function onPointerLeave(): void {
+    pointer = null;
+    redrawStatic();
+  }
+
+  function onPointerDown(e: PointerEvent): void {
+    lastPointerType = e.pointerType;
+    keyboardFocus = false;
   }
 
   function onClick(e: MouseEvent): void {
-    const s = pickStar(e.clientX, e.clientY);
-    if (s) {
-      const url = `${baseUrl}projects/${encodeURIComponent(s.project.slug)}/`;
-      window.location.assign(url);
+    const idx = pickStar(e.offsetX, e.offsetY);
+    if (lastPointerType === 'mouse') {
+      if (idx >= 0) openProject(idx);
+      return;
     }
+    // Touch / pen: first tap shows the project's skills, second tap on the same star opens it.
+    if (idx >= 0 && idx === selectedIdx) {
+      openProject(idx);
+      return;
+    }
+    selectedIdx = idx;
+    announce(idx);
+    redrawStatic();
   }
 
-  canvas.addEventListener('mousemove', onMove);
-  canvas.addEventListener('mouseleave', onLeave);
-  canvas.addEventListener('click', onClick);
-
-  document.addEventListener('visibilitychange', () => {
-    if (!document.hidden) {
-      lastFrameTime = performance.now();
+  function onKeyDown(e: KeyboardEvent): void {
+    if (keyOrder.length === 0) return;
+    const pos = keyOrder.indexOf(selectedIdx);
+    let next = selectedIdx;
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+      next = keyOrder[(pos + 1) % keyOrder.length];
+    } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+      next = keyOrder[(pos <= 0 ? keyOrder.length : pos) - 1];
+    } else if (e.key === 'Enter' && selectedIdx >= 0) {
+      e.preventDefault();
+      openProject(selectedIdx);
+      return;
+    } else if (e.key === 'Escape') {
+      next = -1;
+    } else {
+      return;
     }
-  });
+    e.preventDefault();
+    keyboardFocus = true;
+    selectedIdx = next;
+    announce(next);
+    redrawStatic();
+  }
+
+  function onBlur(): void {
+    keyboardFocus = false;
+    selectedIdx = -1;
+    announce(-1);
+    redrawStatic();
+  }
+
+  canvas.addEventListener('pointermove', onPointerMove);
+  canvas.addEventListener('pointerleave', onPointerLeave);
+  canvas.addEventListener('pointerdown', onPointerDown);
+  canvas.addEventListener('click', onClick);
+  canvas.addEventListener('keydown', onKeyDown);
+  canvas.addEventListener('blur', onBlur);
+
+  function onVisibility(): void {
+    if (document.hidden) stop();
+    else start();
+  }
+  document.addEventListener('visibilitychange', onVisibility);
+
+  /* Paper labels use a web font; repaint the still frame once it arrives. */
+  document.fonts?.addEventListener('loadingdone', redrawStatic);
 
   const themeObs = new MutationObserver(() => {
-    if (reducedMotion) drawFrame();
+    refreshTheme();
+    redrawStatic();
   });
   themeObs.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
 
-  syncSize();
-  drawFrame();
+  const viewObs = new IntersectionObserver(
+    ([entry]) => {
+      inView = entry.isIntersecting;
+      if (inView) start();
+      else stop();
+    },
+    { rootMargin: '100px' }
+  );
+  viewObs.observe(canvas);
 
-  window.addEventListener('resize', () => {
-    lastFrameTime = performance.now();
-    syncSize();
-    if (reducedMotion) drawFrame();
+  /* Rebuild only when width or DPR changes (mobile URL-bar height changes are ignored). */
+  let resizeRaf = 0;
+  const resizeObs = new ResizeObserver(() => {
+    if (resizeRaf) return;
+    resizeRaf = requestAnimationFrame(() => {
+      resizeRaf = 0;
+      const w = canvas.parentElement?.clientWidth ?? 800;
+      const nextDpr = Math.min(window.devicePixelRatio || 1, 2);
+      if (w === wCss && nextDpr === dpr) return;
+      syncSize();
+      redrawStatic();
+    });
   });
+  if (canvas.parentElement) resizeObs.observe(canvas.parentElement);
+
+  syncSize();
+  refreshTheme();
+  drawFrame();
+  start();
+
+  return () => {
+    stop();
+    cancelAnimationFrame(resizeRaf);
+    themeObs.disconnect();
+    viewObs.disconnect();
+    resizeObs.disconnect();
+    document.removeEventListener('visibilitychange', onVisibility);
+    document.fonts?.removeEventListener('loadingdone', redrawStatic);
+    canvas.removeEventListener('pointermove', onPointerMove);
+    canvas.removeEventListener('pointerleave', onPointerLeave);
+    canvas.removeEventListener('pointerdown', onPointerDown);
+    canvas.removeEventListener('click', onClick);
+    canvas.removeEventListener('keydown', onKeyDown);
+    canvas.removeEventListener('blur', onBlur);
+  };
 }

@@ -1,16 +1,20 @@
-export type ThemeId = 'nebula' | 'matrix' | 'terminal' | 'paper';
+import themeConfig from './themes.json';
+
+/** Must match the ids in themes.json (also read by scripts/site-shared.mjs). */
+export type ThemeId = 'nebula' | 'matrix' | 'ember' | 'paper';
 
 const STORAGE_KEY = 'portfolio-theme';
 
-const THEMES: { id: ThemeId; label: string }[] = [
-  { id: 'nebula', label: 'Nebula' },
-  { id: 'matrix', label: 'Matrix' },
-  { id: 'terminal', label: 'Terminal' },
-  { id: 'paper', label: 'Paper' },
-];
+const THEMES = themeConfig.themes as { id: ThemeId; label: string }[];
+/** Retired theme ids -> replacement, so saved preferences keep working. */
+const THEME_ALIASES = themeConfig.aliases as Record<string, ThemeId>;
 
 function applyTheme(theme: ThemeId): void {
   document.documentElement.setAttribute('data-theme', theme);
+  // Tint the mobile browser bar to match the page background.
+  const themeColor = document.querySelector<HTMLMetaElement>('meta[name="theme-color"]');
+  const bg = getComputedStyle(document.documentElement).getPropertyValue('--color-bg').trim();
+  if (themeColor && bg) themeColor.content = bg;
   localStorage.setItem(STORAGE_KEY, theme);
   document.querySelectorAll<HTMLButtonElement>('.theme-btn').forEach((btn) => {
     btn.setAttribute('aria-pressed', btn.dataset.theme === theme ? 'true' : 'false');
@@ -20,9 +24,10 @@ function applyTheme(theme: ThemeId): void {
 export function initTheme(): void {
   let initial: ThemeId = 'nebula';
   try {
-    const saved = localStorage.getItem(STORAGE_KEY) as ThemeId | null;
+    const stored = localStorage.getItem(STORAGE_KEY);
+    const saved = stored ? (THEME_ALIASES[stored] ?? stored) : null;
     if (saved && THEMES.some((t) => t.id === saved)) {
-      initial = saved;
+      initial = saved as ThemeId;
     }
   } catch {
     /* ignore */
