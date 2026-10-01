@@ -110,6 +110,22 @@ export default defineConfig({
   base,
   publicDir: 'public',
   plugins: [siteShared()],
+  server: {
+    watch: {
+      /* Static or generated files never need HMR: generated pages are reloaded by the site-shared
+         plugin after it regenerates them. Keeps the inotify watch count small (ENOSPC when the
+         system limit is shared with an editor). public/projects.json stays watched. */
+      ignored: [
+        '**/public/games/**',
+        '**/public/media/**',
+        '**/public/docs/**',
+        '**/public/fonts/**',
+        '**/public/images/**',
+        '**/public/projects/**',
+        '**/dist/**',
+      ],
+    },
+  },
   build: {
     rollupOptions: {
       input: {

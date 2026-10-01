@@ -568,8 +568,11 @@
 /*
  * Dark themes: invert baked-in light squares; hue-rotate tuned per theme so the graph feels at home.
  */
+/* Nebula: violet scale inverted for the dark panel; screen blending turns the black
+   "no contributions" cells into the panel's own navy instead of holes */
 [data-theme='nebula'] .github-chart-wrap img {
   filter: invert(1) hue-rotate(180deg) brightness(1.06) contrast(1.05);
+  mix-blend-mode: screen;
 }
 
 [data-theme='matrix'] .github-chart-wrap img {

@@ -1,3 +1,6 @@
+import { alphaOf, glowSprite, sprite, stamp } from './canvasSprites';
+import { heatColor } from './emberSparks';
+
 export type OrbitTier = 'featured' | 'outer' | 'archive';
 
 export interface ProjectForMap {
@@ -296,6 +299,8 @@ const MATRIX_MID_GLYPH_SCALE = 2;
 
 /** Golden-angle hue step so neighboring projects read as distinct in any theme */
 const GOLDEN_HUE = 137.508;
+/** Background dots are drawn in this many twinkle-brightness groups (one fill call each). */
+const TWINKLE_BUCKETS = 6;
 /** Ember: project hues stay within a warm band around the accent (degrees below / above). */
 const WARM_HUE_BELOW = 35;
 const WARM_HUE_SPAN = 75;
@@ -522,6 +527,40 @@ function hash01(seed: number, k: number): number {
   return x - Math.floor(x);
 }
 
+/** Geometry of one colored-pencil pass around a circle (wobble, overshoot, lifted gaps). */
+function pencilLoop(
+  p: CanvasRenderingContext2D | Path2D,
+  x: number,
+  y: number,
+  r: number,
+  seed: number,
+  pass: number
+): void {
+  const segs = Math.max(12, Math.round(r * 1.4));
+  const ps = seed * 7 + pass * 101;
+  const start = hash01(ps, 0) * Math.PI * 2;
+  const sweep = Math.PI * 2 * (pass === 0 ? 1.06 : 0.9);
+  const ph1 = hash01(ps, 1) * 6.28;
+  const ph2 = hash01(ps, 2) * 6.28;
+  const rr0 = pass * 0.6;
+  let drawing = false;
+  for (let i = 0; i < segs; i++) {
+    if (hash01(ps + 53, i) < 0.08) {
+      drawing = false;
+      continue;
+    }
+    for (let e = drawing ? 1 : 0; e <= 1; e++) {
+      const a = start + ((i + e) / segs) * sweep;
+      const rr = r * (1 + 0.035 * Math.sin(a * 2 + ph1) + 0.02 * Math.sin(a * 5 + ph2)) + rr0;
+      const px = x + Math.cos(a) * rr;
+      const py = y + Math.sin(a) * rr;
+      if (e === 0) p.moveTo(px, py);
+      else p.lineTo(px, py);
+    }
+    drawing = true;
+  }
+}
+
 /**
  * Paper: colored-pencil outline. Two passes around the circle (one overshooting, one short),
  * a gentle low-frequency wobble, and a few gaps where the pencil lifted.
@@ -537,37 +576,13 @@ function pencilCircle(
   passes = 2
 ): void {
   const base = c.globalAlpha;
-  const segs = Math.max(12, Math.round(r * 1.4));
   c.strokeStyle = color;
   c.lineCap = 'round';
   for (let pass = 0; pass < passes; pass++) {
-    const ps = seed * 7 + pass * 101;
-    const start = hash01(ps, 0) * Math.PI * 2;
-    const sweep = Math.PI * 2 * (pass === 0 ? 1.06 : 0.9);
-    const ph1 = hash01(ps, 1) * 6.28;
-    const ph2 = hash01(ps, 2) * 6.28;
-    const px = (i: number) => {
-      const a = start + (i / segs) * sweep;
-      const rr = r * (1 + 0.035 * Math.sin(a * 2 + ph1) + 0.02 * Math.sin(a * 5 + ph2)) + pass * 0.6;
-      return { x: x + Math.cos(a) * rr, y: y + Math.sin(a) * rr };
-    };
     c.globalAlpha = base * (pass === 0 ? 1 : 0.5);
     c.lineWidth = width * (pass === 0 ? 1 : 0.65);
     c.beginPath();
-    let drawing = false;
-    for (let i = 0; i < segs; i++) {
-      if (hash01(ps + 53, i) < 0.08) {
-        drawing = false;
-        continue;
-      }
-      if (!drawing) {
-        const p0 = px(i);
-        c.moveTo(p0.x, p0.y);
-        drawing = true;
-      }
-      const p1 = px(i + 1);
-      c.lineTo(p1.x, p1.y);
-    }
+    pencilLoop(c, x, y, r, seed, pass);
     c.stroke();
   }
   c.globalAlpha = base;
@@ -659,6 +674,192 @@ function pencilLine(
   }
   c.globalAlpha = base;
   c.lineCap = 'butt';
+}
+
+/** Ember: fire-like flicker in [0, 1] (two incommensurate sines), stable per seed. */
+function flicker(t: number, seed: number): number {
+  return 0.5 + 0.3 * Math.sin(t * 5.3 + seed * 1.7) + 0.2 * Math.sin(t * 8.9 + seed * 3.1);
+}
+
+/** Ember hub sprites (painted once): wide heat halo, white-gold body, drifting hot spot. */
+const emberHalo = () =>
+  sprite('ember:halo', 256, (g, n) => {
+    const h = n / 2;
+    const grad = g.createRadialGradient(h, h, h * 0.125, h, h, h);
+    grad.addColorStop(0, 'rgba(255, 140, 50, 1)');
+    grad.addColorStop(0.4, 'rgba(255, 90, 10, 0.26)');
+    grad.addColorStop(1, 'rgba(194, 65, 12, 0)');
+    g.fillStyle = grad;
+    g.fillRect(0, 0, n, n);
+  });
+const emberBody = () =>
+  sprite('ember:body', 128, (g, n) => {
+    const h = n / 2;
+    const grad = g.createRadialGradient(h, h, 0, h, h, h);
+    grad.addColorStop(0, 'rgba(255, 244, 214, 1)');
+    grad.addColorStop(0.3, 'rgba(255, 200, 110, 0.85)');
+    grad.addColorStop(0.68, 'rgba(255, 120, 30, 0.6)');
+    grad.addColorStop(1, 'rgba(194, 65, 12, 0)');
+    g.fillStyle = grad;
+    g.fillRect(0, 0, n, n);
+  });
+const emberSpot = () =>
+  sprite('ember:spot', 64, (g, n) => {
+    const h = n / 2;
+    const grad = g.createRadialGradient(h, h, 0, h, h, h);
+    grad.addColorStop(0, 'rgba(255, 250, 230, 1)');
+    grad.addColorStop(1, 'rgba(255, 200, 120, 0)');
+    g.fillStyle = grad;
+    g.fillRect(0, 0, n, n);
+  });
+
+/**
+ * Ember hub: a large version of the background sparks. Wide heat halo, white-gold core,
+ * slowly drifting hot spots, and a few sparks lifting off and cooling as they rise.
+ */
+function drawEmberCore(
+  c: CanvasRenderingContext2D,
+  x: number,
+  y: number,
+  r: number,
+  t: number,
+  still: boolean
+): void {
+  const heat = still ? 0.7 : flicker(t * 0.7, 99);
+  c.save();
+  c.globalCompositeOperation = 'lighter';
+  stamp(c, emberHalo(), x, y, r * 6.4, 0.26 + 0.12 * heat);
+  stamp(c, emberBody(), x, y, r * 2, 0.8 + 0.2 * heat);
+
+  // Hot spots drifting inside the core
+  for (let k = 0; k < 3; k++) {
+    const a = t * (0.25 + k * 0.08) + k * 2.1;
+    const hr = r * (0.3 + 0.08 * Math.sin(t * 1.7 + k));
+    stamp(
+      c,
+      emberSpot(),
+      x + Math.cos(a) * r * 0.32,
+      y + Math.sin(a * 1.3) * r * 0.26,
+      hr * 2,
+      0.3 + 0.25 * (still ? 0.6 : flicker(t, k + 40))
+    );
+  }
+
+  // Sparks lifting off, same look as the background ones
+  if (!still) {
+    const SPARKS = 6;
+    for (let k = 0; k < SPARKS; k++) {
+      const p = (t * 0.32 + k / SPARKS + hash01(k, 7) * 0.3) % 1;
+      const sx = x + (hash01(k, 3) - 0.5) * r * 1.1 + Math.sin(t * 1.4 + k * 2.3) * r * 0.25 * p;
+      const sy = y - r * 0.5 - p * r * 3.4;
+      const sr = 0.7 + (1 - p) * 1.6;
+      const [cr, cg, cb] = heatColor(p);
+      const a = Math.sin(Math.PI * Math.min(1, p * 1.25)) * 0.9;
+      stamp(c, glowSprite(`${cr | 0},${cg | 0},${cb | 0}`), sx, sy, sr * 6, a);
+    }
+  }
+  c.restore();
+}
+
+/** Coal sprite radius inside its 96px canvas (room for the crust stroke). */
+const COAL_SPRITE = 96;
+const COAL_R = 45;
+
+/** Ember: a glowing coal: hot core, palette-colored body, dark charred crust (sprites, per color). */
+function drawCoal(
+  c: CanvasRenderingContext2D,
+  x: number,
+  y: number,
+  r: number,
+  fill: string,
+  heat: number
+): void {
+  const body = sprite(`coal:${fill}`, COAL_SPRITE, (g, n) => {
+    const h = n / 2;
+    const grad = g.createRadialGradient(h - COAL_R * 0.2, h - COAL_R * 0.2, 0, h, h, COAL_R);
+    grad.addColorStop(0, 'rgba(255, 243, 214, 0.55)');
+    grad.addColorStop(0.35, fill);
+    grad.addColorStop(0.8, withAlpha(fill, 0.55));
+    grad.addColorStop(1, 'rgba(40, 16, 6, 0.95)');
+    g.fillStyle = grad;
+    g.beginPath();
+    g.arc(h, h, COAL_R, 0, Math.PI * 2);
+    g.fill();
+    g.strokeStyle = 'rgba(28, 12, 5, 0.85)';
+    g.lineWidth = COAL_R * 0.16;
+    g.stroke();
+  });
+  const hot = sprite('coal:hot', COAL_SPRITE, (g, n) => {
+    const h = n / 2;
+    const grad = g.createRadialGradient(h - COAL_R * 0.2, h - COAL_R * 0.2, 0, h, h, COAL_R * 0.6);
+    grad.addColorStop(0, 'rgba(255, 243, 214, 1)');
+    grad.addColorStop(1, 'rgba(255, 243, 214, 0)');
+    g.fillStyle = grad;
+    g.fillRect(0, 0, n, n);
+  });
+  const d = (r / COAL_R) * COAL_SPRITE;
+  stamp(c, body, x, y, d);
+  stamp(c, hot, x, y, d, 0.45 * heat);
+}
+
+/** Glow-only sprite for a text label (shadowBlur runs once here, not every frame). */
+const textGlowCache = new Map<string, { cv: HTMLCanvasElement; w: number; h: number }>();
+function textGlow(
+  c: CanvasRenderingContext2D,
+  text: string,
+  font: string,
+  px: number,
+  color: string,
+  blur: number,
+  x: number,
+  y: number,
+  alpha: number,
+  scale: number
+): void {
+  const key = `${text}|${font}|${color}|${blur}|${scale}`;
+  let e = textGlowCache.get(key);
+  if (!e) {
+    const cv = document.createElement('canvas');
+    const g = cv.getContext('2d');
+    if (!g) return;
+    g.font = font;
+    const pad = blur * 2;
+    const w = g.measureText(text).width + pad * 2;
+    const h = px * 1.4 + pad * 2;
+    cv.width = Math.ceil(w * scale);
+    cv.height = Math.ceil(h * scale);
+    g.scale(scale, scale);
+    g.font = font;
+    g.textAlign = 'center';
+    g.textBaseline = 'middle';
+    // Draw the text far off-canvas and offset only its shadow back in: the sprite holds just the glow.
+    g.shadowColor = color;
+    g.shadowBlur = blur * scale;
+    g.shadowOffsetX = 10000 * scale;
+    g.fillStyle = color;
+    g.fillText(text, w / 2 - 10000, h / 2);
+    e = { cv, w, h };
+    textGlowCache.set(key, e);
+  }
+  const prev = c.globalAlpha;
+  c.globalAlpha = prev * alpha;
+  c.drawImage(e.cv, x - e.w / 2, y - e.h / 2, e.w, e.h);
+  c.globalAlpha = prev;
+}
+
+/** Glow behind a node: replaces shadowBlur (`blur` ≈ the old shadowBlur value). */
+function nodeGlow(
+  c: CanvasRenderingContext2D,
+  x: number,
+  y: number,
+  r: number,
+  blur: number,
+  color: string
+): void {
+  if (blur <= 0) return;
+  const rgb = parseCssColor(color);
+  if (!rgb) return;
+  stamp(c, glowSprite(`${rgb.r},${rgb.g},${rgb.b}`), x, y, (r + blur * 1.6) * 2, alphaOf(color));
 }
 
 function galaxyPos(
@@ -947,6 +1148,14 @@ export function initConstellation(
     const isEmber = theme.style === 'ember';
     const monoFont = "ui-monospace, 'Cascadia Code', 'Fira Code', monospace";
     const uiFont = isPaper ? HAND_FONT : 'system-ui, sans-serif';
+    /* Assigning c.font re-parses the font string; skip it when unchanged (Matrix sets one per glyph). */
+    let curFont = '';
+    const setFont = (f: string) => {
+      if (f !== curFont) {
+        c.font = f;
+        curFont = f;
+      }
+    };
 
     c.clearRect(0, 0, w, h);
 
@@ -977,62 +1186,82 @@ export function initConstellation(
     const archiveSpotIdx = archiveSpot.idx;
     const archiveSpotFade = archiveSpot.alpha;
 
-    // Background mini-stars (non-interactive): brighter + subtle twinkle
+    // Background mini-stars (non-interactive): brighter + subtle twinkle.
+    // Batched: dots are grouped into TWINKLE_BUCKETS alpha levels, one fill per level.
     const bgBaseAlpha = reducedMotion ? 0.32 : 0.48;
+    const dotPaths = Array.from({ length: TWINKLE_BUCKETS }, () => new Path2D());
     for (const d of bgDots) {
       const a = d.ang + spin * (0.85 + (d.r % 1) * 0.3);
       const bx = galaxyCx + Math.cos(a) * d.rx;
       const by = galaxyCy + Math.sin(a) * d.ry;
-      const twinkle = reducedMotion
-        ? 1
-        : 0.62 + 0.38 * Math.sin(animT * d.twinkleSpeed + d.twinklePhase);
-      const rr = d.r * (reducedMotion ? 1 : 0.92 + 0.08 * twinkle);
-      c.beginPath();
-      c.arc(bx, by, rr, 0, Math.PI * 2);
-      if (isPaper) {
-        /* Graphite specks: soft pencil dots, still slightly “alive” via twinkle */
-        c.globalAlpha = (0.42 + 0.18 * twinkle) * (reducedMotion ? 0.9 : 1);
-        c.fillStyle = muted;
-        c.fill();
-      } else {
-        c.globalAlpha = bgBaseAlpha * twinkle;
-        c.fillStyle = muted;
-        c.fill();
-      }
+      const tw01 = reducedMotion ? 1 : 0.5 + 0.5 * Math.sin(animT * d.twinkleSpeed + d.twinklePhase);
+      const rr = d.r * (reducedMotion ? 1 : 0.92 + 0.08 * (0.62 + 0.38 * tw01));
+      const path = dotPaths[Math.min(TWINKLE_BUCKETS - 1, Math.floor(tw01 * TWINKLE_BUCKETS))];
+      path.moveTo(bx + rr, by);
+      path.arc(bx, by, rr, 0, Math.PI * 2);
     }
+    c.fillStyle = isPaper ? muted : isEmber ? '#f0b48c' : muted;
+    dotPaths.forEach((path, b) => {
+      const tw01 = reducedMotion ? 1 : (b + 0.5) / TWINKLE_BUCKETS;
+      const twinkle = 0.62 + 0.38 * tw01;
+      /* Paper: graphite specks; others: faint stars */
+      c.globalAlpha = isPaper
+        ? (0.42 + 0.18 * twinkle) * (reducedMotion ? 0.9 : 1)
+        : bgBaseAlpha * twinkle;
+      c.fill(path);
+    });
     c.globalAlpha = 1;
 
     // Mid-orbit stars (larger than mini dust, smaller than skill satellites)
     const midBaseAlpha = reducedMotion ? 0.44 : 0.58;
     const midPaperMul = isPaper ? 0.95 : 1;
+    const midPaths = isMatrix ? [] : Array.from({ length: TWINKLE_BUCKETS }, () => new Path2D());
+    if (isMatrix) {
+      c.fillStyle = muted;
+      c.textAlign = 'center';
+      c.textBaseline = 'middle';
+    }
     midOrbiters.forEach((d, midIdx) => {
       const a = d.ang + spin * d.spinRate;
       const bx = galaxyCx + Math.cos(a) * d.rx;
       const by = galaxyCy + Math.sin(a) * d.ry;
-      const twinkle = reducedMotion
-        ? 1
-        : 0.68 + 0.32 * Math.sin(animT * d.twinkleSpeed + d.twinklePhase);
+      const tw01 = reducedMotion ? 1 : 0.5 + 0.5 * Math.sin(animT * d.twinkleSpeed + d.twinklePhase);
+      const twinkle = reducedMotion ? 1 : 0.68 + 0.32 * tw01;
       const rr = d.r * (reducedMotion ? 1 : 0.94 + 0.06 * twinkle);
+      if (!isMatrix) {
+        const path = midPaths[Math.min(TWINKLE_BUCKETS - 1, Math.floor(tw01 * TWINKLE_BUCKETS))];
+        if (isPaper) {
+          /* Little hollow pencil loops */
+          pencilLoop(path, bx, by, rr + 0.4, 500 + midIdx, 0);
+        } else {
+          path.moveTo(bx + rr, by);
+          path.arc(bx, by, rr, 0, Math.PI * 2);
+        }
+        return;
+      }
       c.globalAlpha = midBaseAlpha * twinkle * midPaperMul;
       if (isMatrix) {
         const ch = MATRIX_MID_CHARS[midIdx % MATRIX_MID_CHARS.length];
         const fs =
           Math.max(6, Math.min(13, rr * 2.4)) * MATRIX_MID_GLYPH_SCALE;
-        c.fillStyle = muted;
-        c.font = `${fs}px ${monoFont}`;
-        c.textAlign = 'center';
-        c.textBaseline = 'middle';
-        c.globalAlpha = midBaseAlpha * twinkle * midPaperMul;
+        setFont(`${Math.round(fs)}px ${monoFont}`);
         c.fillText(ch, bx, by);
-      } else if (isPaper) {
-        /* Little hollow pencil loops */
+      }
+    });
+    midPaths.forEach((path, b) => {
+      const twinkle = reducedMotion ? 1 : 0.68 + 0.32 * ((b + 0.5) / TWINKLE_BUCKETS);
+      if (isPaper) {
         c.globalAlpha = 1;
-        pencilCircle(c, bx, by, rr + 0.4, withAlpha(muted, 0.5 * twinkle), 1, 500 + midIdx, 1);
+        c.strokeStyle = withAlpha(muted, 0.5 * twinkle);
+        c.lineWidth = 1;
+        c.lineCap = 'round';
+        c.stroke(path);
+        c.lineCap = 'butt';
       } else {
-        c.fillStyle = muted;
-        c.beginPath();
-        c.arc(bx, by, rr, 0, Math.PI * 2);
-        c.fill();
+        /* Ember: drifting cinders; others: mid-size stars */
+        c.globalAlpha = midBaseAlpha * twinkle * midPaperMul;
+        c.fillStyle = isEmber ? '#e07a3f' : muted;
+        c.fill(path);
       }
     });
     c.globalAlpha = 1;
@@ -1066,7 +1295,7 @@ export function initConstellation(
         c.fill();
       }
 
-      const ringCount = reducedMotion ? 2 : isPaper ? 3 : 4;
+      const ringCount = isEmber ? 0 : reducedMotion ? 2 : isPaper ? 3 : 4;
       for (let ring = 0; ring < ringCount; ring++) {
         const baseR = 30 + ring * 9 + (reducedMotion ? 0 : Math.sin(animT * 0.65 + ring * 1.1) * 2.5);
         const alpha = reducedMotion
@@ -1083,7 +1312,7 @@ export function initConstellation(
         c.stroke();
       }
 
-      if (!reducedMotion && !isPaper && !isMatrix) {
+      if (!reducedMotion && !isPaper && !isMatrix && !isEmber) {
         const rot = animT * 0.38;
         for (let s = 0; s < 3; s++) {
           const arcR = 36 + s * 10;
@@ -1107,35 +1336,23 @@ export function initConstellation(
     if (isMatrix) {
       const hubFs = Math.max(20, Math.min(34, 22 * hubPulse));
       c.fillStyle = accent;
-      c.font = `${hubFs}px ${monoFont}`;
+      setFont(`${hubFs}px ${monoFont}`);
       c.textAlign = 'center';
       c.textBaseline = 'middle';
       c.globalAlpha = 1;
       if (!reducedMotion) {
-        c.shadowColor = accent;
-        c.shadowBlur = 10 + 4 * Math.sin(animT * 0.65);
+        textGlow(c, '[JB.py]', `22px ${monoFont}`, 22, accent, 12, hub.x, hub.y, 0.75 + 0.25 * Math.sin(animT * 0.65), dpr);
       }
       c.fillText('[JB.py]', hub.x, hub.y);
-      c.shadowBlur = 0;
     } else if (isPaper) {
       c.globalAlpha = 1;
       pencilFill(c, hub.x, hub.y, hubR, withAlpha(accent, 0.4), 700);
       pencilCircle(c, hub.x, hub.y, hubR, withAlpha(muted, 0.85), 2.2, 701);
       pencilCircle(c, hub.x, hub.y, hubR - 3, withAlpha(accent, 0.75), 1.6, 702);
     } else if (isEmber) {
-      /* Sun core: white-hot center fading to the copper accent */
-      const sun = c.createRadialGradient(hub.x, hub.y, 0, hub.x, hub.y, hubR);
-      sun.addColorStop(0, 'rgba(255, 247, 237, 0.95)');
-      sun.addColorStop(0.45, withAlpha(accent, 0.75));
-      sun.addColorStop(1, withAlpha(accent, 0.18));
-      c.fillStyle = sun;
-      c.beginPath();
-      c.arc(hub.x, hub.y, hubR, 0, Math.PI * 2);
-      c.fill();
-      c.strokeStyle = accent;
-      c.lineWidth = 1.5;
-      c.globalAlpha = reducedMotion ? 0.85 : 0.7 + 0.15 * Math.sin(animT * 0.55 + 0.3);
-      c.stroke();
+      /* A big glowing ember, kin to the sparks drifting up the page */
+      c.globalAlpha = 1;
+      drawEmberCore(c, hub.x, hub.y, hubR * 1.25, animT, reducedMotion);
     } else {
       c.fillStyle = `${accent}38`;
       c.beginPath();
@@ -1150,15 +1367,13 @@ export function initConstellation(
 
     if (!isMatrix) {
       c.fillStyle = isPaper ? withAlpha(muted, 0.92) : muted;
-      c.font = `14px ${uiFont}`;
+      setFont(`14px ${uiFont}`);
       c.textAlign = 'center';
       c.textBaseline = 'alphabetic';
       if (!reducedMotion && !isPaper) {
-        c.shadowColor = accent;
-        c.shadowBlur = 6 + 5 * Math.sin(animT * 0.65);
+        textGlow(c, 'Jeremy B.', `14px ${uiFont}`, 14, accent, 9, hub.x, hub.y + 27, 0.55 + 0.45 * Math.sin(animT * 0.65), dpr);
       }
       c.fillText('Jeremy B.', hub.x, hub.y + 32);
-      c.shadowBlur = 0;
     }
 
     // Archives sub-hub: orbit ring + label (moons orbit this point, not Jeremy B.)
@@ -1178,7 +1393,7 @@ export function initConstellation(
 
         const hubFs = 13;
         c.fillStyle = hubHi ? accent : withAlpha(accent, 0.72);
-        c.font = `${hubFs}px ${monoFont}`;
+        setFont(`${hubFs}px ${monoFont}`);
         c.textAlign = 'center';
         c.textBaseline = 'middle';
         if (!reducedMotion && hubHi) {
@@ -1189,7 +1404,7 @@ export function initConstellation(
         c.shadowBlur = 0;
 
         c.fillStyle = withAlpha(text, hubHi ? 0.92 : 0.68);
-        c.font = `12px ${monoFont}`;
+        setFont(`12px ${monoFont}`);
         c.textBaseline = 'alphabetic';
         c.fillText('Archives', ahPos.x, ahPos.y + hubFs * 0.45 + 12);
       } else if (isPaper) {
@@ -1198,7 +1413,7 @@ export function initConstellation(
         pencilFill(c, ahPos.x, ahPos.y, hubNodeR, withAlpha(muted, hubHi ? 0.55 : 0.4), 801);
         pencilCircle(c, ahPos.x, ahPos.y, hubNodeR, withAlpha(muted, hubHi ? 0.9 : 0.75), 1.8, 802);
         c.fillStyle = withAlpha(text, 0.9);
-        c.font = `14px ${uiFont}`;
+        setFont(`14px ${uiFont}`);
         c.textAlign = 'center';
         c.textBaseline = 'alphabetic';
         c.fillText('Archives', ahPos.x, ahPos.y + hubNodeR + 15);
@@ -1219,7 +1434,7 @@ export function initConstellation(
         c.stroke();
 
         c.fillStyle = withAlpha(text, hubHi ? 0.92 : 0.78);
-        c.font = `12px ${uiFont}`;
+        setFont(`12px ${uiFont}`);
         c.textAlign = 'center';
         c.textBaseline = 'alphabetic';
         c.fillText('Archives', ahPos.x, ahPos.y + hubNodeR + 14);
@@ -1227,7 +1442,7 @@ export function initConstellation(
 
       if (hubHi) {
         c.fillStyle = isPaper ? withAlpha(muted, 0.88) : withAlpha(muted, 0.82);
-        c.font = isMatrix ? `11px ${monoFont}` : `11px ${uiFont}`;
+        setFont(isMatrix ? `11px ${monoFont}` : `11px ${uiFont}`);
         c.textAlign = 'center';
         c.textBaseline = 'alphabetic';
         c.globalAlpha = 1;
@@ -1247,6 +1462,35 @@ export function initConstellation(
         pencilLine(c, hub.x, hub.y, pos.x, pos.y, isHi ? withAlpha(np.fill, 0.9) : withAlpha(muted, 0.4), isHi ? 1.8 : 1.3, 100 + si);
         return;
       }
+      if (isEmber) {
+        c.globalAlpha = 1;
+        /* Fuse starts at the coal's rim so it doesn't cross the hub face */
+        const len = Math.hypot(pos.x - hub.x, pos.y - hub.y) || 1;
+        const ox = hub.x + ((pos.x - hub.x) / len) * (hubR + 2);
+        const oy = hub.y + ((pos.y - hub.y) / len) * (hubR + 2);
+        c.strokeStyle = isHi ? 'rgba(255, 170, 90, 0.9)' : 'rgba(150, 52, 14, 0.5)';
+        c.lineWidth = isHi ? 1.6 : 1.1;
+        c.beginPath();
+        c.moveTo(ox, oy);
+        c.lineTo(pos.x, pos.y);
+        c.stroke();
+        if (!reducedMotion) {
+          /* An ember drifting out along the fuse: same look as the background sparks, cooling
+             from gold to red and fading out as it reaches the node */
+          const ft = (animT * 0.11 + si * 0.37) % 1;
+          const sway = Math.sin(animT * 1.3 + si * 2.1) * 2.5;
+          const nx = -(pos.y - oy) / len;
+          const ny = (pos.x - ox) / len;
+          const sx = ox + (pos.x - ox) * ft + nx * sway;
+          const sy = oy + (pos.y - oy) * ft + ny * sway;
+          const [er, eg, eb] = heatColor(ft);
+          const fade = Math.sin(Math.PI * ft) * (0.72 + 0.28 * flicker(animT, si + 70));
+          const size = 0.9 + (1 - ft) * 1.1;
+          stamp(c, glowSprite(`${er | 0},${eg | 0},${eb | 0}`), sx, sy, size * 6.4, fade);
+        }
+        c.lineWidth = 1;
+        return;
+      }
       c.strokeStyle = isHi ? 'rgba(255, 255, 255, 0.88)' : np.hubLineMuted;
       c.globalAlpha = isHi ? 0.95 : 1;
       c.beginPath();
@@ -1260,9 +1504,13 @@ export function initConstellation(
       const isArchiveSystemHi = archiveHubHovered;
       c.strokeStyle = isPaper
         ? withAlpha(muted, isArchiveSystemHi ? 0.88 : 0.62)
-        : isArchiveSystemHi
-          ? 'rgba(255, 255, 255, 0.72)'
-          : withAlpha(muted, 0.35);
+        : isEmber
+          ? isArchiveSystemHi
+            ? 'rgba(255, 170, 90, 0.85)'
+            : 'rgba(150, 52, 14, 0.5)'
+          : isArchiveSystemHi
+            ? 'rgba(255, 255, 255, 0.72)'
+            : withAlpha(muted, 0.35);
       c.globalAlpha = 1;
       if (isPaper) {
         pencilLine(c, hub.x, hub.y, ahPos.x, ahPos.y, c.strokeStyle as string, 1.3, 199);
@@ -1337,7 +1585,7 @@ export function initConstellation(
         const fs = matrixSatGlyphFs;
         c.fillStyle = isParentHi ? pCol.fill : pCol.fillDim;
         c.globalAlpha = isParentHi ? 0.95 : 0.55 * satTw;
-        c.font = `${fs}px ${monoFont}`;
+        setFont(`${Math.round(fs)}px ${monoFont}`);
         c.textAlign = 'center';
         c.textBaseline = 'middle';
         c.fillText(ch, posS.x, posS.y);
@@ -1347,6 +1595,18 @@ export function initConstellation(
         c.globalAlpha = 1;
         pencilFill(c, posS.x, posS.y, sr + 0.5, withAlpha(col, isParentHi ? 0.7 : 0.5), 400 + satIdx);
         pencilCircle(c, posS.x, posS.y, sr + 0.5, withAlpha(col, isParentHi ? 0.95 : 0.8), 1.5, 400 + satIdx);
+      } else if (isEmber) {
+        /* Sparks: hot core inside a soft palette-colored glow */
+        const heat = reducedMotion ? 0.7 : flicker(animT, satIdx);
+        c.globalAlpha = isParentHi ? 0.95 : 0.45 + 0.25 * heat;
+        c.fillStyle = withAlpha(pCol.fill, 0.35);
+        c.beginPath();
+        c.arc(posS.x, posS.y, sr * 1.7, 0, Math.PI * 2);
+        c.fill();
+        c.fillStyle = isParentHi ? '#fff1d6' : pCol.fill;
+        c.beginPath();
+        c.arc(posS.x, posS.y, sr * 0.7, 0, Math.PI * 2);
+        c.fill();
       } else {
         c.fillStyle = isParentHi ? pCol.fill : pCol.fillDim;
         c.globalAlpha = isParentHi ? 0.92 : 0.38 * satTw;
@@ -1362,7 +1622,7 @@ export function initConstellation(
         c.globalAlpha = skillFade;
         c.fillStyle = text;
         const labelLift = isMatrix ? matrixSatGlyphFs * 0.52 + 10 : 8;
-        c.font = isMatrix ? `13px ${monoFont}` : `14px ${uiFont}`;
+        setFont(isMatrix ? `13px ${monoFont}` : `14px ${uiFont}`);
         c.textAlign = 'center';
         c.textBaseline = 'alphabetic';
         c.fillText(short, posS.x, posS.y - sr - labelLift);
@@ -1390,29 +1650,31 @@ export function initConstellation(
         const fs = matrixNodeGlyphFs;
         c.fillStyle = isHi ? np.fill : np.fillDim;
         c.globalAlpha = isHi ? 1 : 0.62;
-        c.font = `${fs}px ${monoFont}`;
+        setFont(`${Math.round(fs)}px ${monoFont}`);
         c.textAlign = 'center';
         c.textBaseline = 'middle';
-        c.shadowBlur = 0;
         c.fillText(ch, pos.x, pos.y);
         c.globalAlpha = 1;
       } else if (isPaper) {
         /* Planets: crayon shading inside a double-pass colored-pencil outline */
         c.globalAlpha = 1;
-        c.shadowBlur = 0;
         pencilFill(c, pos.x, pos.y, radius, withAlpha(np.fill, isHi ? 0.6 : 0.42), 600 + si);
         pencilCircle(c, pos.x, pos.y, radius, withAlpha(np.fill, isHi ? 0.95 : 0.85), isHi ? 2.6 : 2.2, 600 + si);
+      } else if (isEmber) {
+        const heat = isHi ? 1 : reducedMotion ? 0.6 : flicker(animT * 0.8, si + 10);
+        const tierDim = s.tier === 'archive' ? 0.55 : s.tier === 'outer' ? 0.7 : 0.82;
+        c.globalAlpha = isHi ? 1 : tierDim;
+        nodeGlow(c, pos.x, pos.y, radius, isHi ? 26 : reducedMotion ? 0 : 6 + 8 * heat, isHi ? 'rgba(255, 140, 40, 0.9)' : np.shadowDim);
+        drawCoal(c, pos.x, pos.y, radius, isHi ? np.fill : np.fillDim, heat);
       } else {
         const tierDim =
           s.tier === 'archive' ? 0.32 : s.tier === 'outer' ? 0.38 : 0.46;
         c.globalAlpha = isHi ? 1 : tierDim;
+        nodeGlow(c, pos.x, pos.y, radius, isHi ? 22 : reducedMotion ? 0 : s.tier === 'archive' ? 4 : 10, isHi ? np.glow : np.shadowDim);
         c.fillStyle = isHi ? np.fill : np.fillDim;
-        c.shadowColor = isHi ? np.glow : np.shadowDim;
-        c.shadowBlur = isHi ? 22 : reducedMotion ? 0 : s.tier === 'archive' ? 4 : 10;
         c.beginPath();
         c.arc(pos.x, pos.y, radius, 0, Math.PI * 2);
         c.fill();
-        c.shadowBlur = 0;
       }
 
       if (keyboardFocus && si === selectedIdx) {
@@ -1445,15 +1707,17 @@ export function initConstellation(
           : isArchiveMoon
             ? archiveSpotFade * idleLabelAlpha
             : idleLabelAlpha;
+        /* Archive titles fade in/out with the carousel in every theme */
+        const spotFade = isArchiveMoon && !isHi ? archiveSpotFade : 1;
         c.globalAlpha = isPaper
-          ? 0.88
+          ? 0.88 * spotFade
           : isMatrix
             ? isHi
               ? 1
-              : 0.52
+              : 0.52 * spotFade
             : labelAlpha;
         c.fillStyle = isPaper ? withAlpha(text, 0.94) : text;
-        c.font = isMatrix ? `15px ${monoFont}` : `16px ${uiFont}`;
+        setFont(isMatrix ? `15px ${monoFont}` : `16px ${uiFont}`);
         c.textAlign = 'center';
         c.textBaseline = 'alphabetic';
         const labelY = isMatrix

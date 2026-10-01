@@ -67,7 +67,7 @@ function layoutHtml({ title, bodyHtml, slug }) {
   <link rel="icon" type="image/svg+xml" href="${base}favicon.svg" />
 </head>
 <body>
-  <canvas id="matrix-rain" aria-hidden="true"></canvas>
+  <canvas id="theme-fx" aria-hidden="true"></canvas>
   <div class="site-wrap">
     ${siteHeaderHtml(base)}
     <main class="project-content">

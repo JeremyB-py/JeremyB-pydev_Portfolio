@@ -4,7 +4,7 @@ import './styles/sections.css';
 
 import { getCurrentTheme, initTheme } from './themes';
 import { initScrollReveal } from './scrollReveal';
-import { syncMatrixRain } from './matrixRain';
+import { syncThemeFx } from './themeFx';
 import { initConstellation, type OrbitTier, type ProjectForMap } from './constellation';
 
 interface ProjectJson {
@@ -159,7 +159,7 @@ function syncGithubChart(): void {
 
 function observeThemeEffects(): void {
   const sync = () => {
-    syncMatrixRain(getCurrentTheme());
+    syncThemeFx(getCurrentTheme());
     syncGithubChart();
   };
   sync();

@@ -1,13 +1,13 @@
 /**
  * Shared bootstrap for generated project case-study pages: theme persistence,
- * matrix rain sync, mobile nav (same behavior as main site), click-to-load game players.
+ * theme background effects, mobile nav (same behavior as main site), click-to-load game players.
  */
 import { getCurrentTheme, initTheme } from './themes';
-import { syncMatrixRain } from './matrixRain';
+import { syncThemeFx } from './themeFx';
 import { initGamePlayers } from './game-player';
 
 function syncThemeEffects(): void {
-  syncMatrixRain(getCurrentTheme());
+  syncThemeFx(getCurrentTheme());
 }
 
 initTheme();
